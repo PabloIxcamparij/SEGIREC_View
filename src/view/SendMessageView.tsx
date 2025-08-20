@@ -1,62 +1,30 @@
-import { useState } from "react";
-import { queryFiltered, sendEmails } from "../service/SendMessajeService";
-import type { Persona, QueryBody } from "../types";
+// src/view/SendFilteredEmailsView.tsx
+import { useSendMessage } from "../hooks/useSendMessage";
 
 const provincias = ["Bagaces", "Fortuna", "Mogote", "Río Naranjo"];
 const servicios = ["Electricidad", "Agua", "Internet"];
 
 export default function SendFilteredEmailsView() {
-  const [ciudad, setCiudad] = useState("");
-  const [servicio, setServicio] = useState("");
-  const [valor, setValor] = useState("");
-  const [valorTipo, setValorTipo] = useState<"Nah" | "Mayor" | "Menor">("Nah");
-
-  const [personas, setPersonas] = useState<Persona[]>([]);
-  const [mensaje, setMensaje] = useState<string | null>(null);
-
-  // 🔹 Consultar
-  const handleConsultar = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const body: QueryBody = {};
-    if (ciudad) body.ciudad = ciudad;
-    if (servicio) body.servicio = servicio;
-    if (valor && valorTipo !== "Nah") {
-      body.valor = {};
-      const v = Number(valor);
-      if (valorTipo === "Mayor") body.valor.mayor = v;
-      if (valorTipo === "Menor") body.valor.menor = v;
-    }
-
-    const response = await queryFiltered(body);
-    if (response) {
-      setPersonas(response.personas);
-      setMensaje(null);
-    }
-  };
-
-  // 🔹 Enviar correos
-  const handleEnviar = async () => {
-    const correos = personas.map((p) => p.correo);
-    const response = await sendEmails(correos);
-    if (response) {
-      setMensaje(response.message);
-    }
-  };
-
-  // 🔹 Limpiar
-  const handleLimpiar = () => {
-    setPersonas([]);
-    setCiudad("");
-    setServicio("");
-    setValor("");
-    setValorTipo("Nah");
-    setMensaje(null);
-  };
+  const {
+    ciudad,
+    setCiudad,
+    servicio,
+    setServicio,
+    valor,
+    setValor,
+    valorTipo,
+    setValorTipo,
+    personas,
+    mensaje,
+    handleConsultar,
+    handleEnviar,
+    handleLimpiar,
+  } = useSendMessage();
 
   return (
     <div className="p-4 max-w-3xl mx-auto">
-      <h1 className="text-xl font-bold mb-4">Enviar correos filtrados</h1>
+      <h1 className="text-xl font-bold mb-4">Enviar correos</h1>
+      
       <form onSubmit={handleConsultar} className="space-y-4">
         {/* Ciudad */}
         <select value={ciudad} onChange={(e) => setCiudad(e.target.value)} className="border p-2 rounded w-full">
@@ -90,7 +58,7 @@ export default function SendFilteredEmailsView() {
           </select>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex justify-end gap-2">
           <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Consultar</button>
           <button
             type="button"

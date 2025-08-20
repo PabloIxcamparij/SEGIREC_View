@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import Layout from "./Layout/Layout";
-import SendFilteredEmailsView from "./view/SendMessajeView";
+import SendFilteredEmailsView from "./view/SendMessageView";
 import HomeView
  from "./view/HomeView";
 
