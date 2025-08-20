@@ -17,8 +17,10 @@ export function useSendMessage() {
     e.preventDefault();
 
     const body: QueryBody = {};
+    
     if (ciudad) body.ciudad = ciudad;
     if (servicio) body.servicio = servicio;
+
     if (valor && valorTipo !== "Nah") {
       body.valor = {};
       const v = Number(valor);
@@ -27,6 +29,7 @@ export function useSendMessage() {
     }
 
     const response = await queryFiltered(body);
+
     if (response) {
       setPersonas(response.personas);
       setMensaje(null);
