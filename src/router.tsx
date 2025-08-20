@@ -6,6 +6,7 @@ import HomeView
 
 import LockView from "./view/LockView";
 import ReportsView from "./view/ReportsView";
+import LoginView from "./view/login/LoginView";
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <LoginView />,
+      },
+       {
+        path: "SendMessage",
         element: <SendFilteredEmailsView />,
       },
       {

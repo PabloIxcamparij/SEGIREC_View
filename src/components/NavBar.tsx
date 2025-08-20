@@ -3,14 +3,20 @@ import { Link, useLocation } from "react-router";
 
 const links = [
     { path: "/home", label: "Inicio" },
-    { path: "/", label: "Enviar Mensajes" },
+    { path: "/SendMessage", label: "Enviar Mensajes" },
     { path: "/reports", label: "Reportes" },
     { path: "/lock", label: "Actividad" },
+    { path: "/", label: "Cerrar Sesión" },
 ];
 
+
+
 export default function NavBar() {
+    
     const [open, setOpen] = useState(false);
     const location = useLocation();
+    
+    if (location.pathname === "/") return null;
 
     const toggleMenu = () => setOpen(!open);
 
