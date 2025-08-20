@@ -23,7 +23,7 @@ export default function NavBar() {
     return (
         <>
             {/* Navbar para md y lg */}
-            <nav className="hidden md:flex bg-blue-600 text-white px-6 py-3 justify-between items-center shadow">
+            <nav className="hidden md:flex bg-[#3e50b5] text-white px-6 py-3 justify-between items-center shadow">
                 <div className="font-bold text-lg">MiApp</div>
                 <div className="flex gap-6">
                     {links.map((link) => (
@@ -40,7 +40,7 @@ export default function NavBar() {
             </nav>
 
             {/* Barra superior en móvil */}
-            <div className="flex md:hidden bg-blue-600 text-white px-4 py-3 justify-between items-center shadow">
+            <div className="flex md:hidden bg-[#3e50b5] text-white px-4 py-3 justify-between items-center shadow">
                 <div className="font-bold text-lg">MiApp</div>
                 <button onClick={toggleMenu}>
                     ☰
@@ -49,10 +49,10 @@ export default function NavBar() {
 
             {/* Sidebar en móvil */}
             <div
-                className={`fixed top-0 left-0 h-full w-64 bg-blue-700 text-white transform ${open ? "translate-x-0" : "-translate-x-full"
+                className={`fixed top-0 left-0 h-full w-64 bg-[#3e50b5] text-white transform ${open ? "translate-x-0" : "-translate-x-full"
                     } transition-transform duration-300 ease-in-out md:hidden z-50`}
             >
-                <div className="flex justify-between items-center p-4 border-b border-blue-500">
+                <div className="flex justify-between items-center p-4 bg-[#5265d1]">
                     <span className="font-bold text-lg">Menú</span>
                     <button onClick={toggleMenu}>
                        X

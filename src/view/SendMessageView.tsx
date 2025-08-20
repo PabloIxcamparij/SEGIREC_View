@@ -22,7 +22,7 @@ export default function SendFilteredEmailsView() {
   } = useSendMessage();
 
   return (
-    <div className="p-4 max-w-3xl mx-auto">
+    <div className="flex flex-col items-center justify-center p-4 w-full">
       <h1 className="text-xl font-bold mb-4">Enviar correos</h1>
       
       <form onSubmit={handleConsultar} className="space-y-4">
@@ -58,7 +58,7 @@ export default function SendFilteredEmailsView() {
           </select>
         </div>
 
-        <div className="flex justify-end gap-2">
+        <div className="flex flex-wrap justify-end gap-2">
           <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Consultar</button>
           <button
             type="button"
@@ -76,7 +76,7 @@ export default function SendFilteredEmailsView() {
 
       {/* Tabla */}
       {personas.length > 0 && (
-        <table className="mt-6 w-full border">
+        <table className="mt-5 w-3/5 md:w-3/4 border">
           <thead>
             <tr className="bg-gray-100">
               <th className="p-2 border">Correo</th>

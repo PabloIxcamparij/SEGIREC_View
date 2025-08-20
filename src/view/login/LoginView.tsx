@@ -41,7 +41,7 @@ export default function LoginView() {
                         value={usuario}
                         onChange={(e) => setUsuario(e.target.value)}
                         placeholder="Ingresa tu correo"
-                        className="mt-1 w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="mt-1 w-full p-2 border rounded-md"
                     />
                 </div>
 
@@ -52,7 +52,7 @@ export default function LoginView() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Ingresa tu contraseña"
-                        className="mt-1 w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="mt-1 w-full p-2 border rounded-md"
                     />
                 </div>
 
