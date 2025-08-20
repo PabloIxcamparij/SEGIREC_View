@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { QueryBody, QueryResponse, SendEmailsResponse } from "../types";
 
-const BASE_URL = "http://localhost:4000/api";
+const BASE_URL = "http://localhost:4040/api";
 
 // 🔹 Consultar usuarios filtrados
 export async function queryFiltered(body: QueryBody): Promise<QueryResponse | null> {

@@ -1,16 +1,27 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router';
+import { login } from "../../service/LoginService";
 
 export default function LoginView() {
     const [usuario, setUsuario] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
+
         console.log("Usuario:", usuario);
         console.log("Contraseña:", password);
-        navigate("/home");
+
+        try {
+            const response = await login({ correo: usuario, password });
+            console.log("Respuesta del backend:", response);
+            navigate("/home");
+        } catch (err: any) {
+            setError(err.response?.data?.message || "Error en login");
+        }
     };
 
     return (
@@ -24,22 +35,18 @@ export default function LoginView() {
                 </h1>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                        Usuario
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700">Usuario</label>
                     <input
                         type="text"
                         value={usuario}
                         onChange={(e) => setUsuario(e.target.value)}
-                        placeholder="Ingresa tu usuario"
+                        placeholder="Ingresa tu correo"
                         className="mt-1 w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                        Contraseña
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700">Contraseña</label>
                     <input
                         type="password"
                         value={password}
@@ -55,6 +62,9 @@ export default function LoginView() {
                 >
                     Ingresar
                 </button>
+
+                {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+
             </form>
         </div>
     );
