@@ -1,0 +1,33 @@
+import { createBrowserRouter } from "react-router";
+import Layout from "./Layout/Layout";
+import SendFilteredEmailsView from "./view/SendMessajeView";
+import HomeView
+ from "./view/HomeView";
+
+import LockView from "./view/LockView";
+import ReportsView from "./view/ReportsView";
+
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <SendFilteredEmailsView />,
+      },
+      {
+        path: "home",
+        element: <HomeView />,
+      },
+      {
+        path: "lock",
+        element: <LockView />,
+      },
+      {
+        path: "reports",
+        element: <ReportsView />,
+      },
+    ],
+  },
+]);
