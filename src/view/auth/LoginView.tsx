@@ -25,12 +25,12 @@ export default function LoginView() {
     };
 
     return (
-        <div className="flex items-center justify-center">
+        <div className="flex mt-50 justify-center items-center">
             <form
                 onSubmit={handleSubmit}
                 className="bg-white shadow-lg rounded-xl p-8 w-full max-w-sm space-y-6"
             >
-                <h1 className="text-2xl font-bold text-center text-blue-600">
+                <h1 className="text-2xl font-bold text-center text-principal">
                     Iniciar Sesión
                 </h1>
 
@@ -58,7 +58,7 @@ export default function LoginView() {
 
                 <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+                    className="w-full bg-principal text-white py-2 rounded-md hover:bg-blue-700 transition"
                 >
                     Ingresar
                 </button>

@@ -6,7 +6,7 @@ import HomeView
 
 import LockView from "./view/LockView";
 import ReportsView from "./view/ReportsView";
-import LoginView from "./view/login/LoginView";
+import LoginView from "./view/auth/LoginView";
 
 export const router = createBrowserRouter([
   {

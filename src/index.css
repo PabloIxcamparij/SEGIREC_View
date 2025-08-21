@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-principal: #3e50b5;
+  }
+}
+
+@layer utilities {
+  .bg-principal {
+    background-color: var(--color-principal);
+  }
+
+  .text-principal {
+    color: var(--color-principal);
+  }
+
+  .border-principal {
+    border-color: var(--color-principal);
+  }
+}
