@@ -14,7 +14,7 @@ export function useSendMessage() {
 
   //Consultar
   const handleConsultar = async (filtros: QueryBody) => {
-    const body: any = {
+    const body: QueryBody = {
       ...(filtros.ciudad && { ciudad: filtros.ciudad }),
       ...(filtros.servicio && { servicio: filtros.servicio }),
       ...(filtros.deudaMinima !== "" && filtros.deudaMinima !== undefined && {
@@ -24,7 +24,6 @@ export function useSendMessage() {
         deudaMaxima: filtros.deudaMaxima,
       }),
     };
-    console.log(body);
 
     const response = await queryFiltered(body);
 

@@ -24,30 +24,28 @@ export default function SendFilteredEmailsView() {
 
   const [isConsultando, setIsConsultando] = useState(false);
 
-  // Estados para mostrar/ocultar filtros
   const [filtrosActivos, setFiltrosActivos] = useState({
     ciudad: false,
     servicio: false,
     deuda: false,
   });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     console.log("Filtros Activos:", filtrosActivos);
 
-    const filtros: any = {
+    const filtros: QueryBody = {
       ...(filtrosActivos.ciudad && { ciudad }),
       ...(filtrosActivos.servicio && { servicio }),
       ...(filtrosActivos.deuda && deudaMinima !== "" && { deudaMinima: Number(deudaMinima) }),
       ...(filtrosActivos.deuda && deudaMaxima !== "" && { deudaMaxima: Number(deudaMaxima) }),
     };
-    console.log(filtros);
 
     setIsConsultando(true);
     await handleConsultar(filtros);
     setIsConsultando(false);
   };
-
 
   return (
     <div className="flex flex-col items-center justify-center w-full p-4">
