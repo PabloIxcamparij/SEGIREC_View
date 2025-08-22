@@ -13,18 +13,18 @@ export function useSendMessage() {
   const [mensaje, setMensaje] = useState<string | null>(null);
 
   //Consultar
-  const handleConsultar = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const body: QueryBody = {};
-
-    if (ciudad) body.ciudad = ciudad;
-    if (servicio) body.servicio = servicio;
-
-    if (deudaMinima || deudaMaxima) {
-      if (deudaMinima) body.deudaMinima = Number(deudaMinima);
-      if (deudaMaxima) body.deudaMaxima = Number(deudaMaxima);
-    }
+  const handleConsultar = async (filtros: QueryBody) => {
+    const body: any = {
+      ...(filtros.ciudad && { ciudad: filtros.ciudad }),
+      ...(filtros.servicio && { servicio: filtros.servicio }),
+      ...(filtros.deudaMinima !== "" && filtros.deudaMinima !== undefined && {
+        deudaMinima: filtros.deudaMinima,
+      }),
+      ...(filtros.deudaMaxima !== "" && filtros.deudaMaxima !== undefined && {
+        deudaMaxima: filtros.deudaMaxima,
+      }),
+    };
+    console.log(body);
 
     const response = await queryFiltered(body);
 

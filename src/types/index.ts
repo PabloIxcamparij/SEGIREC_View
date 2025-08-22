@@ -1,9 +1,9 @@
 // src/types.ts
 export type QueryBody = {
-  ciudad?: string;
-  servicio?: string;
-  deudaMinima?: number;
-  deudaMaxima?: number;
+  ciudad: string | null;
+  servicio: string | null;
+  deudaMinima: number | null | '';
+  deudaMaxima: number | null | '';
 };
 
 export type Persona = {
