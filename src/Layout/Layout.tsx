@@ -3,11 +3,11 @@ import NavBar from "../components/NavBar";
 
 export default function Layout() {
   return (
-    <>
-    <NavBar />
-      <main className="mt-10 p-4 w-full">
+    <div className="min-h-screen bg-gray-100">
+      <NavBar />
+      <main className="p-4 w-full">
         <Outlet />
       </main>
-    </>
+    </div>
   );
 }

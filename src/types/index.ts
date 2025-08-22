@@ -1,10 +1,9 @@
+// src/types.ts
 export type QueryBody = {
   ciudad?: string;
   servicio?: string;
-  valor?: {
-    menor?: number;
-    mayor?: number;
-  };
+  deudaMinima?: number;
+  deudaMaxima?: number;
 };
 
 export type Persona = {

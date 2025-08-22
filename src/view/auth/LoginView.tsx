@@ -25,7 +25,7 @@ export default function LoginView() {
     };
 
     return (
-        <div className="flex mt-50 justify-center items-center">
+        <div className="flex mt-17 justify-center items-center">
             <form
                 onSubmit={handleSubmit}
                 className="bg-white shadow-lg rounded-xl p-8 w-full max-w-sm space-y-6"

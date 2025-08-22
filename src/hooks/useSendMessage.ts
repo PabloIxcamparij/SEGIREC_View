@@ -6,26 +6,24 @@ import type { Persona, QueryBody } from "../types";
 export function useSendMessage() {
   const [ciudad, setCiudad] = useState("");
   const [servicio, setServicio] = useState("");
-  const [valor, setValor] = useState("");
-  const [valorTipo, setValorTipo] = useState<"Nah" | "Mayor" | "Menor">("Nah");
+  const [deudaMinima, setDeudaMinima] = useState<number | "">("");
+  const [deudaMaxima, setDeudaMaxima] = useState<number | "">("");
 
   const [personas, setPersonas] = useState<Persona[]>([]);
   const [mensaje, setMensaje] = useState<string | null>(null);
 
-  // 🔹 Consultar
+  //Consultar
   const handleConsultar = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const body: QueryBody = {};
-    
+
     if (ciudad) body.ciudad = ciudad;
     if (servicio) body.servicio = servicio;
 
-    if (valor && valorTipo !== "Nah") {
-      body.valor = {};
-      const v = Number(valor);
-      if (valorTipo === "Mayor") body.valor.mayor = v;
-      if (valorTipo === "Menor") body.valor.menor = v;
+    if (deudaMinima || deudaMaxima) {
+      if (deudaMinima) body.deudaMinima = Number(deudaMinima);
+      if (deudaMaxima) body.deudaMaxima = Number(deudaMaxima);
     }
 
     const response = await queryFiltered(body);
@@ -36,7 +34,7 @@ export function useSendMessage() {
     }
   };
 
-  // 🔹 Enviar correos
+  // Enviar correos
   const handleEnviar = async () => {
     const correos = personas.map((p) => p.correo);
     const response = await sendEmails(correos);
@@ -45,13 +43,13 @@ export function useSendMessage() {
     }
   };
 
-  // 🔹 Limpiar
+  // Limpiar
   const handleLimpiar = () => {
     setPersonas([]);
     setCiudad("");
     setServicio("");
-    setValor("");
-    setValorTipo("Nah");
+    setDeudaMinima("");
+    setDeudaMaxima("");
     setMensaje(null);
   };
 
@@ -60,10 +58,10 @@ export function useSendMessage() {
     setCiudad,
     servicio,
     setServicio,
-    valor,
-    setValor,
-    valorTipo,
-    setValorTipo,
+    deudaMinima,
+    setDeudaMinima,
+    deudaMaxima,
+    setDeudaMaxima,
     personas,
     mensaje,
     handleConsultar,

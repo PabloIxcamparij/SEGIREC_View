@@ -1,7 +1,8 @@
+// src/view/SendFilteredEmailsView.tsx
 import { useState } from "react";
 import { useSendMessage } from "../hooks/useSendMessage";
 
-const provincias = ["Bagaces", "Fortuna", "Mogote", "Río Naranjo"];
+const distritos = ["Bagaces", "Fortuna", "Mogote", "Río Naranjo"];
 const servicios = ["Electricidad", "Agua", "Internet"];
 
 export default function SendFilteredEmailsView() {
@@ -10,12 +11,11 @@ export default function SendFilteredEmailsView() {
     setCiudad,
     servicio,
     setServicio,
-    valor,
-    setValor,
-    valorTipo,
-    setValorTipo,
+    deudaMinima,
+    setDeudaMinima,
+    deudaMaxima,
+    setDeudaMaxima,
     personas,
-    mensaje,
     handleConsultar,
     handleEnviar,
     handleLimpiar,
@@ -23,11 +23,37 @@ export default function SendFilteredEmailsView() {
 
   const [isConsultando, setIsConsultando] = useState(false);
 
+  // Estados para mostrar/ocultar filtros
+  const [filtrosActivos, setFiltrosActivos] = useState({
+    ciudad: false,
+    servicio: false,
+    deuda: false,
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (filtrosActivos.deuda) {
+      if (
+        (deudaMinima !== null && typeof deudaMinima === "number" && deudaMinima < 0) ||
+        (deudaMaxima !== null && typeof deudaMaxima === "number" && deudaMaxima < 0)
+      ) {
+        console.log("Los valores no pueden ser negativos");
+      }
+      if (
+        typeof deudaMinima === "number" &&
+        typeof deudaMaxima === "number" &&
+        deudaMaxima < deudaMinima
+      ) {
+        alert("El valor máximo no puede ser menor al mínimo.");
+        return;
+      }
+    }
+
     setIsConsultando(true);
-    await handleConsultar(e); // asumimos que tu hook soporta async
+    await handleConsultar(e);
     setIsConsultando(false);
+    console.log("Personas consultadas:", personas);
   };
 
   return (
@@ -40,52 +66,113 @@ export default function SendFilteredEmailsView() {
           Enviar correos
         </h1>
 
-        {/* Ciudad */}
-        <select
-          value={ciudad}
-          onChange={(e) => setCiudad(e.target.value)}
-          className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
-        >
-          <option value="">Seleccione Distrito</option>
-          {provincias.map((prov) => (
-            <option key={prov} value={prov}>
-              {prov}
-            </option>
-          ))}
-        </select>
+        {/* Distritos */}
+        <div className="space-y-2">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={filtrosActivos.ciudad}
+              onChange={(e) =>
+                setFiltrosActivos((prev) => ({
+                  ...prev,
+                  ciudad: e.target.checked,
+                }))
+              }
+            />
+            Filtrar por Distritos
+          </label>
+          {filtrosActivos.ciudad && (
+            <select
+              value={ciudad}
+              onChange={(e) => setCiudad(e.target.value)}
+              className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
+            >
+              <option value="">Seleccione Distrito</option>
+              {distritos.map((prov) => (
+                <option key={prov} value={prov}>
+                  {prov}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
 
         {/* Servicio */}
-        <select
-          value={servicio}
-          onChange={(e) => setServicio(e.target.value)}
-          className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
-        >
-          <option value="">Seleccione Servicio</option>
-          {servicios.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
+        <div className="space-y-2">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={filtrosActivos.servicio}
+              onChange={(e) =>
+                setFiltrosActivos((prev) => ({
+                  ...prev,
+                  servicio: e.target.checked,
+                }))
+              }
+            />
+            Filtrar por Servicio
+          </label>
+          {filtrosActivos.servicio && (
+            <select
+              value={servicio}
+              onChange={(e) => setServicio(e.target.value)}
+              className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
+            >
+              <option value="">Seleccione Servicio</option>
+              {servicios.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
 
-        {/* Valor */}
-        <div className="flex flex-col sm:flex-row gap-2 items-center">
-          <input
+        {/* Valor de Deuda */}
+        <div className="space-y-3">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={filtrosActivos.deuda}
+              onChange={(e) =>
+                setFiltrosActivos((prev) => ({
+                  ...prev,
+                  deuda: e.target.checked,
+                }))
+              }
+            />
+            Filtrar por Valor de Deuda
+          </label>
+          {filtrosActivos.deuda && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="space-y-2">
+        <label htmlFor="deuda-min">Valor Mínimo (₡)</label>
+        <input
+            id="deuda-min"
             type="number"
-            value={valor}
-            onChange={(e) => setValor(e.target.value)}
-            className="border p-2 rounded flex-1 w-full focus:ring-2 focus:ring-principal outline-none"
-            placeholder="Valor"
-          />
-          <select
-            value={valorTipo}
-            onChange={(e) => setValorTipo(e.target.value as any)}
-            className="border p-2 rounded w-full sm:w-32 focus:ring-2 focus:ring-principal outline-none"
-          >
-            <option value="Nah">Nah</option>
-            <option value="Mayor">Mayor</option>
-            <option value="Menor">Menor</option>
-          </select>
+            value={deudaMinima}
+            onChange={(e) => {
+                const value = e.target.value;
+                setDeudaMinima(value === '' ? '' : Number(value));
+            }}
+            className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
+        />
+    </div>
+    <div className="space-y-2">
+        <label htmlFor="deuda-max">Valor Máximo (₡)</label>
+        <input
+            id="deuda-max"
+            type="number"
+            value={deudaMaxima}
+            onChange={(e) => {
+                const value = e.target.value;
+                setDeudaMaxima(value === '' ? '' : Number(value));
+            }}
+            className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
+        />
+    </div>
+</div>
+          )}
         </div>
 
         {/* Botones */}
@@ -116,11 +203,9 @@ export default function SendFilteredEmailsView() {
           </button>
         </div>
       </form>
-
-      {/* Tabla */}
       {personas.length > 0 && (
-        <div className="flex flex-col mt-10 bg-white shadow-xl rounded-2xl w-full sm:w-4/5 md:w-3/5 p-4 gap-4">
-          <h1 className="text-xl font-bold">Resultados</h1>
+        <div className="mt-8 w-full sm:w-4/5 md:w-3/5 bg-white shadow-xl rounded-2xl p-6">
+          <h2 className="text-xl font-bold mb-4 text-principal">Resultados</h2>
 
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
@@ -136,30 +221,18 @@ export default function SendFilteredEmailsView() {
                 {personas.map((p, idx) => (
                   <tr
                     key={idx}
-                    className="text-center hover:bg-gray-50 transition"
+                    className="text-center odd:bg-white even:bg-gray-50"
                   >
                     <td className="p-2 border">{p.correo}</td>
                     <td className="p-2 border">{p.ciudad}</td>
                     <td className="p-2 border">{p.servicio}</td>
-                    <td className="p-2 border">{p.valorDeLaDeuda}</td>
+                    <td className="p-2 border">₡{p.valorDeLaDeuda}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-
-          <button
-            type="button"
-            onClick={handleLimpiar}
-            className="border hover:bg-gray-800 hover:text-white px-4 py-2 rounded self-end"
-          >
-            Limpiar
-          </button>
         </div>
-      )}
-
-      {mensaje && (
-        <p className="mt-6 font-medium text-center text-principal">{mensaje}</p>
       )}
     </div>
   );
