@@ -33,7 +33,16 @@ export default function SendFilteredEmailsView() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log("Filtros Activos:", filtrosActivos);
+    if (filtrosActivos.deuda) {
+      if (deudaMinima === "" || deudaMaxima === "") {
+        alert("Por favor, ingrese ambos valores de deuda.");
+        return;
+      }
+      if (Number(deudaMinima) > Number(deudaMaxima)) {
+        alert("El valor mínimo de deuda no puede ser mayor que el valor máximo.");
+        return;
+      }
+    }
 
     const filtros: QueryBody = {
       ...(filtrosActivos.ciudad && { ciudad }),

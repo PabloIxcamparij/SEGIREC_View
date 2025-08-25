@@ -11,13 +11,9 @@ export default function LoginView() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
-
-        console.log("Usuario:", usuario);
-        console.log("Contraseña:", password);
-
         try {
             const response = await login({ correo: usuario, password });
-            console.log("Respuesta del backend:", response);
+            localStorage.setItem("AuthToken", response.token);
             navigate("/home");
         } catch (err: any) {
             setError(err.response?.data?.message || "Error en login");
