@@ -1,25 +1,26 @@
 import { createBrowserRouter } from "react-router";
-import Layout from "./Layout/Layout";
+import LayoutMessages from "./Layout/LayoutMessages";
+import LayoutAuth from "./Layout/LayoutAuth";
 import SendFilteredEmailsView from "./view/SendMessageView";
+import SendMessageByIdView from "./view/SendMessageByIdView";
 import HomeView
- from "./view/HomeView";
-
+  from "./view/HomeView";
 import LockView from "./view/LockView";
 import ReportsView from "./view/ReportsView";
+
 import LoginView from "./view/auth/LoginView";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Layout />,
+    element: <LayoutMessages />,
     children: [
       {
-        index: true,
-        element: <LoginView />,
-      },
-       {
         path: "SendMessage",
         element: <SendFilteredEmailsView />,
+      },
+      {
+        path: "SendMessageById",
+        element: <SendMessageByIdView/>,
       },
       {
         path: "home",
@@ -35,4 +36,14 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/",
+    element: <LayoutAuth />,
+    children: [
+      {
+        index: true,
+        element: <LoginView />,
+      },
+    ],
+  }
 ]);
