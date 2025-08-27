@@ -59,14 +59,13 @@ export default function SendFilteredEmailsView() {
   return (
     <div className="flex flex-col items-center justify-center w-full gap-10 p-4">
 
-      <h1 className="text-2xl font-bold mb-4 text-center text-principal ">
-        Modulo de envio de mensajes.
-      </h1>
-
       <div className="flex flex-col w-full sm:w-4/5 md:w-3/5 shadow-xl rounded-2xl">
         <h1 className="text-2xl font-bold mb-4 text-center text-principal ">
-          Consulta por filtros
+          Búsqueda de personas por filtros
         </h1>
+        <h2 className="text-1xl mb-4 text-center text-gray-500 ">
+          Seleccione los filtros que quiera usar para comenzar la consulta
+        </h2>
         <form
           onSubmit={handleSubmit}
           className="p-6 space-y-6"
@@ -186,7 +185,7 @@ export default function SendFilteredEmailsView() {
       <ButtonsSendsMessage handleSubmit={handleSubmit} isConsultando={isConsultando} />
 
       {personas.length > 0 && (
-        <TablePeople/>
+        <TablePeople />
       )}
 
     </div>

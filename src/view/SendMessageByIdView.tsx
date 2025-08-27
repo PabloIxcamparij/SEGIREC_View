@@ -2,11 +2,14 @@
 import { useState } from "react";
 import { useSendMessage } from "../hooks/useSendMessage";
 import TablePeople from "../components/TablePeople";
+import ButtonsSendsMessage from "../components/ButtonsSendsMessage";
 
 export default function SendMessageByIdView() {
   const {
     idCard,
     setIdCard,
+    namePerson,
+    setNamePerson,
     personas,
     handleConsultar,
   } = useSendMessage();
@@ -20,25 +23,43 @@ export default function SendMessageByIdView() {
     setIsConsultando(false);
   };
 
+  const [filtrosActivos, setFiltrosActivos] = useState({
+    cedula: false,
+    name: false,
+  });
+
   return (
     <div className="flex flex-col items-center justify-center w-full gap-10 p-4">
-
-      <h1 className="text-2xl font-bold mb-4 text-center text-principal ">
-        Modulo de envio de mensajes.
-      </h1>
 
       <div className="flex flex-col w-full sm:w-4/5 md:w-3/5 shadow-xl rounded-2xl">
 
         <h1 className="text-2xl font-bold mb-4 text-center text-principal ">
-          Consulta por cedula.
+          Buscar a una persona por cedula o nombre
         </h1>
+         <h2 className="text-1xl mb-4 text-center text-gray-500 ">
+          Seleccione una de las opciones e ingrese los datos para comenzar la consulta
+        </h2>
 
-          <form
-            onSubmit={handleSubmit}
-            className="w-full p-6 space-y-6"
-          >
-            <div className="space-y-2">
-              <label htmlFor="deuda-min">Ingrese la cedula de la persona a buscar</label>
+        <form
+          onSubmit={handleSubmit}
+          className="w-full p-6 space-y-6"
+        >
+          <div className="space-y-2">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={filtrosActivos.cedula}
+                onChange={(e) =>
+                  setFiltrosActivos((prev) => ({
+                    ...prev,
+                    cedula: e.target.checked,
+                    name: false,
+                  }))
+                }
+              />
+              Ingrese la cedula de la persona a buscar
+            </label>
+            {filtrosActivos.cedula && (
               <input
                 id="id-card"
                 type="text"
@@ -46,10 +67,39 @@ export default function SendMessageByIdView() {
                 onChange={(e) => setIdCard(e.target.value)}
                 className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
               />
-            </div>
-          </form>
+            )}
+          </div>
+          <div className="space-y-2">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={filtrosActivos.name}
+                onChange={(e) =>
+                  setFiltrosActivos((prev) => ({
+                    ...prev,
+                    name: e.target.checked,
+                    cedula: false,
+                  }))
+                }
+              />
+              Ingrese el nombre de la persona a buscar
+            </label>
+            {filtrosActivos.name && (
+              <input
+                id="name-person"
+                type="text"
+                value={namePerson}
+                onChange={(e) => setNamePerson(e.target.value)}
+                className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
+              />
+            )}
+          </div>
+
+        </form>
       </div>
-  
+
+      <ButtonsSendsMessage handleSubmit={handleSubmit} isConsultando={isConsultando} />
+
       {personas.length > 0 && (
         <TablePeople />
       )}

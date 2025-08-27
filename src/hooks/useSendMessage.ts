@@ -9,6 +9,7 @@ export function useSendMessage() {
   const [deudaMinima, setDeudaMinima] = useState<number | "">("");
   const [deudaMaxima, setDeudaMaxima] = useState<number | "">("");
   const [idCard, setIdCard] = useState("");
+  const [namePerson, setNamePerson] = useState("");
 
   const [personas, setPersonas] = useState<Persona[]>([]);
   const [mensaje, setMensaje] = useState<string | null>(null);
@@ -64,6 +65,8 @@ export function useSendMessage() {
     setDeudaMaxima,
     idCard,
     setIdCard,
+    namePerson,
+    setNamePerson,
     personas,
     mensaje,
     handleConsultar,

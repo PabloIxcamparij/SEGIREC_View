@@ -43,14 +43,14 @@ export default function NavBar() {
                   className="block px-4 py-2 hover:text-[#3e50b5]"
                   onClick={() => setSubmenuOpen(false)}
                 >
-                  Por Filtros
+                  Hacer por filtros
                 </Link>
                 <Link
                   to="/SendMessageById"
                   className="block px-4 py-2 hover:text-[#3e50b5]"
                   onClick={() => setSubmenuOpen(false)}
                 >
-                  Por ID
+                  Buscar a una persona
                 </Link>
               </div>
             )}
@@ -125,7 +125,7 @@ export default function NavBar() {
                   }}
                   className="hover:text-black transition"
                 >
-                  Por Filtros
+                  Hacer por filtros
                 </Link>
                 <Link
                   to="/SendMessageById"
@@ -135,7 +135,7 @@ export default function NavBar() {
                   }}
                   className="hover:text-black transition"
                 >
-                  Por ID
+                  Buscar a una persona
                 </Link>
               </div>
             )}
