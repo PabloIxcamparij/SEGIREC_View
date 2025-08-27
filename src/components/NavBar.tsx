@@ -9,13 +9,17 @@ const links = [
     { path: "/", label: "Cerrar Sesión" },
 ];
 
+const handleLogout = () => {
+    localStorage.removeItem("AuthToken");
+    window.location.href = "/";
+};
 
 
 export default function NavBar() {
-    
+
     const [open, setOpen] = useState(false);
     const location = useLocation();
-    
+
     if (location.pathname === "/") return null;
 
     const toggleMenu = () => setOpen(!open);
@@ -30,12 +34,17 @@ export default function NavBar() {
                         <Link
                             key={link.path}
                             to={link.path}
+                            onClick={() => {
+                                setOpen(false); // cerrar sidebar si es móvil
+                                if (link.label === "Cerrar Sesión") handleLogout();
+                            }}
                             className={`hover:text-gray-200 transition ${location.pathname === link.path ? "underline" : ""
                                 }`}
                         >
                             {link.label}
                         </Link>
                     ))}
+
                 </div>
             </nav>
 
@@ -60,13 +69,17 @@ export default function NavBar() {
                         <Link
                             key={link.path}
                             to={link.path}
-                            onClick={() => setOpen(false)} // cerrar sidebar al navegar
+                            onClick={() => {
+                                setOpen(false); // cerrar sidebar si es móvil
+                                if (link.label === "Cerrar Sesión") handleLogout();
+                            }}
                             className={`hover:text-gray-200 transition ${location.pathname === link.path ? "underline" : ""
                                 }`}
                         >
                             {link.label}
                         </Link>
                     ))}
+
                 </nav>
             </div>
 

@@ -63,7 +63,7 @@ export default function SendFilteredEmailsView() {
         className="bg-white w-full sm:w-4/5 md:w-3/5 shadow-xl rounded-2xl p-6 space-y-6"
       >
         <h1 className="text-2xl font-bold mb-4 text-center text-principal">
-          Enviar correos
+          Envio de Mensajes
         </h1>
 
         {/* Distritos */}
