@@ -1,10 +1,11 @@
 import axios from "axios";
 import type { QueryBody, QueryResponse, SendEmailsResponse } from "../types";
 
-const BASE_URL = "https://silver-tribble-9779qq49gwjr276w4-4040.app.github.dev/message";
+// const BASE_URL = "https://silver-tribble-9779qq49gwjr276w4-4040.app.github.dev/message";
+const BASE_URL = "http://localhost:4040/message";
 const token = localStorage.getItem("AuthToken");
 
-// 🔹 Consultar usuarios filtrados
+// Consultar usuarios filtrados
 export async function queryFiltered(body: QueryBody): Promise<QueryResponse | null> {
   try {
     const { data } = await axios.post<QueryResponse>(
@@ -25,7 +26,7 @@ export async function queryFiltered(body: QueryBody): Promise<QueryResponse | nu
 }
 
 
-// 🔹 Enviar correos
+// Enviar correos
 export async function sendEmails(destinatarios: string[]): Promise<SendEmailsResponse | null> {
   try {
     const { data } = await axios.post<SendEmailsResponse>(

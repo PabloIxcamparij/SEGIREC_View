@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://silver-tribble-9779qq49gwjr276w4-4040.app.github.dev/auth";
+const BASE_URL = "http://localhost:4040/auth";
 
 // Body esperado: { correo: string, password: string }
 export async function login(body: { correo: string; password: string }) {

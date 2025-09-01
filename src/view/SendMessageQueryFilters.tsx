@@ -8,7 +8,7 @@ import { useSendMessageContext } from "../context/SendMessageContext";
 const distritos = ["Bagaces", "Fortuna", "Mogote", "Río Naranjo"];
 const servicios = ["Electricidad", "Agua", "Internet"];
 
-export default function SendFilteredEmailsView() {
+export default function SendMessageQueryFilters() {
   const {
     ciudad,
     setCiudad,

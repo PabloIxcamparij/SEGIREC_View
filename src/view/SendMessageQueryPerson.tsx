@@ -4,7 +4,7 @@ import { useSendMessage } from "../hooks/useSendMessage";
 import TablePeople from "../components/TablePeople";
 import ButtonsSendsMessage from "../components/ButtonsSendsMessage";
 
-export default function SendMessageByIdView() {
+export default function SendMessageQueryPerson() {
   const {
     idCard,
     setIdCard,
