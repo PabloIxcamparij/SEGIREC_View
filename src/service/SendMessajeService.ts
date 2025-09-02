@@ -25,11 +25,51 @@ export async function queryPeopleFilters(body: QueryBody): Promise<QueryResponse
   }
 }
 
-//Consultar a un usuario por ID
-export async function queryPerson(body: string): Promise<Persona | null> {
+//Consultar a un usuario por Cedula
+export async function queryPersonByCedula(body: string): Promise<Persona | null> {
   try {
     const { data } = await axios.post<Persona>(
-      `${BASE_URL}/queryPerson`,
+      `${BASE_URL}/queryPersonByCedula`,
+      body,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  } catch (error: any) {
+    console.error("Error al consultar usuario:", error.response?.data || error.message);
+    return null;
+  }
+}
+
+// Consultar a un usuario por Archivo
+export async function queryPersonByArchive(body: string[]): Promise<QueryResponse | null> {
+  try {
+    const { data } = await axios.post<QueryResponse>(
+      `${BASE_URL}/queryPersonByArchive`,
+      body,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  } catch (error: any) {
+    console.error("Error al consultar usuario:", error.response?.data || error.message);
+    return null;
+  }
+}
+
+//Consultar a un usario por nombre
+export async function queryPersonByName(body: string): Promise<Persona | null> {
+  try {
+    const { data } = await axios.post<Persona>(
+      `${BASE_URL}/queryPersonByName`,
       body,
       {
         headers: {

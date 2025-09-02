@@ -1,6 +1,12 @@
 // src/hooks/useSendMessage.ts
 import { useState } from "react";
-import { queryPeopleFilters, queryPerson, sendEmails } from "../service/SendMessajeService";
+import {
+  queryPeopleFilters,
+  queryPersonByCedula,
+  queryPersonByName,
+  queryPersonByArchive,
+  sendEmails,
+} from "../service/SendMessajeService";
 import type { Persona, QueryBody } from "../types";
 
 export function useSendMessage() {
@@ -19,12 +25,14 @@ export function useSendMessage() {
     const body: QueryBody = {
       ...(filtros.ciudad && { ciudad: filtros.ciudad }),
       ...(filtros.servicio && { servicio: filtros.servicio }),
-      ...(filtros.deudaMinima !== "" && filtros.deudaMinima !== undefined && {
-        deudaMinima: filtros.deudaMinima,
-      }),
-      ...(filtros.deudaMaxima !== "" && filtros.deudaMaxima !== undefined && {
-        deudaMaxima: filtros.deudaMaxima,
-      }),
+      ...(filtros.deudaMinima !== "" &&
+        filtros.deudaMinima !== undefined && {
+          deudaMinima: filtros.deudaMinima,
+        }),
+      ...(filtros.deudaMaxima !== "" &&
+        filtros.deudaMaxima !== undefined && {
+          deudaMaxima: filtros.deudaMaxima,
+        }),
     };
 
     const response = await queryPeopleFilters(body);
@@ -35,17 +43,38 @@ export function useSendMessage() {
     }
   };
 
-  //Consultar a una persona por ID
-  const handleQueryPerson = async (cedula: string) => {
+  //Consultar a una persona por Cedula
+  const handleQueryPersonByCedula = async (cedula: string) => {
+    const body: any = { cedula };
+    const response = await queryPersonByCedula(body);
 
-    const body : any = { cedula };
-
-    const response = await queryPerson(body);
     if (response) {
       setPersonas([response]);
       setMensaje(null);
     }
-  }; 
+  };
+
+  //Consultar a una persona por Nombre
+  const handleQueryPersonByName = async (nombre: string) => {
+    const body: any = { nombre };
+    const response: any = await queryPersonByName(body);
+    if (response) {
+      setPersonas(response.personas);
+      setMensaje(null);
+    }
+  };
+
+  //Consultar a una persona por Archivo
+  const handleQueryPersonByArchive = async (cedulas: string[]) => {
+    const body: any = { cedulas };
+
+    const response = await queryPersonByArchive(body);
+
+    if (response) {
+      setPersonas(response.personas);
+      setMensaje(null);
+    }
+  };
 
   // Enviar correos
   const handleEnviar = async () => {
@@ -60,7 +89,9 @@ export function useSendMessage() {
   const handleLimpiar = () => {
     setPersonas([]);
     setCiudad("");
+    setIdCard("");
     setServicio("");
+    setNamePerson("");
     setDeudaMinima("");
     setDeudaMaxima("");
     setMensaje(null);
@@ -82,7 +113,9 @@ export function useSendMessage() {
     personas,
     mensaje,
     handleQueryPeopleFilters,
-    handleQueryPerson,
+    handleQueryPersonByCedula,
+    handleQueryPersonByName,
+    handleQueryPersonByArchive,
     handleEnviar,
     handleLimpiar,
   };

@@ -52,6 +52,13 @@ export default function NavBar() {
                 >
                   Buscar a una persona
                 </Link>
+                <Link
+                  to="/SendMessageByArchive"
+                  className="block px-4 py-2 hover:text-[#3e50b5]"
+                  onClick={() => setSubmenuOpen(false)}
+                >
+                  Buscar por archivo
+                </Link>
               </div>
             )}
           </div>
@@ -136,6 +143,16 @@ export default function NavBar() {
                   className="hover:text-black transition"
                 >
                   Buscar a una persona
+                </Link>
+                <Link
+                  to="/SendMessageByArchive"
+                  onClick={() => {
+                    setOpen(false);
+                    setSubmenuMobileOpen(false);
+                  }}
+                  className="hover:text-black transition"
+                >
+                  Buscar por archivo
                 </Link>
               </div>
             )}

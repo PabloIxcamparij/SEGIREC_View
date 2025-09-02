@@ -3,8 +3,9 @@ import LayoutMessages from "./Layout/LayoutMessages";
 import LayoutAuth from "./Layout/LayoutAuth";
 
 // SendMessage views
-import QueryFilters from "./view/SendMessageQueryFilters";
-import SearchPerson from "./view/SendMessageQueryPerson";
+import QueryFilters from "./view/SendMessageQueryByFilters";
+import QueryAttributes from "./view/SendMessageQueryByAttributes";
+import QueryArchive from "./view/SendMessageQueryByArchive";
 
 // Admin views
 import HomeView
@@ -25,7 +26,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "SendMessageById",
-        element: <SearchPerson />,
+        element: <QueryAttributes />,
+      },
+      {
+        path: "SendMessageByArchive",
+        element: <QueryArchive />,
       },
       {
         path: "home",

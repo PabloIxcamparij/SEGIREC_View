@@ -1,34 +1,43 @@
-// src/view/SendFilteredEmailsView.tsx
 import { useEffect, useState } from "react";
 import { useSendMessageContext } from "../context/SendMessageContext";
 import ButtonsSendsMessage from "../components/ButtonsSendsMessage";
 import TablePeople from "../components/TablePeople";
 
-export default function SendMessageQueryPerson() {
+export default function SendMessageQueryByAttributes() {
   const {
     idCard,
     setIdCard,
     namePerson,
     setNamePerson,
     personas,
-    handleQueryPerson,
+    handleQueryPersonByCedula,
+    handleQueryPersonByName,
     handleLimpiar,
   } = useSendMessageContext();
 
   const [isConsultando, setIsConsultando] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    setIsConsultando(true);
-    await handleQueryPerson(idCard);
-    setIsConsultando(false);
-  };
-
   const [filtrosActivos, setFiltrosActivos] = useState({
     cedula: false,
     name: false,
   });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setIsConsultando(true);
+
+    try {
+      if (filtrosActivos.cedula) {
+        await handleQueryPersonByCedula(idCard);
+      } else if (filtrosActivos.name) {
+        await handleQueryPersonByName(namePerson);
+      }
+    } catch (error) {
+      console.error("Error en handleSubmit:", error);
+    } finally {
+      setIsConsultando(false);
+    }
+  };
 
   //Limpiar y desmontar al salir de la pagina
   useEffect(() => {
@@ -39,7 +48,7 @@ export default function SendMessageQueryPerson() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full gap-10 p-4">
-      <div className="flex flex-col w-full sm:w-4/5 md:w-3/5 shadow-xl rounded-2xl">
+      <div className="flex flex-col text-wrap p-4 w-full sm:w-4/5 md:w-3/5 shadow-xl bg-gray-200 rounded-2xl">
         <h1 className="text-2xl font-bold mb-4 text-center text-principal ">
           Buscar a una persona por cedula o nombre
         </h1>
