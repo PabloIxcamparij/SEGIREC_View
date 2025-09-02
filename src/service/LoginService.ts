@@ -1,4 +1,5 @@
 import axios from "axios";
+import { showToast } from "../utils/toastUtils";
 
 const BASE_URL = "http://localhost:4040/auth";
 
@@ -10,7 +11,7 @@ export async function login(body: { correo: string; password: string }) {
     });
     return data; // { message: "Login successful" }
   } catch (error: any) {
-    console.error("Error en login:", error.response?.data || error.message);
+    showToast("error", "Error en login", String(error));
     throw error;
   }
 }

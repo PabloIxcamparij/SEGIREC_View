@@ -8,6 +8,7 @@ import {
   sendEmails,
 } from "../service/SendMessajeService";
 import type { Persona, QueryBody } from "../types";
+import { showToast } from "../utils/toastUtils";
 
 export function useSendMessage() {
   const [ciudad, setCiudad] = useState("");
@@ -18,7 +19,6 @@ export function useSendMessage() {
   const [namePerson, setNamePerson] = useState("");
 
   const [personas, setPersonas] = useState<Persona[]>([]);
-  const [mensaje, setMensaje] = useState<string | null>(null);
 
   //Consultar personas por filtros
   const handleQueryPeopleFilters = async (filtros: QueryBody) => {
@@ -39,7 +39,7 @@ export function useSendMessage() {
 
     if (response) {
       setPersonas(response.personas);
-      setMensaje(null);
+      showToast("success", "Consulta exitosa", "Cargando Resultados");
     }
   };
 
@@ -50,7 +50,7 @@ export function useSendMessage() {
 
     if (response) {
       setPersonas([response]);
-      setMensaje(null);
+      showToast("success", "Consulta exitosa", "Cargando Resultados");
     }
   };
 
@@ -60,7 +60,7 @@ export function useSendMessage() {
     const response: any = await queryPersonByName(body);
     if (response) {
       setPersonas(response.personas);
-      setMensaje(null);
+      showToast("success", "Consulta exitosa", "Cargando Resultados");
     }
   };
 
@@ -72,7 +72,7 @@ export function useSendMessage() {
 
     if (response) {
       setPersonas(response.personas);
-      setMensaje(null);
+      showToast("success", "Archivo procesado", "Cargando Resultados");
     }
   };
 
@@ -81,7 +81,7 @@ export function useSendMessage() {
     const correos = personas.map((p) => p.correo);
     const response = await sendEmails(correos);
     if (response) {
-      setMensaje(response.message);
+      showToast("success", "Correos enviados", "Cargando Resultados");
     }
   };
 
@@ -94,7 +94,6 @@ export function useSendMessage() {
     setNamePerson("");
     setDeudaMinima("");
     setDeudaMaxima("");
-    setMensaje(null);
   };
 
   return {
@@ -111,7 +110,6 @@ export function useSendMessage() {
     namePerson,
     setNamePerson,
     personas,
-    mensaje,
     handleQueryPeopleFilters,
     handleQueryPersonByCedula,
     handleQueryPersonByName,

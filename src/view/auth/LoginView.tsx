@@ -1,13 +1,12 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { login } from "../../service/LoginService";
-import { Toast } from "primereact/toast";
 import { useNavigate } from "react-router";
+import { showToast } from "../../utils/toastUtils";
 
 export default function LoginView() {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const toast = useRef<Toast>(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -18,31 +17,22 @@ export default function LoginView() {
       const response = await login({ correo: usuario, password });
       localStorage.setItem("AuthToken", response.token);
 
-      toast.current?.show({
-        severity: "success",
-        summary: "Inicio de sesión exitoso",
-        life: 3000,
-      });
+      showToast("success", "Inicio de sesión exitoso");
 
       setTimeout(() => navigate("/home"), 2000);
     } catch (err: any) {
-      toast.current?.show({
-        severity: "error",
-        summary: "Error de autenticación",
-        detail:
-          err.response?.data?.message ||
-          "Credenciales inválidas, intenta de nuevo.",
-        life: 4000,
-      });
+      showToast(
+        "error",
+        "Error de autenticación",
+        err.response?.data?.message ||
+          "Credenciales inválidas, intenta de nuevo."
+      );
     } finally {
       setIsLoading(false);
     }
   };
-
   return (
     <div className="h-full flex items-center justify-center p-6">
-      <Toast ref={toast} position="top-center" />
-
       <div className="w-full max-w-md">
         {/* Encabezado */}
         <div className="text-center mb-8">

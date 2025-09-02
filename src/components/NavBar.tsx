@@ -1,9 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router";
+import { showToast } from "../utils/toastUtils";
 
 const handleLogout = () => {
-  localStorage.removeItem("AuthToken");
-  window.location.href = "/";
+  showToast("info", "Cerrando sesión");
+
+  setTimeout(() => {
+    localStorage.removeItem("AuthToken");
+    window.location.href = "/";
+  }, 2000);
 };
 
 export default function NavBar() {

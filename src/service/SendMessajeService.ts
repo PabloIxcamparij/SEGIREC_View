@@ -1,106 +1,53 @@
-import axios from "axios";
 import type { Persona, QueryBody, QueryResponse, SendEmailsResponse } from "../types";
-
-// const BASE_URL = "https://silver-tribble-9779qq49gwjr276w4-4040.app.github.dev/message";
-const BASE_URL = "http://localhost:4040/message";
-const token = localStorage.getItem("AuthToken");
+import { axiosClient } from "../utils/axiosClient";
+import {errorHandler} from "../utils/errorHandler";
 
 // Consultar usuarios filtrados
 export async function queryPeopleFilters(body: QueryBody): Promise<QueryResponse | null> {
   try {
-    const { data } = await axios.post<QueryResponse>(
-      `${BASE_URL}/queryPeople`,
-      body,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const { data } = await axiosClient.post<QueryResponse>("/queryPeople", body);
     return data;
   } catch (error: any) {
-    console.error("Error al consultar filtrados:", error.response?.data || error.message);
-    return null;
+    return errorHandler(error, "consultar filtrados");
   }
 }
 
-//Consultar a un usuario por Cedula
+// Consultar por cédula
 export async function queryPersonByCedula(body: string): Promise<Persona | null> {
   try {
-    const { data } = await axios.post<Persona>(
-      `${BASE_URL}/queryPersonByCedula`,
-      body,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const { data } = await axiosClient.post<Persona>("/queryPersonByCedula", body);
     return data;
   } catch (error: any) {
-    console.error("Error al consultar usuario:", error.response?.data || error.message);
-    return null;
+    return errorHandler(error, "consultar por cédula");
   }
 }
 
-// Consultar a un usuario por Archivo
-export async function queryPersonByArchive(body: string[]): Promise<QueryResponse | null> {
-  try {
-    const { data } = await axios.post<QueryResponse>(
-      `${BASE_URL}/queryPersonByArchive`,
-      body,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return data;
-  } catch (error: any) {
-    console.error("Error al consultar usuario:", error.response?.data || error.message);
-    return null;
-  }
-}
-
-//Consultar a un usario por nombre
+// Consultar por nombre
 export async function queryPersonByName(body: string): Promise<Persona | null> {
   try {
-    const { data } = await axios.post<Persona>(
-      `${BASE_URL}/queryPersonByName`,
-      body,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const { data } = await axiosClient.post<Persona>("/queryPersonByName", body);
     return data;
   } catch (error: any) {
-    console.error("Error al consultar usuario:", error.response?.data || error.message);
-    return null;
+    return errorHandler(error, "consultar por nombre");
+  }
+}
+
+// Consultar por archivo
+export async function queryPersonByArchive(body: string[]): Promise<QueryResponse | null> {
+  try {
+    const { data } = await axiosClient.post<QueryResponse>("/queryPersonByArchive", body);
+    return data;
+  } catch (error: any) {
+    return errorHandler(error, "consultar por archivo");
   }
 }
 
 // Enviar correos
 export async function sendEmails(destinatarios: string[]): Promise<SendEmailsResponse | null> {
   try {
-    const { data } = await axios.post<SendEmailsResponse>(
-      `${BASE_URL}/sendMessage`,
-      { destinatarios },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const { data } = await axiosClient.post<SendEmailsResponse>("/sendMessage", { destinatarios });
     return data;
   } catch (error: any) {
-    console.error("Error al enviar correos:", error.response?.data || error.message);
-    return null;
+    return errorHandler(error, "enviar correos");
   }
 }

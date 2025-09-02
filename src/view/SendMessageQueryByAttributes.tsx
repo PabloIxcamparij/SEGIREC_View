@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSendMessageContext } from "../context/SendMessageContext";
 import ButtonsSendsMessage from "../components/ButtonsSendsMessage";
 import TablePeople from "../components/TablePeople";
+import { showToast } from "../utils/toastUtils";
 
 export default function SendMessageQueryByAttributes() {
   const {
@@ -33,7 +34,7 @@ export default function SendMessageQueryByAttributes() {
         await handleQueryPersonByName(namePerson);
       }
     } catch (error) {
-      console.error("Error en handleSubmit:", error);
+      showToast("error", "Error en lectura", String(error));
     } finally {
       setIsConsultando(false);
     }

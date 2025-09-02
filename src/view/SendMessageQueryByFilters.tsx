@@ -3,7 +3,7 @@ import type { QueryBody } from "../types";
 import TablePeople from "../components/TablePeople";
 import ButtonsSendsMessage from "../components/ButtonsSendsMessage";
 import { useSendMessageContext } from "../context/SendMessageContext";
-
+import { showToast } from "../utils/toastUtils";
 const distritos = ["Bagaces", "Fortuna", "Mogote", "Río Naranjo"];
 const servicios = ["Electricidad", "Agua", "Internet"];
 
@@ -35,29 +35,34 @@ export default function SendMessageQueryByFilters() {
 
     if (filtrosActivos.deuda) {
       if (deudaMinima === "" || deudaMaxima === "") {
-        alert("Por favor, ingrese ambos valores de deuda.");
+        showToast("error", "Por favor, ingrese ambos valores de deuda.");
         return;
       }
       if (Number(deudaMinima) > Number(deudaMaxima)) {
-        alert(
+        showToast(
+          "error",
           "El valor mínimo de deuda no puede ser mayor que el valor máximo."
         );
         return;
       }
     }
-
-    const filtros: QueryBody = {
-      ...(filtrosActivos.distritosList && { ciudad }),
-      ...(filtrosActivos.servicio && { servicio }),
-      ...(filtrosActivos.deuda &&
-        deudaMinima !== "" && { deudaMinima: Number(deudaMinima) }),
-      ...(filtrosActivos.deuda &&
-        deudaMaxima !== "" && { deudaMaxima: Number(deudaMaxima) }),
-    };
-
     setIsConsultando(true);
-    await handleQueryPeopleFilters(filtros);
-    setIsConsultando(false);
+
+    try {
+      const filtros: QueryBody = {
+        ...(filtrosActivos.distritosList && { ciudad }),
+        ...(filtrosActivos.servicio && { servicio }),
+        ...(filtrosActivos.deuda &&
+          deudaMinima !== "" && { deudaMinima: Number(deudaMinima) }),
+        ...(filtrosActivos.deuda &&
+          deudaMaxima !== "" && { deudaMaxima: Number(deudaMaxima) }),
+      };
+      await handleQueryPeopleFilters(filtros);
+    } catch (error) {
+      showToast("error", "Error en lectura", String(error));
+    } finally {
+      setIsConsultando(false);
+    }
   };
 
   //Limpiar y desmontar al salir de la pagina
