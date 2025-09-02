@@ -1,78 +1,136 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useState, useRef } from "react";
 import { login } from "../../service/LoginService";
-import toast from "react-hot-toast"; // 1. Importa toast
+import { Toast } from "primereact/toast";
+import { useNavigate } from "react-router";
 
 export default function LoginView() {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
-
-  // 2. Elimina el estado `error`
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useRef<Toast>(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+
     try {
       const response = await login({ correo: usuario, password });
       localStorage.setItem("AuthToken", response.token);
 
-      toast.success("¡Inicio de sesión exitoso!");
-      
-      setTimeout(() => {
-        navigate("/home");
-      }, 500);
+      toast.current?.show({
+        severity: "success",
+        summary: "Inicio de sesión exitoso",
+        life: 3000,
+      });
 
+      setTimeout(() => navigate("/home"), 2000);
     } catch (err: any) {
-      const errorMessage =
-        err.response?.data?.message ||
-        "Error al iniciar sesión. Por favor, revisa tus credenciales.";
-      toast.error(errorMessage);
+      toast.current?.show({
+        severity: "error",
+        summary: "Error de autenticación",
+        detail:
+          err.response?.data?.message ||
+          "Credenciales inválidas, intenta de nuevo.",
+        life: 4000,
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex mt-17 justify-center items-center">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-xl p-8 w-full max-w-sm space-y-6"
-      >
-        <h1 className="text-2xl font-bold text-center text-principal">
-          Iniciar Sesión
-        </h1>
+    <div className="h-full flex items-center justify-center p-6">
+      <Toast ref={toast} position="top-center" />
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Usuario
-          </label>
-          <input
-            type="text"
-            value={usuario}
-            onChange={(e) => setUsuario(e.target.value)}
-            placeholder="Ingresa tu correo"
-            className="mt-1 w-full p-2 border rounded-md"
-          />
+      <div className="w-full max-w-md">
+        {/* Encabezado */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold">Iniciar Sesión</h1>
+          <p className="text-gray-500">Ingresa tus credenciales para acceder</p>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Contraseña
-          </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Ingresa tu contraseña"
-            className="mt-1 w-full p-2 border rounded-md"
-          />
-        </div>
+        {/* Card */}
+        <div className="bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Email */}
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700">
+                Correo electrónico
+              </label>
+              <div className="relative group">
+                <input
+                  type="email"
+                  value={usuario}
+                  onChange={(e) => setUsuario(e.target.value)}
+                  placeholder="tu@ejemplo.com"
+                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 
+                             focus:border-principal focus:ring-2 focus:ring-principal/20
+                             text-gray-900 placeholder-gray-400 outline-none transition"
+                  required
+                />
+              </div>
+            </div>
 
-        <button
-          type="submit"
-          className="w-full bg-principal text-white py-2 rounded-md hover:bg-blue-700 transition"
-        >
-          Ingresar
-        </button>
-      </form>
+            {/* Password */}
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700">
+                Contraseña
+              </label>
+              <div className="relative group">
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 
+                             focus:border-principal focus:ring-2 focus:ring-principal/20
+                             text-gray-900 placeholder-gray-400 outline-none transition"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Botón */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full flex items-center justify-center gap-2 bg-principal hover:bg-principal/90 
+                         text-white font-medium py-3 px-4 rounded-lg transition 
+                         focus:outline-none focus:ring-2 focus:ring-principal/40 
+                         disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+            >
+              {isLoading ? (
+                <>
+                  <svg
+                    className="animate-spin w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 
+                      1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Iniciando...
+                </>
+              ) : (
+                "Iniciar Sesión"
+              )}
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

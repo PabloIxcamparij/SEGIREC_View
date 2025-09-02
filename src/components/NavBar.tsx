@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router";
 
 const handleLogout = () => {
@@ -8,28 +8,64 @@ const handleLogout = () => {
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
-  const [submenuOpen, setSubmenuOpen] = useState(false); // submenu desktop
-  const [submenuMobileOpen, setSubmenuMobileOpen] = useState(false); // submenu mobile
+  const [submenuOpen, setSubmenuOpen] = useState(false);
+
+  const navItems = [
+    { href: "/home", label: "Inicio" },
+    { href: "/reports", label: "Reportes" },
+    { href: "/lock", label: "Actividad" },
+  ];
+
+  const submenuItemsSendMessage = [
+    { href: "/SendMessage", label: "Hacer por filtros" },
+    { href: "/SendMessageById", label: "Buscar a una persona" },
+    { href: "/SendMessageByArchive", label: "Buscar por archivo" },
+  ];
+
+  const submenuRef = useRef<HTMLDivElement | null>(null);
 
   const toggleMenu = () => setOpen(!open);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        submenuRef.current &&
+        !submenuRef.current.contains(event.target as Node)
+      ) {
+        setSubmenuOpen(false);
+      }
+    };
+
+    if (submenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [submenuOpen]);
 
   return (
     <div className="text-white">
       {/* Navbar para md y lg */}
-      <nav className="hidden md:flex bg-principal px-6 py-3 justify-between items-center shadow">
+      <nav className="hidden md:flex h-16 bg-principal px-6 py-3 justify-between items-center shadow">
         <div className="font-bold text-lg">Gestor de Mensajes</div>
+
         <div className="flex gap-6 items-center relative">
-          <Link
-            to="/home"
-            className={`hover:text-gray-200 transition ${
-              location.pathname === "/home" ? "underline" : ""
-            }`}
-          >
-            Inicio
-          </Link>
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              to={item.href}
+              onClick={() => setOpen(false)}
+              className="hover:text-gray-200 transition"
+            >
+              {item.label}
+            </Link>
+          ))}
 
           {/* Submenu desktop */}
-          <div className="relative">
+          <div className="relative" ref={submenuRef}>
             <button
               onClick={() => setSubmenuOpen(!submenuOpen)}
               className="hover:text-gray-200 transition flex items-center gap-1"
@@ -37,51 +73,24 @@ export default function NavBar() {
               Enviar Mensajes ▾
             </button>
             {submenuOpen && (
-              <div className="absolute top-full left-0 bg-white text-black shadow-lg rounded-md mt-2 w-48">
-                <Link
-                  to="/SendMessage"
-                  className="block px-4 py-2 hover:text-[#3e50b5]"
-                  onClick={() => setSubmenuOpen(false)}
-                >
-                  Hacer por filtros
-                </Link>
-                <Link
-                  to="/SendMessageById"
-                  className="block px-4 py-2 hover:text-[#3e50b5]"
-                  onClick={() => setSubmenuOpen(false)}
-                >
-                  Buscar a una persona
-                </Link>
-                <Link
-                  to="/SendMessageByArchive"
-                  className="block px-4 py-2 hover:text-[#3e50b5]"
-                  onClick={() => setSubmenuOpen(false)}
-                >
-                  Buscar por archivo
-                </Link>
+              <div className="absolute top-full left-0 bg-white text-black shadow-lg rounded-md mt-2 w-58 z-50">
+                {submenuItemsSendMessage.map((item) => (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    onClick={() => setSubmenuOpen(false)}
+                    className="block px-4 py-2 hover:text-[#3e50b5]"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </div>
             )}
           </div>
 
-          <Link
-            to="/reports"
-            className={`hover:text-gray-200 transition ${
-              location.pathname === "/reports" ? "underline" : ""
-            }`}
-          >
-            Reportes
-          </Link>
-          <Link
-            to="/lock"
-            className={`hover:text-gray-200 transition ${
-              location.pathname === "/lock" ? "underline" : ""
-            }`}
-          >
-            Actividad
-          </Link>
           <button
             onClick={handleLogout}
-            className="hover:text-gray-200 transition"
+            className="text-left text-red-300 hover:text-red-200 transition-colors"
           >
             Cerrar Sesión
           </button>
@@ -89,9 +98,11 @@ export default function NavBar() {
       </nav>
 
       {/* Barra superior en móvil */}
-      <div className="flex md:hidden bg-principal px-4 py-3 justify-between items-center shadow">
+      <div className="flex md:hidden h-16 bg-principal px-4 py-3 justify-between items-center shadow">
         <div className="font-bold text-lg">Gestor de Mensajes</div>
-        <button onClick={toggleMenu}>☰</button>
+        <button className="text-2xl hover:text-gray-300" onClick={toggleMenu}>
+          ☰
+        </button>
       </div>
 
       {/* Sidebar en móvil */}
@@ -104,81 +115,36 @@ export default function NavBar() {
           <span className="font-bold text-lg">Menú</span>
         </div>
         <nav className="flex flex-col p-4 gap-4">
-          <Link
-            to="/home"
-            onClick={() => setOpen(false)}
-            className={`hover:text-gray-200 transition ${
-              location.pathname === "/home" ? "underline" : ""
-            }`}
-          >
-            Inicio
-          </Link>
+          {navItems.map((item) => (
+            <Link key={item.href} to={item.href} onClick={() => setOpen(false)}>
+              {item.label}
+            </Link>
+          ))}
 
           {/* Submenu móvil */}
-          <div>
-            <button
-              onClick={() => setSubmenuMobileOpen(!submenuMobileOpen)}
-              className="w-full text-left hover:text-gray-200 transition flex justify-between"
-            >
-              Enviar Mensajes {submenuMobileOpen ? "▾" : "▸"}
-            </button>
-            {submenuMobileOpen && (
-              <div className="ml-4 mt-2 flex flex-col gap-2">
+          <div className="border-t border-slate-700 pt-4">
+            <div className="text-sm font-medium text-gray-300 mb-3">
+              Enviar Mensajes
+            </div>
+            <div className="ml-4 flex flex-col gap-3">
+              {submenuItemsSendMessage.map((item) => (
                 <Link
-                  to="/SendMessage"
+                  key={item.href}
+                  to={item.href}
                   onClick={() => {
                     setOpen(false);
-                    setSubmenuMobileOpen(false);
                   }}
-                  className="hover:text-black transition"
+                  className="text-gray-200 hover:text-white transition-colors"
                 >
-                  Hacer por filtros
+                  {item.label}
                 </Link>
-                <Link
-                  to="/SendMessageById"
-                  onClick={() => {
-                    setOpen(false);
-                    setSubmenuMobileOpen(false);
-                  }}
-                  className="hover:text-black transition"
-                >
-                  Buscar a una persona
-                </Link>
-                <Link
-                  to="/SendMessageByArchive"
-                  onClick={() => {
-                    setOpen(false);
-                    setSubmenuMobileOpen(false);
-                  }}
-                  className="hover:text-black transition"
-                >
-                  Buscar por archivo
-                </Link>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
 
-          <Link
-            to="/reports"
-            onClick={() => setOpen(false)}
-            className={`hover:text-gray-200 transition ${
-              location.pathname === "/reports" ? "underline" : ""
-            }`}
-          >
-            Reportes
-          </Link>
-          <Link
-            to="/lock"
-            onClick={() => setOpen(false)}
-            className={`hover:text-gray-200 transition ${
-              location.pathname === "/lock" ? "underline" : ""
-            }`}
-          >
-            Actividad
-          </Link>
           <button
             onClick={handleLogout}
-            className="text-left hover:text-gray-200 transition"
+            className="text-left text-red-300 hover:text-red-200 transition-colors mt-4 pt-4 border-t border-slate-700"
           >
             Cerrar Sesión
           </button>
