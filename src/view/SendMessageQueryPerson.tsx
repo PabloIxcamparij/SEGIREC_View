@@ -1,8 +1,8 @@
 // src/view/SendFilteredEmailsView.tsx
-import { useState } from "react";
-import { useSendMessage } from "../hooks/useSendMessage";
-import TablePeople from "../components/TablePeople";
+import { useEffect, useState } from "react";
+import { useSendMessageContext } from "../context/SendMessageContext";
 import ButtonsSendsMessage from "../components/ButtonsSendsMessage";
+import TablePeople from "../components/TablePeople";
 
 export default function SendMessageQueryPerson() {
   const {
@@ -11,8 +11,9 @@ export default function SendMessageQueryPerson() {
     namePerson,
     setNamePerson,
     personas,
-    handleConsultar,
-  } = useSendMessage();
+    handleQueryPerson,
+    handleLimpiar,
+  } = useSendMessageContext();
 
   const [isConsultando, setIsConsultando] = useState(false);
 
@@ -20,6 +21,7 @@ export default function SendMessageQueryPerson() {
     e.preventDefault();
 
     setIsConsultando(true);
+    await handleQueryPerson(idCard);
     setIsConsultando(false);
   };
 
@@ -28,22 +30,25 @@ export default function SendMessageQueryPerson() {
     name: false,
   });
 
+  //Limpiar y desmontar al salir de la pagina
+  useEffect(() => {
+    return () => {
+      handleLimpiar();
+    };
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center w-full gap-10 p-4">
-
       <div className="flex flex-col w-full sm:w-4/5 md:w-3/5 shadow-xl rounded-2xl">
-
         <h1 className="text-2xl font-bold mb-4 text-center text-principal ">
           Buscar a una persona por cedula o nombre
         </h1>
-         <h2 className="text-1xl mb-4 text-center text-gray-500 ">
-          Seleccione una de las opciones e ingrese los datos para comenzar la consulta
+        <h2 className="text-1xl mb-4 text-center text-gray-500 ">
+          Seleccione una de las opciones e ingrese los datos para comenzar la
+          consulta
         </h2>
 
-        <form
-          onSubmit={handleSubmit}
-          className="w-full p-6 space-y-6"
-        >
+        <form onSubmit={handleSubmit} className="w-full p-6 space-y-6">
           <div className="space-y-2">
             <label className="flex items-center gap-2">
               <input
@@ -94,16 +99,15 @@ export default function SendMessageQueryPerson() {
               />
             )}
           </div>
-
         </form>
       </div>
 
-      <ButtonsSendsMessage handleSubmit={handleSubmit} isConsultando={isConsultando} />
+      <ButtonsSendsMessage
+        handleSubmit={handleSubmit}
+        isConsultando={isConsultando}
+      />
 
-      {personas.length > 0 && (
-        <TablePeople />
-      )}
-
+      {personas.length > 0 && <TablePeople />}
     </div>
   );
 }

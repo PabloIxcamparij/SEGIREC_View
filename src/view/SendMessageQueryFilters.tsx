@@ -1,5 +1,5 @@
 // src/view/SendFilteredEmailsView.tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { QueryBody } from "../types";
 import TablePeople from "../components/TablePeople";
 import ButtonsSendsMessage from "../components/ButtonsSendsMessage";
@@ -19,7 +19,8 @@ export default function SendMessageQueryFilters() {
     deudaMaxima,
     setDeudaMaxima,
     personas,
-    handleConsultar,
+    handleQueryPeopleFilters,
+    handleLimpiar,
   } = useSendMessageContext();
 
   const [isConsultando, setIsConsultando] = useState(false);
@@ -39,7 +40,9 @@ export default function SendMessageQueryFilters() {
         return;
       }
       if (Number(deudaMinima) > Number(deudaMaxima)) {
-        alert("El valor mínimo de deuda no puede ser mayor que el valor máximo.");
+        alert(
+          "El valor mínimo de deuda no puede ser mayor que el valor máximo."
+        );
         return;
       }
     }
@@ -47,18 +50,26 @@ export default function SendMessageQueryFilters() {
     const filtros: QueryBody = {
       ...(filtrosActivos.distritosList && { ciudad }),
       ...(filtrosActivos.servicio && { servicio }),
-      ...(filtrosActivos.deuda && deudaMinima !== "" && { deudaMinima: Number(deudaMinima) }),
-      ...(filtrosActivos.deuda && deudaMaxima !== "" && { deudaMaxima: Number(deudaMaxima) }),
+      ...(filtrosActivos.deuda &&
+        deudaMinima !== "" && { deudaMinima: Number(deudaMinima) }),
+      ...(filtrosActivos.deuda &&
+        deudaMaxima !== "" && { deudaMaxima: Number(deudaMaxima) }),
     };
 
     setIsConsultando(true);
-    await handleConsultar(filtros);
+    await handleQueryPeopleFilters(filtros);
     setIsConsultando(false);
   };
 
+  //Limpiar y desmontar al salir de la pagina
+  useEffect(() => {
+    return () => {
+      handleLimpiar();
+    };
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center w-full gap-10 p-4">
-
       <div className="flex flex-col w-full sm:w-4/5 md:w-3/5 shadow-xl rounded-2xl">
         <h1 className="text-2xl font-bold mb-4 text-center text-principal ">
           Búsqueda de personas por filtros
@@ -66,11 +77,7 @@ export default function SendMessageQueryFilters() {
         <h2 className="text-1xl mb-4 text-center text-gray-500 ">
           Seleccione los filtros que quiera usar para comenzar la consulta
         </h2>
-        <form
-          onSubmit={handleSubmit}
-          className="p-6 space-y-6"
-        >
-
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Distritos */}
           <div className="space-y-2">
             <label className="flex items-center gap-2">
@@ -158,7 +165,7 @@ export default function SendMessageQueryFilters() {
                     value={deudaMinima}
                     onChange={(e) => {
                       const value = e.target.value;
-                      setDeudaMinima(value === '' ? '' : Number(value));
+                      setDeudaMinima(value === "" ? "" : Number(value));
                     }}
                     className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
                   />
@@ -171,7 +178,7 @@ export default function SendMessageQueryFilters() {
                     value={deudaMaxima}
                     onChange={(e) => {
                       const value = e.target.value;
-                      setDeudaMaxima(value === '' ? '' : Number(value));
+                      setDeudaMaxima(value === "" ? "" : Number(value));
                     }}
                     className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
                   />
@@ -182,12 +189,12 @@ export default function SendMessageQueryFilters() {
         </form>
       </div>
 
-      <ButtonsSendsMessage handleSubmit={handleSubmit} isConsultando={isConsultando} />
+      <ButtonsSendsMessage
+        handleSubmit={handleSubmit}
+        isConsultando={isConsultando}
+      />
 
-      {personas.length > 0 && (
-        <TablePeople />
-      )}
-
+      {personas.length > 0 && <TablePeople />}
     </div>
   );
 }

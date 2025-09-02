@@ -6,8 +6,10 @@ export type QueryBody = {
   deudaMaxima?: number | "";
 };
 
-
 export type Persona = {
+  cedula: string;
+  nombre: string;
+  apellido: string;
   correo: string;
   ciudad: string;
   servicio: string;

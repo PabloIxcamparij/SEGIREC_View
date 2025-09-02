@@ -1,6 +1,6 @@
 // src/hooks/useSendMessage.ts
 import { useState } from "react";
-import { queryFiltered, sendEmails } from "../service/SendMessajeService";
+import { queryPeopleFilters, queryPerson, sendEmails } from "../service/SendMessajeService";
 import type { Persona, QueryBody } from "../types";
 
 export function useSendMessage() {
@@ -14,8 +14,8 @@ export function useSendMessage() {
   const [personas, setPersonas] = useState<Persona[]>([]);
   const [mensaje, setMensaje] = useState<string | null>(null);
 
-  //Consultar
-  const handleConsultar = async (filtros: QueryBody) => {
+  //Consultar personas por filtros
+  const handleQueryPeopleFilters = async (filtros: QueryBody) => {
     const body: QueryBody = {
       ...(filtros.ciudad && { ciudad: filtros.ciudad }),
       ...(filtros.servicio && { servicio: filtros.servicio }),
@@ -27,13 +27,25 @@ export function useSendMessage() {
       }),
     };
 
-    const response = await queryFiltered(body);
+    const response = await queryPeopleFilters(body);
 
     if (response) {
       setPersonas(response.personas);
       setMensaje(null);
     }
   };
+
+  //Consultar a una persona por ID
+  const handleQueryPerson = async (cedula: string) => {
+
+    const body : any = { cedula };
+
+    const response = await queryPerson(body);
+    if (response) {
+      setPersonas([response]);
+      setMensaje(null);
+    }
+  }; 
 
   // Enviar correos
   const handleEnviar = async () => {
@@ -69,7 +81,8 @@ export function useSendMessage() {
     setNamePerson,
     personas,
     mensaje,
-    handleConsultar,
+    handleQueryPeopleFilters,
+    handleQueryPerson,
     handleEnviar,
     handleLimpiar,
   };

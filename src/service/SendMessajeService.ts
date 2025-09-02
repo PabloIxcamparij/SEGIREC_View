@@ -1,12 +1,12 @@
 import axios from "axios";
-import type { QueryBody, QueryResponse, SendEmailsResponse } from "../types";
+import type { Persona, QueryBody, QueryResponse, SendEmailsResponse } from "../types";
 
 // const BASE_URL = "https://silver-tribble-9779qq49gwjr276w4-4040.app.github.dev/message";
 const BASE_URL = "http://localhost:4040/message";
 const token = localStorage.getItem("AuthToken");
 
 // Consultar usuarios filtrados
-export async function queryFiltered(body: QueryBody): Promise<QueryResponse | null> {
+export async function queryPeopleFilters(body: QueryBody): Promise<QueryResponse | null> {
   try {
     const { data } = await axios.post<QueryResponse>(
       `${BASE_URL}/queryPeople`,
@@ -14,7 +14,7 @@ export async function queryFiltered(body: QueryBody): Promise<QueryResponse | nu
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ token en header
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -25,6 +25,25 @@ export async function queryFiltered(body: QueryBody): Promise<QueryResponse | nu
   }
 }
 
+//Consultar a un usuario por ID
+export async function queryPerson(body: string): Promise<Persona | null> {
+  try {
+    const { data } = await axios.post<Persona>(
+      `${BASE_URL}/queryPerson`,
+      body,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  } catch (error: any) {
+    console.error("Error al consultar usuario:", error.response?.data || error.message);
+    return null;
+  }
+}
 
 // Enviar correos
 export async function sendEmails(destinatarios: string[]): Promise<SendEmailsResponse | null> {
@@ -35,7 +54,7 @@ export async function sendEmails(destinatarios: string[]): Promise<SendEmailsRes
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ token
+          Authorization: `Bearer ${token}`,
         },
       }
     );
