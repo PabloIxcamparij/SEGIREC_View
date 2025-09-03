@@ -4,7 +4,7 @@ import { SendMessageProvider } from "../context/SendMessageContext";
 
 export default function LayoutMessages() {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-full">
       <NavBar />
       <SendMessageProvider>
         <main className="p-4 w-full">

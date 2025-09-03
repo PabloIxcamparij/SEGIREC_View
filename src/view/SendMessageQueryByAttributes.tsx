@@ -48,12 +48,12 @@ export default function SendMessageQueryByAttributes() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full gap-10 p-4">
-      <div className="flex flex-col text-wrap p-4 w-full sm:w-4/5 md:w-3/5 shadow-xl bg-gray-200 rounded-2xl">
-        <h1 className="text-2xl font-bold mb-4 text-center text-principal ">
-          Buscar a una persona por cedula o nombre
+    <div className="flex flex-col items-center w-full justify-center gap-10 p-4">
+      <div className="flex flex-col w-[90%] lg:w-[50%] xl:w-[40%] text-center text-wrap bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8">
+        <h1 className="text-2xl font-bold mb-4 text-principal ">
+          Buscar a una persona
         </h1>
-        <h2 className="text-1xl mb-4 text-center text-gray-500 ">
+        <h2 className="text-1xl mb-4 text-gray-500 ">
           Seleccione una de las opciones e ingrese los datos para comenzar la
           consulta
         </h2>
@@ -72,7 +72,7 @@ export default function SendMessageQueryByAttributes() {
                   }))
                 }
               />
-              Ingrese la cedula de la persona a buscar
+              Buscar por cedula
             </label>
             {filtrosActivos.cedula && (
               <input
@@ -97,7 +97,7 @@ export default function SendMessageQueryByAttributes() {
                   }))
                 }
               />
-              Ingrese el nombre de la persona a buscar
+              Buscar por nombre
             </label>
             {filtrosActivos.name && (
               <input

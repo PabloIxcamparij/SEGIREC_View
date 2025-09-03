@@ -7,7 +7,13 @@ import { showToast } from "../utils/toastUtils";
 
 export default function SendMessageQueryByArchive() {
   const { personas, handleLimpiar } = useSendMessageContext();
-  const { archivo, nombreArchivo, handleFileChange, procesarCSV, procesarExcel } = useArchiveRead();
+  const {
+    archivo,
+    nombreArchivo,
+    handleFileChange,
+    procesarCSV,
+    procesarExcel,
+  } = useArchiveRead();
 
   const [isConsultando, setIsConsultando] = useState(false);
 
@@ -17,9 +23,9 @@ export default function SendMessageQueryByArchive() {
 
     try {
       if (!archivo) {
-      showToast("warn", "Advertencia", "No se ha cargado un archivo");
-      return;
-    }
+        showToast("warn", "Advertencia", "No se ha cargado un archivo");
+        return;
+      }
       const extension = archivo.name.split(".").pop()?.toLowerCase();
 
       if (extension === "csv") {
@@ -27,10 +33,10 @@ export default function SendMessageQueryByArchive() {
       } else if (extension === "xlsx" || extension === "xls") {
         await procesarExcel(archivo);
       } else {
-      showToast("error", "Error", "Formato de archivo no soportado");
+        showToast("error", "Error", "Formato de archivo no soportado");
       }
     } catch (error) {
-    showToast("error", "Error en lectura", String(error));
+      showToast("error", "Error en lectura", String(error));
     } finally {
       setIsConsultando(false);
     }
@@ -45,18 +51,18 @@ export default function SendMessageQueryByArchive() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full gap-10 p-4">
-      <div className="flex flex-col justify-center items-center text-wrap p-4 w-full sm:w-4/5 md:w-3/5 shadow-xl bg-gray-200 rounded-2xl">
-        <h1 className="text-2xl font-bold mb-4 text-center text-principal">
+      <div className="flex flex-col w-[90%] lg:w-[50%] xl:w-[40%] justify-center items-center text-center text-wrap bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8">
+        <h1 className="text-2xl font-bold mb-4 text-principal">
           Buscar por archivo
         </h1>
-        <h2 className="text-1xl mb-4 text-center text-gray-500">
+        <h2 className="text-1xl mb-4 text-gray-500">
           Suba un archivo (.csv o .xlsx) para realizar la consulta a la base de
           datos
         </h2>
 
         <div
-          className={`relative w-4/5 xl:w-3/5 p-2 border-2 border-dashed border-white rounded-xl 
-    ${archivo ? "bg-principal" : "bg-black/60"}
+          className={`relative w-4/5 xl:w-3/4 p-2 border-2 border-dashed border-white rounded-xl 
+    ${archivo ? "bg-principal" : "bg-gray-600"}
   `}
         >
           <input

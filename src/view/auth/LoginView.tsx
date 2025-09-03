@@ -34,16 +34,14 @@ export default function LoginView() {
   return (
     <div className="h-full flex items-center justify-center p-6">
       <div className="w-full max-w-md">
-        {/* Encabezado */}
+
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold">Iniciar Sesión</h1>
           <p className="text-gray-500">Ingresa tus credenciales para acceder</p>
         </div>
 
-        {/* Card */}
         <div className="bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email */}
             <div className="space-y-1">
               <label className="text-sm font-medium text-gray-700">
                 Correo electrónico
@@ -62,7 +60,6 @@ export default function LoginView() {
               </div>
             </div>
 
-            {/* Password */}
             <div className="space-y-1">
               <label className="text-sm font-medium text-gray-700">
                 Contraseña
@@ -81,7 +78,6 @@ export default function LoginView() {
               </div>
             </div>
 
-            {/* Botón */}
             <button
               type="submit"
               disabled={isLoading}

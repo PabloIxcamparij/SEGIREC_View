@@ -22,8 +22,8 @@ export default function NavBar() {
   ];
 
   const submenuItemsSendMessage = [
-    { href: "/SendMessage", label: "Hacer por filtros" },
-    { href: "/SendMessageById", label: "Buscar a una persona" },
+    { href: "/SendMessage", label: "Buscar por filtros" },
+    { href: "/SendMessageById", label: "Buscar por nombre o cedula" },
     { href: "/SendMessageByArchive", label: "Buscar por archivo" },
   ];
 
@@ -52,18 +52,18 @@ export default function NavBar() {
   }, [submenuOpen]);
 
   return (
-    <div className="text-white">
+    <div className="text-principal mt-5 mr-15 ml-15">
       {/* Navbar para md y lg */}
-      <nav className="hidden md:flex h-16 bg-principal px-6 py-3 justify-between items-center shadow">
-        <div className="font-bold text-lg">Gestor de Mensajes</div>
 
-        <div className="flex gap-6 items-center relative">
+      <nav className="hidden md:flex w-full h-18 bg-white border-principal border-2 justify-between px-5 items-center shadow rounded-2xl">
+        <h1 className="font-bold text-lg">Gestor de Mensajes</h1>
+        <div className="flex gap-6 items-center relative mr-8">
           {navItems.map((item) => (
             <Link
               key={item.href}
               to={item.href}
               onClick={() => setOpen(false)}
-              className="hover:text-gray-200 transition"
+              className="hover:text-black transition"
             >
               {item.label}
             </Link>
@@ -73,12 +73,12 @@ export default function NavBar() {
           <div className="relative" ref={submenuRef}>
             <button
               onClick={() => setSubmenuOpen(!submenuOpen)}
-              className="hover:text-gray-200 transition flex items-center gap-1"
+              className="hover:text-black transition flex items-center gap-1"
             >
               Enviar Mensajes ▾
             </button>
             {submenuOpen && (
-              <div className="absolute top-full left-0 bg-white text-black shadow-lg rounded-md mt-2 w-58 z-50">
+              <div className="absolute top-full left-0 bg-white text-black border-2 border-black rounded-md mt-8 w-68 z-50">
                 {submenuItemsSendMessage.map((item) => (
                   <Link
                     key={item.href}
@@ -95,15 +95,14 @@ export default function NavBar() {
 
           <button
             onClick={handleLogout}
-            className="text-left text-red-300 hover:text-red-200 transition-colors"
+            className="font-bold text-red-500 hover:text-red-300 transition-colors"
           >
             Cerrar Sesión
           </button>
         </div>
       </nav>
-
       {/* Barra superior en móvil */}
-      <div className="flex md:hidden h-16 bg-principal px-4 py-3 justify-between items-center shadow">
+      <div className="flex md:hidden h-18 bg-principal px-4 py-3 justify-between items-center shadow">
         <div className="font-bold text-lg">Gestor de Mensajes</div>
         <button className="text-2xl hover:text-gray-300" onClick={toggleMenu}>
           ☰

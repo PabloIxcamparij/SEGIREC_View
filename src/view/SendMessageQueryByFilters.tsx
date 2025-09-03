@@ -74,11 +74,11 @@ export default function SendMessageQueryByFilters() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full gap-10 p-4">
-      <div className="flex flex-col p-4 w-full sm:w-4/5 md:w-3/5 bg-gray-200 shadow-xl rounded-2xl">
-        <h1 className="text-2xl font-bold mb-4 text-center text-principal ">
-          Búsqueda de personas por filtros
+      <div className="flex flex-col w-[90%] lg:w-[50%] xl:w-[40%] text-center text-wrap bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8">
+        <h1 className="text-2xl font-bold mb-4 text-principal ">
+          Buscar en la base de datos
         </h1>
-        <h2 className="text-1xl mb-4 text-center text-gray-500 ">
+        <h2 className="text-1xl mb-4 text-gray-500 ">
           Seleccione los filtros que quiera usar para comenzar la consulta
         </h2>
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
@@ -157,7 +157,7 @@ export default function SendMessageQueryByFilters() {
                   }))
                 }
               />
-              Filtrar por Valor de Deuda
+              Filtrar por Deuda
             </label>
             {filtrosActivos.deuda && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
