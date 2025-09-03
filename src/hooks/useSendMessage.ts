@@ -12,7 +12,7 @@ import { showToast } from "../utils/toastUtils";
 
 export function useSendMessage() {
   const [ciudad, setCiudad] = useState("");
-  const [servicio, setServicio] = useState("");
+  const [servicio, setServicio] = useState([]);
   const [deudaMinima, setDeudaMinima] = useState<number | "">("");
   const [deudaMaxima, setDeudaMaxima] = useState<number | "">("");
   const [idCard, setIdCard] = useState("");
@@ -90,7 +90,7 @@ export function useSendMessage() {
     setPersonas([]);
     setCiudad("");
     setIdCard("");
-    setServicio("");
+    setServicio([]);
     setNamePerson("");
     setDeudaMinima("");
     setDeudaMaxima("");

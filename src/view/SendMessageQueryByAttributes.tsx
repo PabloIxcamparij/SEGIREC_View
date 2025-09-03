@@ -49,7 +49,7 @@ export default function SendMessageQueryByAttributes() {
 
   return (
     <div className="flex flex-col items-center w-full justify-center gap-10 p-4">
-      <div className="flex flex-col w-[90%] lg:w-[50%] xl:w-[40%] text-center text-wrap bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8">
+      <div className="flex flex-col w-[90%] lg:w-[50%] xl:w-[40%] text-center text-wrap border-2 border-principal backdrop-blur-md rounded-2xl shadow-xl p-8">
         <h1 className="text-2xl font-bold mb-4 text-principal ">
           Buscar a una persona
         </h1>

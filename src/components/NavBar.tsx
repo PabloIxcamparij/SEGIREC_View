@@ -55,7 +55,7 @@ export default function NavBar() {
     <div className="text-principal mt-5 mr-15 ml-15">
       {/* Navbar para md y lg */}
 
-      <nav className="hidden md:flex w-full h-18 bg-white border-principal border-2 justify-between px-5 items-center shadow rounded-2xl">
+      <nav className="hidden lg:flex w-full h-18 bg-white border-principal border-2 justify-between px-5 items-center shadow rounded-2xl">
         <h1 className="font-bold text-lg">Gestor de Mensajes</h1>
         <div className="flex gap-6 items-center relative mr-8">
           {navItems.map((item) => (
@@ -78,7 +78,7 @@ export default function NavBar() {
               Enviar Mensajes ▾
             </button>
             {submenuOpen && (
-              <div className="absolute top-full left-0 bg-white text-black border-2 border-black rounded-md mt-8 w-68 z-50">
+              <div className="absolute top-full left-0 bg-white text-black border-2 rounded-2xl mt-7 w-81.5 z-50">
                 {submenuItemsSendMessage.map((item) => (
                   <Link
                     key={item.href}
@@ -101,8 +101,10 @@ export default function NavBar() {
           </button>
         </div>
       </nav>
+
+
       {/* Barra superior en móvil */}
-      <div className="flex md:hidden h-18 bg-principal px-4 py-3 justify-between items-center shadow">
+      <div className="flex lg:hidden h-18 bg-white border-principal border-2 px-4 py-3 justify-between items-center shadow rounded-2xl">
         <div className="font-bold text-lg">Gestor de Mensajes</div>
         <button className="text-2xl hover:text-gray-300" onClick={toggleMenu}>
           ☰
@@ -111,23 +113,21 @@ export default function NavBar() {
 
       {/* Sidebar en móvil */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-principal transform ${
-          open ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out md:hidden z-50`}
+        className={`fixed top-0 left-0 h-full w-64 py-4 bg-white transform ${open ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 ease-in-out lg:hidden z-50`}
       >
-        <div className="flex justify-between items-center p-4 bg-principal">
-          <span className="font-bold text-lg">Menú</span>
-        </div>
+        <span className="font-bold text-lg p-4">Menú</span>
+
         <nav className="flex flex-col p-4 gap-4">
           {navItems.map((item) => (
-            <Link key={item.href} to={item.href} onClick={() => setOpen(false)}>
+            <Link key={item.href} to={item.href} onClick={() => setOpen(false)} className="hover:text-black">
               {item.label}
             </Link>
           ))}
 
           {/* Submenu móvil */}
           <div className="border-t border-slate-700 pt-4">
-            <div className="text-sm font-medium text-gray-300 mb-3">
+            <div className="text-sm font-medium mb-3">
               Enviar Mensajes
             </div>
             <div className="ml-4 flex flex-col gap-3">
@@ -138,7 +138,7 @@ export default function NavBar() {
                   onClick={() => {
                     setOpen(false);
                   }}
-                  className="text-gray-200 hover:text-white transition-colors"
+                  className=" hover:text-black transition-colors"
                 >
                   {item.label}
                 </Link>
@@ -148,7 +148,7 @@ export default function NavBar() {
 
           <button
             onClick={handleLogout}
-            className="text-left text-red-300 hover:text-red-200 transition-colors mt-4 pt-4 border-t border-slate-700"
+            className="text-left text-red-500 hover:text-red-200 transition-colors mt-4 pt-4 border-t border-slate-700"
           >
             Cerrar Sesión
           </button>
@@ -158,7 +158,7 @@ export default function NavBar() {
       {/* Overlay para cerrar sidebar */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/20 bg-opacity-50 md:hidden"
+          className="fixed inset-0 bg-black/40 bg-opacity-50 lg:hidden"
           onClick={toggleMenu}
         />
       )}

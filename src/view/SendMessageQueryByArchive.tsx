@@ -51,7 +51,7 @@ export default function SendMessageQueryByArchive() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full gap-10 p-4">
-      <div className="flex flex-col w-[90%] lg:w-[50%] xl:w-[40%] justify-center items-center text-center text-wrap bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8">
+      <div className="flex flex-col w-[90%] lg:w-[50%] xl:w-[40%] justify-center items-center text-center text-wrap border-2 border-principal backdrop-blur-md rounded-2xl shadow-xl p-8">
         <h1 className="text-2xl font-bold mb-4 text-principal">
           Buscar por archivo
         </h1>
@@ -61,8 +61,8 @@ export default function SendMessageQueryByArchive() {
         </h2>
 
         <div
-          className={`relative w-4/5 xl:w-3/4 p-2 border-2 border-dashed border-white rounded-xl 
-    ${archivo ? "bg-principal" : "bg-gray-600"}
+          className={`relative w-4/5 xl:w-3/4 p-2 border-2 border-dashed border-black rounded-xl 
+    ${archivo ? "bg-principal" : "bg-gray-400"}
   `}
         >
           <input
@@ -92,7 +92,7 @@ export default function SendMessageQueryByArchive() {
             <span className="mt-2 text-xl text-white font-semibold">
               {nombreArchivo}
             </span>
-            <p className="text-xs text-gray-300 mt-1">
+            <p className="text-xs text-white/60 mt-1">
               Arrastre y suelte un archivo aquí o haga clic para seleccionar
             </p>
           </label>

@@ -4,8 +4,14 @@ import TablePeople from "../components/TablePeople";
 import ButtonsSendsMessage from "../components/ButtonsSendsMessage";
 import { useSendMessageContext } from "../context/SendMessageContext";
 import { showToast } from "../utils/toastUtils";
+import Select from 'react-select'
+
+
 const distritos = ["Bagaces", "Fortuna", "Mogote", "Río Naranjo"];
-const servicios = ["Electricidad", "Agua", "Internet"];
+const servicios = [
+  { value: "Electricidad", label: "Electricidad" },
+  { value: "Agua", label: "Agua" },
+  { value: "Internet", label: "Internet" }];
 
 export default function SendMessageQueryByFilters() {
   const {
@@ -74,7 +80,7 @@ export default function SendMessageQueryByFilters() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full gap-10 p-4">
-      <div className="flex flex-col w-[90%] lg:w-[50%] xl:w-[40%] text-center text-wrap bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8">
+      <div className="flex flex-col w-[90%] lg:w-[50%] xl:w-[40%] text-center text-wrap border-2 border-principal backdrop-blur-md rounded-2xl shadow-xl p-8">
         <h1 className="text-2xl font-bold mb-4 text-principal ">
           Buscar en la base de datos
         </h1>
@@ -129,19 +135,20 @@ export default function SendMessageQueryByFilters() {
               Filtrar por Servicio
             </label>
             {filtrosActivos.servicio && (
-              <select
-                value={servicio}
-                onChange={(e) => setServicio(e.target.value)}
-                className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
-              >
-                <option value="">Seleccione Servicio</option>
-                {servicios.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
+              <Select
+                isMulti
+                options={servicios}
+                value={servicios.filter((s) => servicio.includes(s.value))}
+                onChange={(selected) => {
+                  // selected puede ser null o un array de objetos
+                  const values = selected ? selected.map((opt) => opt.value) : [];
+                  setServicio(values);
+                }}
+                className="w-full"
+                placeholder="Seleccione servicios..."
+              />
             )}
+
           </div>
 
           {/* Valor de Deuda */}
