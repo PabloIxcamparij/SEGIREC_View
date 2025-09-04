@@ -17,12 +17,13 @@ export default function SendMessageQueryByAttributes() {
   } = useSendMessageContext();
 
   const [isConsultando, setIsConsultando] = useState(false);
+  const [mensajePersonalizado, setMensajePersonalizado] = useState("");
 
   const [filtrosActivos, setFiltrosActivos] = useState({
     cedula: false,
     name: false,
   });
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e : any) => {
     e.preventDefault();
 
     setIsConsultando(true);
@@ -81,6 +82,8 @@ export default function SendMessageQueryByAttributes() {
                 value={idCard}
                 onChange={(e) => setIdCard(e.target.value)}
                 className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
+                placeholder="ej. 5044507... (sin espacios ni guiones)"
+                autoComplete="off"
               />
             )}
           </div>
@@ -106,11 +109,29 @@ export default function SendMessageQueryByAttributes() {
                 value={namePerson}
                 onChange={(e) => setNamePerson(e.target.value)}
                 className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
+                placeholder="ej. Pablo Sorto"
+                autoComplete="off"
               />
             )}
           </div>
         </form>
       </div>
+
+         {/* Nuevo componente para el mensaje personalizado */}
+      {personas.length === 1 && (
+        <div className="flex flex-col w-[70%] lg:w-[40%] xl:w-[30%] text-center text-wrap border-2 border-principal backdrop-blur-md rounded-2xl shadow-xl p-8 mt-10">
+          <label htmlFor="mensajePersonalizado" className="text-gray-500 font-bold mb-4">
+            Escribir un mensaje personalizado
+          </label>
+          <textarea
+            id="mensajePersonalizado"
+            value={mensajePersonalizado}
+            onChange={(e) => setMensajePersonalizado(e.target.value)}
+            className="border p-2 rounded w-full h-32 focus:ring-2 focus:ring-principal outline-none resize-none"
+            placeholder="Escribe tu mensaje aquí..."
+          />
+        </div>
+      )}
 
       <ButtonsSendsMessage
         handleSubmit={handleSubmit}
@@ -118,6 +139,8 @@ export default function SendMessageQueryByAttributes() {
       />
 
       {personas.length > 0 && <TablePeople />}
+
+   
     </div>
   );
 }

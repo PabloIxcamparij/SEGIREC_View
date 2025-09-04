@@ -11,8 +11,8 @@ import type { Persona, QueryBody } from "../types";
 import { showToast } from "../utils/toastUtils";
 
 export function useSendMessage() {
-  const [ciudad, setCiudad] = useState("");
-  const [servicio, setServicio] = useState([]);
+  const [ciudad, setCiudad] = useState<string[]>([]);
+  const [servicio, setServicio] = useState<string[]>([]);
   const [deudaMinima, setDeudaMinima] = useState<number | "">("");
   const [deudaMaxima, setDeudaMaxima] = useState<number | "">("");
   const [idCard, setIdCard] = useState("");
@@ -88,7 +88,7 @@ export function useSendMessage() {
   // Limpiar
   const handleLimpiar = () => {
     setPersonas([]);
-    setCiudad("");
+    setCiudad([]);
     setIdCard("");
     setServicio([]);
     setNamePerson("");

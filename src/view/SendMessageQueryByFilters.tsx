@@ -4,14 +4,20 @@ import TablePeople from "../components/TablePeople";
 import ButtonsSendsMessage from "../components/ButtonsSendsMessage";
 import { useSendMessageContext } from "../context/SendMessageContext";
 import { showToast } from "../utils/toastUtils";
-import Select from 'react-select'
+import Select from "react-select";
 
+const distritos = [
+  { value: "Bagaces", label: "Bagaces" },
+  { value: "Fortuna", label: "Fortuna" },
+  { value: "Mogote", label: "Mogote" },
+  { value: "Río Naranjo", label: "Río Naranjo" },
+];
 
-const distritos = ["Bagaces", "Fortuna", "Mogote", "Río Naranjo"];
 const servicios = [
   { value: "Electricidad", label: "Electricidad" },
   { value: "Agua", label: "Agua" },
-  { value: "Internet", label: "Internet" }];
+  { value: "Internet", label: "Internet" },
+];
 
 export default function SendMessageQueryByFilters() {
   const {
@@ -56,8 +62,8 @@ export default function SendMessageQueryByFilters() {
 
     try {
       const filtros: QueryBody = {
-        ...(filtrosActivos.distritosList && { ciudad }),
-        ...(filtrosActivos.servicio && { servicio }),
+        ...(filtrosActivos.distritosList && { ciudad: ciudad.join(",") }),
+        ...(filtrosActivos.servicio && { servicio: servicio.join(",") }),
         ...(filtrosActivos.deuda &&
           deudaMinima !== "" && { deudaMinima: Number(deudaMinima) }),
         ...(filtrosActivos.deuda &&
@@ -103,19 +109,21 @@ export default function SendMessageQueryByFilters() {
               />
               Filtrar por Distritos
             </label>
+
             {filtrosActivos.distritosList && (
-              <select
-                value={ciudad}
-                onChange={(e) => setCiudad(e.target.value)}
-                className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
-              >
-                <option value="">Seleccione Distrito</option>
-                {distritos.map((prov) => (
-                  <option key={prov} value={prov}>
-                    {prov}
-                  </option>
-                ))}
-              </select>
+              <Select
+                isMulti
+                options={distritos}
+                value={distritos.filter((s) => ciudad.includes(s.value))}
+                onChange={(selected) => {
+                  const values = selected
+                    ? selected.map((opt) => opt.value)
+                    : [];
+                  setCiudad(values);
+                }}
+                className="w-full text-left"
+                placeholder="Seleccione servicios..."
+              />
             )}
           </div>
 
@@ -140,15 +148,15 @@ export default function SendMessageQueryByFilters() {
                 options={servicios}
                 value={servicios.filter((s) => servicio.includes(s.value))}
                 onChange={(selected) => {
-                  // selected puede ser null o un array de objetos
-                  const values = selected ? selected.map((opt) => opt.value) : [];
+                  const values = selected
+                    ? selected.map((opt) => opt.value)
+                    : [];
                   setServicio(values);
                 }}
-                className="w-full"
+                className="w-full text-left"
                 placeholder="Seleccione servicios..."
               />
             )}
-
           </div>
 
           {/* Valor de Deuda */}

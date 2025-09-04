@@ -104,7 +104,7 @@ export default function NavBar() {
 
 
       {/* Barra superior en móvil */}
-      <div className="flex lg:hidden h-18 bg-white border-principal border-2 px-4 py-3 justify-between items-center shadow rounded-2xl">
+      <div className="flex lg:hidden h-18 bg-white border-principal border-2 px-6 py-3 justify-between items-center shadow rounded-2xl">
         <div className="font-bold text-lg">Gestor de Mensajes</div>
         <button className="text-2xl hover:text-gray-300" onClick={toggleMenu}>
           ☰
