@@ -1,12 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router";
-import { showToast } from "../utils/toastUtils";
+import { logout } from "../service/LoginService";
 
-const handleLogout = () => {
-  showToast("info", "Cerrando sesión");
-
+const handleLogout = async () => {
+  await logout();
   setTimeout(() => {
-    localStorage.removeItem("AuthToken");
     window.location.href = "/";
   }, 2000);
 };

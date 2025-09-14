@@ -8,10 +8,24 @@ export async function login(body: { Nombre: string; Clave: string }) {
   try {
     const { data } = await axios.post(`${BASE_URL}/login`, body, {
       headers: { "Content-Type": "application/json" },
-    });
-    return data; // { message: "Login successful" }
+      withCredentials: true,
+    })
+    return data;
   } catch (error: any) {
     showToast("error", "Error en login", String(error));
+    throw error;
+  }
+}
+
+export async function logout() {
+  try {
+    await axios.post(`${BASE_URL}/logout`, {}, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    });
+    showToast("info", "Cierre de sesión exitoso");
+  } catch (error: any) {
+    showToast("error", "Error en logout", String(error));
     throw error;
   }
 }

@@ -15,11 +15,9 @@ export default function LoginView() {
 
     try {
       const response = await login({ Nombre: usuario, Clave: password });
-      localStorage.setItem("AuthToken", response.token);
-
-      showToast("success", "Inicio de sesión exitoso");
-
-      setTimeout(() => navigate("/home"), 2000);
+        console.log(response);
+        showToast("success", "Inicio de sesión exitoso");
+        setTimeout(() => navigate("/home"), 2000);
     } catch (err: any) {
       showToast(
         "error",
@@ -31,6 +29,7 @@ export default function LoginView() {
       setIsLoading(false);
     }
   };
+
   return (
     <div className="h-full flex items-center justify-center p-6">
       <div className="w-full max-w-md">

@@ -8,22 +8,5 @@ export const axiosClient = axios.create({
     headers: {
         "Content-Type": "application/json",
     },
+    withCredentials: true,
 });
-
-// Añade un interceptor de solicitudes
-axiosClient.interceptors.request.use(
-    (config) => {
-        // Obtén el token del localStorage justo antes de cada solicitud
-        const token = localStorage.getItem("AuthToken");
-
-        // Si el token existe, agrégalo al encabezado de la solicitud
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
