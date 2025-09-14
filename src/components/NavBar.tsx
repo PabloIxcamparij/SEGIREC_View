@@ -29,8 +29,6 @@ export default function NavBar() {
 
   const submenuRef = useRef<HTMLDivElement | null>(null);
 
-  const toggleMenu = () => setOpen(!open);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -102,34 +100,46 @@ export default function NavBar() {
         </div>
       </nav>
 
-
       {/* Barra superior en móvil */}
       <div className="flex lg:hidden h-18 bg-white border-principal border-2 px-6 py-3 justify-between items-center shadow rounded-2xl">
         <div className="font-bold text-lg">Gestor de Mensajes</div>
-        <button className="text-2xl hover:text-gray-300" onClick={toggleMenu}>
+        <button className="text-2xl hover:text-gray-300" onClick={() => setOpen(!open)}>
           ☰
         </button>
       </div>
 
       {/* Sidebar en móvil */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 py-4 bg-white transform ${open ? "translate-x-0" : "-translate-x-full"
-          } transition-transform duration-300 ease-in-out lg:hidden z-50`}
+        className={`fixed top-0 left-0 h-full w-64 py-4 bg-white transform ${
+          open ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 ease-in-out lg:hidden z-50`}
       >
-        <span className="font-bold text-lg p-4">Menú</span>
+        <div className="flex justify-between items-center">
+          <span className="font-bold text-lg p-4">Menú</span>
+          <button
+            onClick={() => setOpen(false)}
+            className="text-lg font-extrabold text-red-500 px-10 hover:text-red-300 transition-colors"
+          >
+            X
+          </button>
+        </div>
 
         <nav className="flex flex-col p-4 gap-4">
           {navItems.map((item) => (
-            <Link key={item.href} to={item.href} onClick={() => setOpen(false)} className="hover:text-black">
+            <Link
+              key={item.href}
+              to={item.href}
+              onClick={() => setOpen(false)}
+              className="hover:text-black"
+            >
               {item.label}
             </Link>
           ))}
 
           {/* Submenu móvil */}
           <div className="border-t border-slate-700 pt-4">
-            <div className="text-sm font-medium mb-3">
-              Enviar Mensajes
-            </div>
+            <div className="text-sm font-medium mb-3">Enviar Mensajes</div>
+
             <div className="ml-4 flex flex-col gap-3">
               {submenuItemsSendMessage.map((item) => (
                 <Link
@@ -159,7 +169,7 @@ export default function NavBar() {
       {open && (
         <div
           className="fixed inset-0 bg-black/40 bg-opacity-50 lg:hidden"
-          onClick={toggleMenu}
+          onClick={() => setOpen(false)}
         />
       )}
     </div>
