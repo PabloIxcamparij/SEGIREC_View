@@ -22,18 +22,7 @@ export function useSendMessage() {
 
   //Consultar personas por filtros
   const handleQueryPeopleFilters = async (filtros: QueryBody) => {
-    const body: QueryBody = {
-      ...(filtros.ciudad && { ciudad: filtros.ciudad }),
-      ...(filtros.servicio && { servicio: filtros.servicio }),
-      ...(filtros.deudaMinima !== "" &&
-        filtros.deudaMinima !== undefined && {
-          deudaMinima: filtros.deudaMinima,
-        }),
-      ...(filtros.deudaMaxima !== "" &&
-        filtros.deudaMaxima !== undefined && {
-          deudaMaxima: filtros.deudaMaxima,
-        }),
-    };
+    const body: QueryBody = filtros;
 
     const response = await queryPeopleFilters(body);
 

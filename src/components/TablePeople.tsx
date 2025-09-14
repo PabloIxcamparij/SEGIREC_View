@@ -18,10 +18,9 @@ export default function TablePeople() {
             <tr className="bg-gray-100 text-cente">
               <th className="p-2 border">Cedula</th>
               <th className="p-2 border">Correo</th>
-              <th className="p-2 border">Ciudad</th>
+              <th className="p-2 border">Distrito</th>
               <th className="p-2 border">Servicio</th>
               <th className="p-2 border">Deuda</th>
-              <th className="p-2 border">incluir</th>
             </tr>
           </thead>
           <tbody>
@@ -32,16 +31,9 @@ export default function TablePeople() {
               >
                 <td className="p-2 border">{p.cedula}</td>
                 <td className="p-2 border">{p.correo}</td>
-                <td className="p-2 border">{p.ciudad}</td>
+                <td className="p-2 border">{p.distrito}</td>
                 <td className="p-2 border">{p.servicio}</td>
                 <td className="p-2 border">₡{p.valorDeLaDeuda}</td>
-                <td className="p-2 border">
-                  <input
-                    className="text-blue-500 hover:underline"
-                    type="checkbox"
-                    value="Incluir"
-                  />
-                </td>
               </tr>
             ))}
           </tbody>

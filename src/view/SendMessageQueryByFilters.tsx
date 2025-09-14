@@ -62,8 +62,8 @@ export default function SendMessageQueryByFilters() {
 
     try {
       const filtros: QueryBody = {
-        ...(filtrosActivos.distritosList && { ciudad: ciudad.join(",") }),
-        ...(filtrosActivos.servicio && { servicio: servicio.join(",") }),
+        ...(filtrosActivos.distritosList && { distritos: ciudad }),
+        ...(filtrosActivos.servicio && { servicios: servicio }),
         ...(filtrosActivos.deuda &&
           deudaMinima !== "" && { deudaMinima: Number(deudaMinima) }),
         ...(filtrosActivos.deuda &&
@@ -122,7 +122,7 @@ export default function SendMessageQueryByFilters() {
                   setCiudad(values);
                 }}
                 className="w-full text-left"
-                placeholder="Seleccione servicios..."
+                placeholder="Seleccione distritos..."
               />
             )}
           </div>
