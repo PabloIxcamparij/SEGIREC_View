@@ -14,7 +14,7 @@ export default function LoginView() {
     setIsLoading(true);
 
     try {
-      const response = await login({ correo: usuario, password });
+      const response = await login({ Nombre: usuario, Clave: password });
       localStorage.setItem("AuthToken", response.token);
 
       showToast("success", "Inicio de sesión exitoso");
@@ -44,14 +44,14 @@ export default function LoginView() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-1">
               <label className="text-sm font-medium text-gray-700">
-                Correo electrónico
+                Nombre de usuario
               </label>
               <div className="relative group">
                 <input
-                  type="email"
+                  type="text"
                   value={usuario}
                   onChange={(e) => setUsuario(e.target.value)}
-                  placeholder="tu@ejemplo.com"
+                  placeholder="Sofia..."
                   className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 
                              focus:border-principal focus:ring-2 focus:ring-principal/20
                              text-gray-900 placeholder-gray-400 outline-none transition"
