@@ -14,10 +14,9 @@ export default function LoginView() {
     setIsLoading(true);
 
     try {
-      const response = await login({ Nombre: usuario, Clave: password });
-        console.log(response);
-        showToast("success", "Inicio de sesión exitoso");
-        setTimeout(() => navigate("/home"), 2000);
+      await login({ Nombre: usuario, Clave: password });
+      showToast("success", "Inicio de sesión exitoso");
+      setTimeout(() => navigate("/home"), 2000);
     } catch (err: any) {
       showToast(
         "error",
@@ -31,18 +30,18 @@ export default function LoginView() {
   };
 
   return (
-    <div className="h-full flex items-center justify-center p-6">
+    <div className="h-[525px] w-2/3 lg:w-[500px] p-2 bg-white/60 backdrop-blur-md rounded-2xl shadow-xl flex items-center justify-center">
+      
       <div className="w-full max-w-md">
-
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">Iniciar Sesión</h1>
-          <p className="text-gray-500">Ingresa tus credenciales para acceder</p>
+        <div className="text-center mb-2">
+          <h1 className="text-3xl font-bold">Inicio de sesion</h1>
+          <p className="text-gray-800">Ingresa tus credenciales para acceder</p>
         </div>
 
-        <div className="bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-8">
+        <div className=" p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-gray-800">
                 Nombre de usuario
               </label>
               <div className="relative group">
@@ -51,7 +50,7 @@ export default function LoginView() {
                   value={usuario}
                   onChange={(e) => setUsuario(e.target.value)}
                   placeholder="Sofia..."
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 
+                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-white 
                              focus:border-principal focus:ring-2 focus:ring-principal/20
                              text-gray-900 placeholder-gray-400 outline-none transition"
                   required
@@ -60,7 +59,7 @@ export default function LoginView() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-gray-800">
                 Contraseña
               </label>
               <div className="relative group">
@@ -69,7 +68,7 @@ export default function LoginView() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 
+                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-white 
                              focus:border-principal focus:ring-2 focus:ring-principal/20
                              text-gray-900 placeholder-gray-400 outline-none transition"
                   required

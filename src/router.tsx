@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, redirect } from "react-router";
 import LayoutMessages from "./Layout/LayoutMessages";
 import LayoutAuth from "./Layout/LayoutAuth";
 
@@ -8,17 +8,28 @@ import QueryAttributes from "./view/SendMessageQueryByAttributes";
 import QueryArchive from "./view/SendMessageQueryByArchive";
 
 // Admin views
-import HomeView
-  from "./view/HomeView";
+import HomeView from "./view/HomeView";
 import LockView from "./view/LockView";
 import ReportsView from "./view/ReportsView";
 
 // Auth views
 import LoginView from "./view/auth/LoginView";
 
+// Servicios
+import { checkAuth } from "./service/LoginService";
+
+const protectedRoutesLoader = async () => {
+  const isAuthenticated = await checkAuth();
+  if (!isAuthenticated) {
+    return redirect("/");
+  }
+  return null;
+};
+
 export const router = createBrowserRouter([
   {
     element: <LayoutMessages />,
+    loader: protectedRoutesLoader,
     children: [
       {
         path: "SendMessage",
@@ -55,5 +66,5 @@ export const router = createBrowserRouter([
         element: <LoginView />,
       },
     ],
-  }
+  },
 ]);
