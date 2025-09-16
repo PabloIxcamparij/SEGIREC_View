@@ -18,6 +18,9 @@ import LoginView from "./view/auth/LoginView";
 // Servicios
 import { checkAuth } from "./service/LoginService";
 
+
+// Protección de rutas, si no está autenticado redirige al login
+// Esta función se usa como loader en las rutas protegidas
 const protectedRoutesLoader = async () => {
   const isAuthenticated = await checkAuth();
   if (!isAuthenticated) {

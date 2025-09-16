@@ -1,12 +1,11 @@
 // src/utils/axiosClient.ts
 import axios from "axios";
 
-const BASE_URL = "http://localhost:4040/message";
-
+// Creación de una instancia de axios con configuraciones predeterminadas
 export const axiosClient = axios.create({
-    baseURL: BASE_URL,
-    headers: {
-        "Content-Type": "application/json",
-    },
-    withCredentials: true,
+  baseURL: import.meta.env.VITE_BASE_URL_SERVER,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
 });

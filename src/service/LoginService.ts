@@ -1,47 +1,36 @@
-import axios from "axios";
-import { showToast } from "../utils/toastUtils";
+import { axiosClient } from "../utils/axiosClient";
+import { errorHandler } from "../utils/errorHandler";
 
-const BASE_URL = "http://localhost:4040/auth";
-
-// Body esperado: { Nombre: string; Clave: string }
+// Inicia la sesión del usuario
+// Retorna los datos del usuario y un token de sesión
 export async function login(body: { Nombre: string; Clave: string }) {
   try {
-    const { data } = await axios.post(`${BASE_URL}/login`, body, {
-      headers: { "Content-Type": "application/json" },
-      withCredentials: true,
-    });
+    const { data } = await axiosClient.post("/auth/login", body);
     return data;
   } catch (error: any) {
-    showToast("error", "Error en login", String(error));
-    throw error;
+    errorHandler(error, "Inicio de sesión");
   }
 }
 
+// Cierra la sesión del usuario
+// Se borran las cookies de sesión en el servidor
 export async function logout() {
   try {
-    await axios.post(
-      `${BASE_URL}/logout`,
-      {},
-      {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      }
-    );
-    showToast("info", "Cierre de sesión exitoso");
+    const { data } = await axiosClient.post("/auth/logout");
+    return data;
   } catch (error: any) {
-    showToast("error", "Error en logout", String(error));
-    throw error;
+    errorHandler(error, "Cierre de sesión");
   }
 }
 
+// Verifica si el usuario tiene una sesión activa
+// Retorna true si la sesión es válida, false en caso contrario
 export async function checkAuth() {
   try {
-    const response = await axios.get(`${BASE_URL}/verify`, {
-      withCredentials: true,
-    });
-    return response.status === 200;
+    const { data } = await axiosClient.get("/auth/verify");
+    return data;
   } catch (error) {
-    console.log("checkAuth error:", error);
+    errorHandler(error, "Chequeo de sesión");
     return false;
   }
 }

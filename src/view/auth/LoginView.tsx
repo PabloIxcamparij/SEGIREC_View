@@ -14,9 +14,11 @@ export default function LoginView() {
     setIsLoading(true);
 
     try {
-      await login({ Nombre: usuario, Clave: password });
-      showToast("success", "Inicio de sesión exitoso");
-      setTimeout(() => navigate("/home"), 2000);
+      const response = await login({ Nombre: usuario, Clave: password });
+     if (response) {
+        showToast("success", "Inicio de sesión exitoso");
+        setTimeout(() => navigate("/home"), 2000);
+      }
     } catch (err: any) {
       showToast(
         "error",

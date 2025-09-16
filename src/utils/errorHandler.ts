@@ -1,5 +1,6 @@
 import { showToast } from "./toastUtils";
 
+// Manejador de errores para capturar y mostrar mensajes de error
 export function errorHandler(error: any, contexto: string): null {
   const mensaje =
     error.response?.data?.error ||

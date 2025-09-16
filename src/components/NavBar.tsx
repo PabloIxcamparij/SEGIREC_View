@@ -1,12 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router";
 import { logout } from "../service/LoginService";
+import { showToast } from "../utils/toastUtils";
 
 const handleLogout = async () => {
-  await logout();
-  setTimeout(() => {
-    window.location.href = "/";
-  }, 2000);
+  const response = await logout();
+  if (response) {
+    showToast("info", "Cerrando sesión", "Hasta pronto!");
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 2000);
+  }
 };
 
 export default function NavBar() {
@@ -101,7 +105,10 @@ export default function NavBar() {
       {/* Barra superior en móvil */}
       <div className="flex lg:hidden h-18 bg-white border-principal border-2 px-6 py-3 justify-between items-center shadow rounded-2xl">
         <div className="font-bold text-lg">Gestor de Mensajes</div>
-        <button className="text-2xl hover:text-gray-300" onClick={() => setOpen(!open)}>
+        <button
+          className="text-2xl hover:text-gray-300"
+          onClick={() => setOpen(!open)}
+        >
           ☰
         </button>
       </div>
