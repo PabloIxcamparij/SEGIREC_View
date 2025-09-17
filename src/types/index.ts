@@ -14,6 +14,7 @@ export type Persona = {
   distrito: string;
   servicio: string;
   valorDeLaDeuda: number;
+  areaDeLaPropiedad: number;
 };
 
 export type QueryResponse = {

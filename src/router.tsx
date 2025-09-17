@@ -3,9 +3,7 @@ import LayoutMessages from "./Layout/LayoutMessages";
 import LayoutAuth from "./Layout/LayoutAuth";
 
 // SendMessage views
-import QueryFilters from "./view/SendMessageQueryByFilters";
-import QueryAttributes from "./view/SendMessageQueryByAttributes";
-import QueryArchive from "./view/SendMessageQueryByArchive";
+import QueryPropiedades from "./view/queryModules/QueryPropiedades";
 
 // Admin views
 import HomeView from "./view/HomeView";
@@ -17,7 +15,6 @@ import LoginView from "./view/auth/LoginView";
 
 // Servicios
 import { checkAuth } from "./service/LoginService";
-
 
 // Protección de rutas, si no está autenticado redirige al login
 // Esta función se usa como loader en las rutas protegidas
@@ -35,16 +32,8 @@ export const router = createBrowserRouter([
     loader: protectedRoutesLoader,
     children: [
       {
-        path: "SendMessage",
-        element: <QueryFilters />,
-      },
-      {
-        path: "SendMessageById",
-        element: <QueryAttributes />,
-      },
-      {
-        path: "SendMessageByArchive",
-        element: <QueryArchive />,
+        path: "propiedades",
+        element: <QueryPropiedades />,
       },
       {
         path: "home",

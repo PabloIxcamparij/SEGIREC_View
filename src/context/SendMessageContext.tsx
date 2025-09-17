@@ -1,11 +1,11 @@
 // src/context/SendMessageContext.tsx
 import { createContext, useContext } from "react";
-import { useSendMessage } from "../hooks/useSendMessage";
+import { useQueryPropiedades } from "../hooks/useSendMessage";
 
-const SendMessageContext = createContext<ReturnType<typeof useSendMessage> | null>(null);
+const SendMessageContext = createContext<ReturnType<typeof useQueryPropiedades> | null>(null);
 
 export const SendMessageProvider = ({ children }: { children: React.ReactNode }) => {
-  const sendMessage = useSendMessage();
+  const sendMessage = useQueryPropiedades();
   return (
     <SendMessageContext.Provider value={sendMessage}>
       {children}

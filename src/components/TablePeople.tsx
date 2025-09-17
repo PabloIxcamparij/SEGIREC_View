@@ -19,8 +19,7 @@ export default function TablePeople() {
               <th className="p-2 border">Cedula</th>
               <th className="p-2 border">Correo</th>
               <th className="p-2 border">Distrito</th>
-              <th className="p-2 border">Servicio</th>
-              <th className="p-2 border">Deuda</th>
+              <th className="p-2 border">Area</th>
             </tr>
           </thead>
           <tbody>
@@ -32,8 +31,7 @@ export default function TablePeople() {
                 <td className="p-2 border">{p.cedula}</td>
                 <td className="p-2 border">{p.correo}</td>
                 <td className="p-2 border">{p.distrito}</td>
-                <td className="p-2 border">{p.servicio}</td>
-                <td className="p-2 border">₡{p.valorDeLaDeuda}</td>
+                <td className="p-2 border">{p.areaDeLaPropiedad}</td>
               </tr>
             ))}
           </tbody>

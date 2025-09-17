@@ -1,31 +1,32 @@
 // src/hooks/useSendMessage.ts
 import { useState } from "react";
 import {
-  queryPeopleFilters,
-  queryPersonByCedula,
-  queryPersonByName,
-  queryPersonByArchive,
+  queryPropiedadesByFilters,
+  queryPropiedadesByCedula,
+  queryPropiedadesByName,
+
+  ////////////////////////////////////////-----------------------------------------------
+  queryPropiedadesByArchive,
   sendEmails,
-} from "../service/SendMessajeService";
+} from "../service/QueryService";
 import type { Persona, QueryBody } from "../types";
 import { showToast } from "../utils/toastUtils";
 
-export function useSendMessage() {
-  const [ciudad, setCiudad] = useState<string[]>([]);
-  const [servicio, setServicio] = useState<string[]>([]);
-  const [deudaMinima, setDeudaMinima] = useState<number | "">("");
-  const [deudaMaxima, setDeudaMaxima] = useState<number | "">("");
-  const [idCard, setIdCard] = useState("");
-  const [namePerson, setNamePerson] = useState("");
+export function useQueryPropiedades() {
+  // Estados para los filtros
+  const [distrito, setDistrito] = useState<string[]>([]);
+  const [areaMinima, setAreaMinima] = useState<number | "">("");
+  const [areaMaxima, setAreaMaxima] = useState<number | "">("");
 
+  // Estado para consultas por atributos
+  const [cedula, setCedula] = useState("");
+  const [namePerson, setNamePerson] = useState("");
   const [personas, setPersonas] = useState<Persona[]>([]);
 
   //Consultar personas por filtros
-  const handleQueryPeopleFilters = async (filtros: QueryBody) => {
+  const handleQueryPropiedadesByFilters = async (filtros: QueryBody) => {
     const body: QueryBody = filtros;
-
-    const response = await queryPeopleFilters(body);
-
+    const response = await queryPropiedadesByFilters(body);
     if (response) {
       setPersonas(response.personas);
       showToast("success", "Consulta exitosa", "Cargando Resultados");
@@ -33,9 +34,10 @@ export function useSendMessage() {
   };
 
   //Consultar a una persona por Cedula
-  const handleQueryPersonByCedula = async (cedula: string) => {
+  const handleQueryPropiedadesByCedula = async (cedula: string) => {
     const body: any = { cedula };
-    const response = await queryPersonByCedula(body);
+
+    const response = await queryPropiedadesByCedula(body);
 
     if (response) {
       setPersonas([response]);
@@ -44,9 +46,9 @@ export function useSendMessage() {
   };
 
   //Consultar a una persona por Nombre
-  const handleQueryPersonByName = async (nombre: string) => {
+  const handleQueryPropiedadesByName = async (nombre: string) => {
     const body: any = { nombre };
-    const response: any = await queryPersonByName(body);
+    const response: any = await queryPropiedadesByName(body);
     if (response) {
       setPersonas(response.personas);
       showToast("success", "Consulta exitosa", "Cargando Resultados");
@@ -54,10 +56,10 @@ export function useSendMessage() {
   };
 
   //Consultar a una persona por Archivo
-  const handleQueryPersonByArchive = async (cedulas: string[]) => {
+  const handleQueryPropiedadesByArchive = async (cedulas: string[]) => {
     const body: any = { cedulas };
 
-    const response = await queryPersonByArchive(body);
+    const response = await queryPropiedadesByArchive(body);
 
     if (response) {
       setPersonas(response.personas);
@@ -66,7 +68,7 @@ export function useSendMessage() {
   };
 
   // Enviar correos
-  const handleEnviar = async () => {
+  const handleSendMessage = async () => {
     const correos = personas.map((p) => p.correo);
     const response = await sendEmails(correos);
     if (response) {
@@ -77,33 +79,38 @@ export function useSendMessage() {
   // Limpiar
   const handleLimpiar = () => {
     setPersonas([]);
-    setCiudad([]);
-    setIdCard("");
-    setServicio([]);
-    setNamePerson("");
-    setDeudaMinima("");
-    setDeudaMaxima("");
+    setAreaMaxima("");
+    setAreaMinima("");
+    setDistrito([]);
   };
 
   return {
-    ciudad,
-    setCiudad,
-    servicio,
-    setServicio,
-    deudaMinima,
-    setDeudaMinima,
-    deudaMaxima,
-    setDeudaMaxima,
-    idCard,
-    setIdCard,
+    distrito,
+    setDistrito,
+    areaMinima,
+    setAreaMinima,
+    areaMaxima,
+    setAreaMaxima,
+
+    // Estados para consulta por atributos
+    cedula,
+    setCedula,
     namePerson,
     setNamePerson,
+
+    // Resultados
     personas,
-    handleQueryPeopleFilters,
-    handleQueryPersonByCedula,
-    handleQueryPersonByName,
-    handleQueryPersonByArchive,
-    handleEnviar,
+
+    // Metodo limpiar
     handleLimpiar,
+
+    // Metodos de consulta
+    handleQueryPropiedadesByName,
+    handleQueryPropiedadesByCedula,
+    handleQueryPropiedadesByArchive,
+    handleQueryPropiedadesByFilters,
+
+    // Metodo de envio
+    handleSendMessage,
   };
 }

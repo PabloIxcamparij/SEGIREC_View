@@ -21,8 +21,8 @@ const servicios = [
 
 export default function SendMessageQueryByFilters() {
   const {
-    ciudad,
-    setCiudad,
+    distrito,
+    setDistrito,
     servicio,
     setServicio,
     deudaMinima,
@@ -114,12 +114,12 @@ export default function SendMessageQueryByFilters() {
               <Select
                 isMulti
                 options={distritos}
-                value={distritos.filter((s) => ciudad.includes(s.value))}
+                value={distritos.filter((s) => distrito.includes(s.value))}
                 onChange={(selected) => {
                   const values = selected
                     ? selected.map((opt) => opt.value)
                     : [];
-                  setCiudad(values);
+                  setDistrito(values);
                 }}
                 className="w-full text-left"
                 placeholder="Seleccione distritos..."

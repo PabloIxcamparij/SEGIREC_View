@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useSendMessageContext } from "../context/SendMessageContext";
 
 export function useArchiveRead() {
-  const { handleQueryPersonByArchive } = useSendMessageContext();  
+  const { handleQueryPropiedadesByArchive } = useSendMessageContext();  
   const [archivo, setArchivo] = useState<File | null>(null);
   const [nombreArchivo, setNombreArchivo] = useState("Seleccionar archivo...");
 
@@ -28,7 +28,7 @@ export function useArchiveRead() {
         const Cedulas = datos
           .map((row) => row["Cedula"] || row["cedula"])
           .filter(Boolean);
-        handleQueryPersonByArchive(Cedulas);
+        handleQueryPropiedadesByArchive(Cedulas);
       },
     });
   };
@@ -68,7 +68,7 @@ export function useArchiveRead() {
       }
     });
 
-    handleQueryPersonByArchive(Cedulas);
+    handleQueryPropiedadesByArchive(Cedulas);
   };
 
   return {

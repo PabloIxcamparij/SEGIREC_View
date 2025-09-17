@@ -24,9 +24,7 @@ export default function NavBar() {
   ];
 
   const submenuItemsSendMessage = [
-    { href: "/SendMessage", label: "Buscar por filtros" },
-    { href: "/SendMessageById", label: "Buscar por nombre o cedula" },
-    { href: "/SendMessageByArchive", label: "Buscar por archivo" },
+    { href: "/propiedades", label: "Buscar por propiedades" },
   ];
 
   const submenuRef = useRef<HTMLDivElement | null>(null);
