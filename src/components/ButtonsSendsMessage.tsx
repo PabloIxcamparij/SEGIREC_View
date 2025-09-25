@@ -3,7 +3,6 @@ import { useSendMessageContext } from "../context/SendMessageContext";
 export default function ButtonsSendsMessage({ handleSubmit, isConsultando }: { handleSubmit: any, isConsultando: boolean }) {
     const {
         handleLimpiar,
-        handleEnviar,
         personas
     } = useSendMessageContext();
 
@@ -28,7 +27,6 @@ export default function ButtonsSendsMessage({ handleSubmit, isConsultando }: { h
             <button
                 type="button"
                 disabled={personas.length === 0}
-                onClick={handleEnviar}
                 className="bg-green-600 text-white px-4 py-2 rounded disabled:bg-gray-300 disabled:text-gray-600"
             >
                 Enviar Mensaje
