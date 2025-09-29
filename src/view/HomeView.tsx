@@ -3,8 +3,8 @@ export default function HomeView() {
     <div className="p-6 max-w-2xl mx-auto text-center space-y-6">
       
       {/* Luego colocar el escudo del canton */}
-      <div className="w-32 h-32 mx-auto rounded-full border-4 border-gray-300 flex items-center justify-center">
-        <span className="text-sm text-gray-500">Escudo</span>
+      <div className="w-42 h-42 mx-auto flex items-center justify-center">
+        <img src="./Escudo.png" alt="Escudo" className=" object-cover" />
       </div>
 
       <h1 className="text-2xl font-bold">Sistema Interno de Mensajería</h1>
