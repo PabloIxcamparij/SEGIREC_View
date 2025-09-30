@@ -41,7 +41,7 @@ export default function QueryPropiedades() {
     handleFileChange,
     procesarCSV,
     procesarExcel,
-  } = useArchiveRead();
+  } = useArchiveRead("Propiedades");
 
   const [isConsulting, setIsConsulting] = useState(false);
   const [activeOption, setActiveOption] = useState<
@@ -66,9 +66,9 @@ export default function QueryPropiedades() {
     try {
       if (activeOption === "attributes") {
         if (attributes.name) {
-          await handleQueryPropiedadesByName(namePerson);
+          await handleQueryPropiedadesByName(namePerson, "Propiedades");
         } else {
-          await handleQueryPropiedadesByCedula(cedula);
+          await handleQueryPropiedadesByCedula(cedula, "Propiedades");
         }
       } else if (activeOption === "filters") {
         if (

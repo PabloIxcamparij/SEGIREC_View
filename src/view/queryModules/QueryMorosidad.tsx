@@ -44,7 +44,7 @@ export default function QueryMorosidad() {
     handleFileChange,
     procesarCSV,
     procesarExcel,
-  } = useArchiveRead();
+  } = useArchiveRead("Morosidad");
 
   const [isConsulting, setIsConsulting] = useState(false);
   const [activeOption, setActiveOption] = useState<
@@ -74,9 +74,9 @@ export default function QueryMorosidad() {
     try {
       if (activeOption === "attributes") {
         if (attributes.name) {
-          await handleQueryPropiedadesByName(namePerson);
+          await handleQueryPropiedadesByName(namePerson, "Morosidad");
         } else {
-          await handleQueryPropiedadesByCedula(cedula);
+          await handleQueryPropiedadesByCedula(cedula, "Morosidad");
         }
       } else if (activeOption === "filters") {
         if (
@@ -95,9 +95,9 @@ export default function QueryMorosidad() {
         const query: QueryBody = {
           ...(filters.distritos && { distritos: distrito }),
           ...(filters.area &&
-            deudaMinima !== "" && { areaMinima: Number(deudaMinima) }),
+            deudaMinima !== "" && { deudaMinima: Number(deudaMinima) }),
           ...(filters.area &&
-            deudaMaxima !== "" && { areaMaxima: Number(deudaMaxima) }),
+            deudaMaxima !== "" && { deudaMaxima: Number(deudaMaxima) }),
         };
 
         await handleQueryMorosidadByFilters(query);

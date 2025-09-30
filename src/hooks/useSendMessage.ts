@@ -39,6 +39,8 @@ export function useQueryPropiedades() {
   //Consultar personas por filtros
   const handleQueryMorosidadByFilters = async (filtros: QueryBody) => {
     const body: QueryBody = filtros;
+
+    console.log(body)
     const response = await queryPeopleWithDebt(body);
     if (response) {
       setPersonas(response.personas);
@@ -47,8 +49,8 @@ export function useQueryPropiedades() {
   };
 
   //Consultar a una persona por Cedula
-  const handleQueryPropiedadesByCedula = async (cedula: string) => {
-    const body: any = { cedula };
+  const handleQueryPropiedadesByCedula = async (cedula : string, typeQuery : string) => {
+    const body: any = { cedula, typeQuery };
 
     const response = await queryPropiedadesByCedula(body);
 
@@ -59,8 +61,8 @@ export function useQueryPropiedades() {
   };
 
   //Consultar a una persona por Nombre
-  const handleQueryPropiedadesByName = async (nombre: string) => {
-    const body: any = { nombre };
+  const handleQueryPropiedadesByName = async (nombre: string, typeQuery : string) => {
+    const body: any = { nombre, typeQuery };
     const response: any = await queryPropiedadesByName(body);
     if (response) {
       setPersonas(response.personas);
@@ -69,8 +71,8 @@ export function useQueryPropiedades() {
   };
 
   //Consultar a una persona por Archivo
-  const handleQueryPropiedadesByArchive = async (cedulas: string[]) => {
-    const body: any = { cedulas };
+  const handleQueryPropiedadesByArchive = async (cedulas: string[], typeQuery : string) => {
+    const body: any = { cedulas, typeQuery };
 
     const response = await queryPropiedadesByArchive(body);
 

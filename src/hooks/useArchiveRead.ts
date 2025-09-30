@@ -3,7 +3,7 @@ import * as ExcelJS from "exceljs";
 import { useState } from "react";
 import { useSendMessageContext } from "../context/SendMessageContext";
 
-export function useArchiveRead() {
+export function useArchiveRead(typeQuery : string) {
   const { handleQueryPropiedadesByArchive } = useSendMessageContext();  
   const [archivo, setArchivo] = useState<File | null>(null);
   const [nombreArchivo, setNombreArchivo] = useState("Seleccionar archivo...");
@@ -28,7 +28,7 @@ export function useArchiveRead() {
         const Cedulas = datos
           .map((row) => row["Cedula"] || row["cedula"])
           .filter(Boolean);
-        handleQueryPropiedadesByArchive(Cedulas);
+        handleQueryPropiedadesByArchive(Cedulas, typeQuery);
       },
     });
   };
@@ -68,7 +68,7 @@ export function useArchiveRead() {
       }
     });
 
-    handleQueryPropiedadesByArchive(Cedulas);
+    handleQueryPropiedadesByArchive(Cedulas, typeQuery);
   };
 
   return {
