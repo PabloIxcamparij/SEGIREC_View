@@ -15,6 +15,7 @@ export type Persona = {
   servicio: string;
   valorDeLaDeuda: number;
   areaDeLaPropiedad: number;
+  fechaVencimiento: string;
 };
 
 export type QueryResponse = {
@@ -25,3 +26,8 @@ export type SendEmailsResponse = {
   message: string;
   destinatarios: string[];
 };
+
+export type ServicesCatalago = {
+  codServic: string;
+  desServic: string;
+}

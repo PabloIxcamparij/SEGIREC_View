@@ -18,6 +18,16 @@ export async function queryPropiedadesByFilters(body: QueryBody): Promise<QueryR
     return errorHandler(error, "consultar filtrados");
   }
 }
+
+export async function queryPeopleWithDebt(body: QueryBody): Promise<QueryResponse | null> {
+   try {
+    const { data } = await axiosClient.post<QueryResponse>("/message/queryPeopleWithDebt", body);
+    return data;
+  } catch (error: any) {
+    return errorHandler(error, "consultar filtrados");
+  }
+}
+
 // Consultar por cédula
 export async function queryPropiedadesByCedula(body: string): Promise<Persona | null> {
   try {

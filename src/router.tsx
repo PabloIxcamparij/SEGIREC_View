@@ -15,6 +15,7 @@ import LoginView from "./view/auth/LoginView";
 
 // Servicios
 import { checkAuth } from "./service/LoginService";
+import QueryMorosidad from "./view/queryModules/QueryMorosidad";
 
 // Protección de rutas, si no está autenticado redirige al login
 // Esta función se usa como loader en las rutas protegidas
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
       {
         path: "propiedades",
         element: <QueryPropiedades />,
+      },
+      {
+        path: "morosidad",
+        element: <QueryMorosidad />,
       },
       {
         path: "home",
