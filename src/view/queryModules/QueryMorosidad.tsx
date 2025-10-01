@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import type { QueryBody, ServicesCatalago } from "../../types";
+import type { AttributesState, QueryBody, ServicesCatalago } from "../../types";
 
 import TablePeople from "../../components/TablePeople";
 import ButtonsSendsMessage from "../../components/ButtonsSendsMessage";
@@ -9,6 +9,8 @@ import { showToast } from "../../utils/toastUtils";
 import { useSendMessageContext } from "../../context/SendMessageContext";
 import { useArchiveRead } from "../../hooks/useArchiveRead";
 import { queryServiceCatalogo } from "../../service/utilsService";
+import ContainerQueryAttribute from "../../components/ContainerQueryAttribute";
+import ContainerQueryArchive from "../../components/ContainerQueryArchive";
 
 const distritos = [
   { value: "Bagaces", label: "Bagaces" },
@@ -28,12 +30,10 @@ export default function QueryMorosidad() {
     deudaMaxima,
     setDeudaMaxima,
     personas,
-    handleQueryMorosidadByFilters,
     cedula,
-    setCedula,
     namePerson,
-    setNamePerson,
     handleQueryPropiedadesByName,
+    handleQueryMorosidadByFilters,
     handleQueryPropiedadesByCedula,
     handleLimpiar,
   } = useSendMessageContext();
@@ -57,7 +57,7 @@ export default function QueryMorosidad() {
     area: false,
   });
 
-  const [attributes, setAttributes] = useState({
+  const [attributes, setAttributes] = useState<AttributesState>({
     cedula: false,
     name: false,
   });
@@ -135,6 +135,7 @@ export default function QueryMorosidad() {
         try {
           const data = await queryServiceCatalogo();
           setServiciosCatalogo(data);
+          console.log(serviciosCatalogo)
         } catch (error) {
           console.error("Error al cargar el catálogo de servicios:", error);
         }
@@ -250,11 +251,11 @@ export default function QueryMorosidad() {
                     <Select
                       isMulti
                       options={serviciosCatalogo}
-                      value={serviciosCatalogo.filter((s : any) =>
+                      value={serviciosCatalogo.filter((s: any) =>
                         servicio.includes(s.value)
                       )}
                       onChange={(selected) =>
-                        setServicio(selected.map((opt : any) => opt.value))
+                        setServicio(selected.map((opt: any) => opt.value))
                       }
                       className="mt-2 text-left"
                       placeholder="Seleccione distritos..."
@@ -300,93 +301,18 @@ export default function QueryMorosidad() {
             )}
 
             {activeOption === "attributes" && (
-              <>
-                {/* Cedula */}
-                <div>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={attributes.cedula}
-                      onChange={(e) =>
-                        setAttributes({ cedula: e.target.checked, name: false })
-                      }
-                    />
-                    Buscar por cédula
-                  </label>
-                  {attributes.cedula && (
-                    <input
-                      type="text"
-                      placeholder="ej. 5044507..."
-                      value={cedula}
-                      onChange={(e) => setCedula(e.target.value)}
-                      className="mt-2 border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
-                    />
-                  )}
-                </div>
-
-                {/* Nombre */}
-                <div>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={attributes.name}
-                      onChange={(e) =>
-                        setAttributes({ name: e.target.checked, cedula: false })
-                      }
-                    />
-                    Buscar por nombre
-                  </label>
-                  {attributes.name && (
-                    <input
-                      type="text"
-                      placeholder="ej. Pablo Sorto"
-                      value={namePerson}
-                      onChange={(e) => setNamePerson(e.target.value)}
-                      className="mt-2 border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
-                    />
-                  )}
-                </div>
-              </>
+              <ContainerQueryAttribute
+                attributes={attributes}
+                setAttributes={setAttributes}
+              />
             )}
 
             {activeOption === "archive" && (
-              <div
-                className={`relative w-full p-2 border-2 border-dashed border-black rounded-xl 
-                ${archivo ? "bg-principal" : "bg-gray-400"}`}
-              >
-                <input
-                  type="file"
-                  accept=".csv,.xlsx,.xls"
-                  onChange={handleFileChange}
-                  id="file-upload"
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                />
-
-                <label
-                  htmlFor="file-upload"
-                  className="flex flex-col items-center justify-center p-4"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-18 w-18 text-white"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="mt-2 text-xl text-white font-semibold">
-                    {nombreArchivo}
-                  </span>
-                  <p className="text-xs text-white/60 mt-1">
-                    Arrastre y suelte un archivo aquí o haga clic para
-                    seleccionar
-                  </p>
-                </label>
-              </div>
+              <ContainerQueryArchive
+                nombreArchivo={nombreArchivo}
+                handleFileChange={handleFileChange}
+                archivo={archivo}
+              />
             )}
           </form>
         </div>

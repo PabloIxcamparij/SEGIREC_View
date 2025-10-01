@@ -31,3 +31,8 @@ export type ServicesCatalago = {
   codServic: string;
   desServic: string;
 }
+
+export type AttributesState = {
+  cedula: boolean;
+  name: boolean;
+};
