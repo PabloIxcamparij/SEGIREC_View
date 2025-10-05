@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import type { QueryBody } from "../../types";
+import type { AttributesState, QueryBody, BaseImponibleCatalago } from "../../types";
 
-import TablePeople from "../../components/TablePeople";
-import ButtonsSendsMessage from "../../components/ButtonsSendsMessage";
 
 import { showToast } from "../../utils/toastUtils";
 import { useSendMessageContext } from "../../context/SendMessageContext";
 import { useArchiveRead } from "../../hooks/useArchiveRead";
+import { queryBaseImponibleCatalogo } from "../../service/utilsService";
+
+import TablePeople from "../../components/TablePeople";
+import ButtonsSendsMessage from "../../components/ButtonsSendsMessage";
+import ContainerQueryArchive from "../../components/ContainerQueryArchive";
+import ContainerQueryAttribute from "../../components/ContainerQueryAttribute";
 
 const distritos = [
   { value: "Bagaces", label: "Bagaces" },
@@ -24,12 +28,16 @@ export default function QueryPropiedades() {
     setAreaMinima,
     areaMaxima,
     setAreaMaxima,
+    monImponibleMinimo,
+    setMonImponibleMinimo,
+    monImponibleMaximo,
+    setMonImponibleMaximo,
+    codigoBaseImponible,
+    setCodigoBaseImponible,
     personas,
     handleQueryPropiedadesByFilters,
     cedula,
-    setCedula,
     namePerson,
-    setNamePerson,
     handleQueryPropiedadesByName,
     handleQueryPropiedadesByCedula,
     handleLimpiar,
@@ -50,13 +58,34 @@ export default function QueryPropiedades() {
 
   const [filters, setFilters] = useState({
     distritos: false,
+    baseImponible: false,
     area: false,
+    montoImponible: false,
   });
 
-  const [attributes, setAttributes] = useState({
+  const [attributes, setAttributes] = useState<AttributesState>({
     cedula: false,
     name: false,
   });
+
+  const [baseImponibleCatalogo, setBaseImponibleCatalogoCatalogo] = useState<
+    BaseImponibleCatalago[]
+  >([]);
+
+  useEffect(() => {
+    if (baseImponibleCatalogo.length === 0) {
+      const fetchServicios = async () => {
+        try {
+          const data = await queryBaseImponibleCatalogo();
+          setBaseImponibleCatalogoCatalogo(data);
+        } catch (error) {
+          console.error("Error al cargar el catálogo de servicios:", error);
+        }
+      };
+
+      fetchServicios();
+    }
+  }, [baseImponibleCatalogo]);
 
   // Handle submit
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,6 +119,11 @@ export default function QueryPropiedades() {
             areaMinima !== "" && { areaMinima: Number(areaMinima) }),
           ...(filters.area &&
             areaMaxima !== "" && { areaMaxima: Number(areaMaxima) }),
+          ...(filters.montoImponible &&
+            monImponibleMinimo !== "" && { monImponibleMinimo: Number(monImponibleMinimo) }),
+          ...(filters.montoImponible &&
+            monImponibleMaximo !== "" && { monImponibleMaximo: Number(monImponibleMaximo) }),
+          ...(filters.baseImponible && { codigoBaseImponible: codigoBaseImponible }),
         };
 
         await handleQueryPropiedadesByFilters(query);
@@ -162,15 +196,15 @@ export default function QueryPropiedades() {
             {activeOption === "filters"
               ? "Buscar en la base de datos"
               : activeOption === "attributes"
-              ? "Buscar a una persona"
-              : "Buscar por archivo"}
+                ? "Buscar a una persona"
+                : "Buscar por archivo"}
           </h1>
           <p className="text-gray-500 mb-4">
             {activeOption === "filters"
               ? "Seleccione los filtros que quiera usar para comenzar la consulta"
               : activeOption === "attributes"
-              ? "Seleccione una opción e ingrese los datos para comenzar la consulta"
-              : "Suba un archivo (.csv o .xlsx) para realizar la consulta a la base de datos"}
+                ? "Seleccione una opción e ingrese los datos para comenzar la consulta"
+                : "Suba un archivo (.csv o .xlsx) para realizar la consulta a la base de datos"}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -200,6 +234,37 @@ export default function QueryPropiedades() {
                       )}
                       onChange={(selected) =>
                         setDistrito(selected.map((opt) => opt.value))
+                      }
+                      className="mt-2 text-left"
+                      placeholder="Seleccione distritos..."
+                    />
+                  )}
+                </div>
+
+                {/* Base Imponible */}
+                <div>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={filters.baseImponible}
+                      onChange={(e) =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          baseImponible: e.target.checked,
+                        }))
+                      }
+                    />
+                    Filtrar por Base Imponible
+                  </label>
+                  {filters.baseImponible && (
+                    <Select
+                      isMulti
+                      options={baseImponibleCatalogo}
+                      value={baseImponibleCatalogo.filter((s: any) =>
+                        codigoBaseImponible.includes(s.value)
+                      )}
+                      onChange={(selected) =>
+                        setCodigoBaseImponible(selected.map((opt: any) => opt.value))
                       }
                       className="mt-2 text-left"
                       placeholder="Seleccione distritos..."
@@ -241,97 +306,57 @@ export default function QueryPropiedades() {
                     </div>
                   )}
                 </div>
+
+                {/* Monto Imponible */}
+                <div>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={filters.montoImponible}
+                      onChange={(e) =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          montoImponible: e.target.checked,
+                        }))
+                      }
+                    />
+                    Filtrar por monto imponible
+                  </label>
+                  {filters.montoImponible && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                      <input
+                        type="number"
+                        placeholder="Monto minimo"
+                        value={monImponibleMinimo}
+                        onChange={(e: any) => setMonImponibleMinimo(e.target.value)}
+                        className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
+                      />
+                      <input
+                        type="number"
+                        placeholder="Monto máximo"
+                        value={monImponibleMaximo}
+                        onChange={(e: any) => setMonImponibleMaximo(e.target.value)}
+                        className="border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
+                      />
+                    </div>
+                  )}
+                </div>
               </>
             )}
 
             {activeOption === "attributes" && (
-              <>
-                {/* Cedula */}
-                <div>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={attributes.cedula}
-                      onChange={(e) =>
-                        setAttributes({ cedula: e.target.checked, name: false })
-                      }
-                    />
-                    Buscar por cédula
-                  </label>
-                  {attributes.cedula && (
-                    <input
-                      type="text"
-                      placeholder="ej. 5044507..."
-                      value={cedula}
-                      onChange={(e) => setCedula(e.target.value)}
-                      className="mt-2 border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
-                    />
-                  )}
-                </div>
-
-                {/* Nombre */}
-                <div>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={attributes.name}
-                      onChange={(e) =>
-                        setAttributes({ name: e.target.checked, cedula: false })
-                      }
-                    />
-                    Buscar por nombre
-                  </label>
-                  {attributes.name && (
-                    <input
-                      type="text"
-                      placeholder="ej. Pablo Sorto"
-                      value={namePerson}
-                      onChange={(e) => setNamePerson(e.target.value)}
-                      className="mt-2 border p-2 rounded w-full focus:ring-2 focus:ring-principal outline-none"
-                    />
-                  )}
-                </div>
-              </>
+              <ContainerQueryAttribute
+                attributes={attributes}
+                setAttributes={setAttributes}
+              />
             )}
 
             {activeOption === "archive" && (
-              <div
-                className={`relative w-full p-2 border-2 border-dashed border-black rounded-xl 
-                ${archivo ? "bg-principal" : "bg-gray-400"}`}
-              >
-                <input
-                  type="file"
-                  accept=".csv,.xlsx,.xls"
-                  onChange={handleFileChange}
-                  id="file-upload"
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                />
-
-                <label
-                  htmlFor="file-upload"
-                  className="flex flex-col items-center justify-center p-4"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-18 w-18 text-white"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="mt-2 text-xl text-white font-semibold">
-                    {nombreArchivo}
-                  </span>
-                  <p className="text-xs text-white/60 mt-1">
-                    Arrastre y suelte un archivo aquí o haga clic para
-                    seleccionar
-                  </p>
-                </label>
-              </div>
+              <ContainerQueryArchive
+                nombreArchivo={nombreArchivo}
+                handleFileChange={handleFileChange}
+                archivo={archivo}
+              />
             )}
           </form>
         </div>

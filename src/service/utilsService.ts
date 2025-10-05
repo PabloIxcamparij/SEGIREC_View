@@ -6,6 +6,16 @@ export async function queryServiceCatalogo() {
     const { data } = await axiosClient.get("/utils/service");
     return data;
   } catch (error: any) {
-    errorHandler(error, "Inicio de sesión");
+    errorHandler(error, "Cargado Catalogo");
   }
 }
+
+export async function queryBaseImponibleCatalogo() {
+  try {
+    const { data } = await axiosClient.get("/utils/baseImponible");
+    return data;
+  } catch (error: any) {
+    errorHandler(error, "Cargado Catalogo");
+  }
+}
+

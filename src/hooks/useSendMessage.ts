@@ -15,8 +15,12 @@ export function useQueryPropiedades() {
   // Estados para los filtros
   const [distrito, setDistrito] = useState<string[]>([]);
   const [servicio, setServicio] = useState<string[]>([]);
+  const [codigoBaseImponible, setCodigoBaseImponible] = useState<string[]>([]);
   const [areaMinima, setAreaMinima] = useState<number | "">("");
   const [areaMaxima, setAreaMaxima] = useState<number | "">("");
+  
+  const [monImponibleMinimo, setMonImponibleMinimo] = useState<number | "">("");
+  const [monImponibleMaximo, setMonImponibleMaximo] = useState<number | "">("");
 
   const [deudaMinima, setDeudaMinima] = useState<number | "">("");
   const [deudaMaxima, setDeudaMaxima] = useState<number | "">("");
@@ -99,9 +103,12 @@ export function useQueryPropiedades() {
     setAreaMinima("");
     setDeudaMinima("");
     setDeudaMaxima("");
+    setMonImponibleMinimo("");
+    setMonImponibleMaximo("");
     setDistrito([]);
     setServicio([]);
     setPersonas([]);
+    setCodigoBaseImponible([]);
   };
 
   return {
@@ -111,6 +118,12 @@ export function useQueryPropiedades() {
     setAreaMinima,
     areaMaxima,
     setAreaMaxima,
+    monImponibleMinimo,
+    setMonImponibleMinimo,
+    monImponibleMaximo,
+    setMonImponibleMaximo,
+    codigoBaseImponible,
+    setCodigoBaseImponible,
 
     //Estados para la consulta por morosidad
     deudaMinima,

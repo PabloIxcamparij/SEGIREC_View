@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import Select from "react-select";
 import type { AttributesState, QueryBody, ServicesCatalago } from "../../types";
 
-import TablePeople from "../../components/TablePeople";
-import ButtonsSendsMessage from "../../components/ButtonsSendsMessage";
-
 import { showToast } from "../../utils/toastUtils";
 import { useSendMessageContext } from "../../context/SendMessageContext";
 import { useArchiveRead } from "../../hooks/useArchiveRead";
 import { queryServiceCatalogo } from "../../service/utilsService";
-import ContainerQueryAttribute from "../../components/ContainerQueryAttribute";
+
+import TablePeople from "../../components/TablePeople";
+import ButtonsSendsMessage from "../../components/ButtonsSendsMessage";
 import ContainerQueryArchive from "../../components/ContainerQueryArchive";
+import ContainerQueryAttribute from "../../components/ContainerQueryAttribute";
 
 const distritos = [
   { value: "Bagaces", label: "Bagaces" },
@@ -135,7 +135,6 @@ export default function QueryMorosidad() {
         try {
           const data = await queryServiceCatalogo();
           setServiciosCatalogo(data);
-          console.log(serviciosCatalogo)
         } catch (error) {
           console.error("Error al cargar el catálogo de servicios:", error);
         }

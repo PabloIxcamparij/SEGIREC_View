@@ -32,6 +32,11 @@ export type ServicesCatalago = {
   desServic: string;
 }
 
+export type BaseImponibleCatalago = {
+  Codigo: string;
+  Descripción: string;
+}
+
 export type AttributesState = {
   cedula: boolean;
   name: boolean;
