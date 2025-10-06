@@ -3,6 +3,8 @@ import LayoutMessages from "./Layout/LayoutMessages";
 import LayoutAuth from "./Layout/LayoutAuth";
 
 // SendMessage views
+import QueryMorosidad from "./view/queryModules/QueryMorosidad";
+import QueryEnvioMasivo from "./view/queryModules/QueryEnvioMasivo";
 import QueryPropiedades from "./view/queryModules/QueryPropiedades";
 
 // Admin views
@@ -15,7 +17,6 @@ import LoginView from "./view/auth/LoginView";
 
 // Servicios
 import { checkAuth } from "./service/LoginService";
-import QueryMorosidad from "./view/queryModules/QueryMorosidad";
 
 // Protección de rutas, si no está autenticado redirige al login
 // Esta función se usa como loader en las rutas protegidas
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
       {
         path: "morosidad",
         element: <QueryMorosidad />,
+      },
+      {
+        path: "envioMasivo",
+        element: <QueryEnvioMasivo />,
       },
       {
         path: "home",

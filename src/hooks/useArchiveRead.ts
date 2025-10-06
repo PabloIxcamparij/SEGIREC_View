@@ -1,10 +1,12 @@
 import Papa from "papaparse";
 import * as ExcelJS from "exceljs";
 import { useState } from "react";
-import { useSendMessageContext } from "../context/SendMessageContext";
+// import { useSendMessageContext } from "../context/SendMessageContext";
 
-export function useArchiveRead(typeQuery : string) {
-  const { handleQueryPropiedadesByArchive } = useSendMessageContext();  
+export function useArchiveRead() {
+
+  // const { handleQueryPropiedadesByArchive } = useSendMessageContext();
+
   const [archivo, setArchivo] = useState<File | null>(null);
   const [nombreArchivo, setNombreArchivo] = useState("Seleccionar archivo...");
 
@@ -28,7 +30,7 @@ export function useArchiveRead(typeQuery : string) {
         const Cedulas = datos
           .map((row) => row["Cedula"] || row["cedula"])
           .filter(Boolean);
-        handleQueryPropiedadesByArchive(Cedulas, typeQuery);
+        // handleQueryPropiedadesByArchive(Cedulas);
       },
     });
   };
@@ -68,7 +70,7 @@ export function useArchiveRead(typeQuery : string) {
       }
     });
 
-    handleQueryPropiedadesByArchive(Cedulas, typeQuery);
+    // handleQueryPropiedadesByArchive(Cedulas);
   };
 
   return {

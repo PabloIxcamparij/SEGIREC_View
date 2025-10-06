@@ -26,6 +26,7 @@ export default function NavBar() {
   const submenuItemsSendMessage = [
     { href: "/propiedades", label: "Buscar por propiedades" },
     { href: "/morosidad", label: "Buscar por morosidad" },
+    { href: "/envioMasivo", label: "Envio masivo de mensajes" },
   ];
 
   const submenuRef = useRef<HTMLDivElement | null>(null);

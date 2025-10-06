@@ -3,9 +3,6 @@ import { useState } from "react";
 import {
   queryPropiedadesByFilters,
   queryPeopleWithDebt,
-  queryPropiedadesByCedula,
-  queryPropiedadesByName,
-  queryPropiedadesByArchive,
   sendEmails,
 } from "../service/QueryService";
 import type { Persona, QueryBody } from "../types";
@@ -15,7 +12,9 @@ export function useQueryPropiedades() {
   // Estados para los filtros
   const [distrito, setDistrito] = useState<string[]>([]);
   const [servicio, setServicio] = useState<string[]>([]);
+
   const [codigoBaseImponible, setCodigoBaseImponible] = useState<string[]>([]);
+  
   const [areaMinima, setAreaMinima] = useState<number | "">("");
   const [areaMaxima, setAreaMaxima] = useState<number | "">("");
   
@@ -44,45 +43,10 @@ export function useQueryPropiedades() {
   const handleQueryMorosidadByFilters = async (filtros: QueryBody) => {
     const body: QueryBody = filtros;
 
-    console.log(body)
     const response = await queryPeopleWithDebt(body);
     if (response) {
       setPersonas(response.personas);
       showToast("success", "Consulta exitosa", "Cargando Resultados");
-    }
-  };
-
-  //Consultar a una persona por Cedula
-  const handleQueryPropiedadesByCedula = async (cedula : string, typeQuery : string) => {
-    const body: any = { cedula, typeQuery };
-
-    const response = await queryPropiedadesByCedula(body);
-
-    if (response) {
-      setPersonas([response]);
-      showToast("success", "Consulta exitosa", "Cargando Resultados");
-    }
-  };
-
-  //Consultar a una persona por Nombre
-  const handleQueryPropiedadesByName = async (nombre: string, typeQuery : string) => {
-    const body: any = { nombre, typeQuery };
-    const response: any = await queryPropiedadesByName(body);
-    if (response) {
-      setPersonas(response.personas);
-      showToast("success", "Consulta exitosa", "Cargando Resultados");
-    }
-  };
-
-  //Consultar a una persona por Archivo
-  const handleQueryPropiedadesByArchive = async (cedulas: string[], typeQuery : string) => {
-    const body: any = { cedulas, typeQuery };
-
-    const response = await queryPropiedadesByArchive(body);
-
-    if (response) {
-      setPersonas(response.personas);
-      showToast("success", "Archivo procesado", "Cargando Resultados");
     }
   };
 
@@ -146,10 +110,7 @@ export function useQueryPropiedades() {
     handleLimpiar,
 
     // Metodos de consulta
-    handleQueryPropiedadesByName,
     handleQueryMorosidadByFilters,
-    handleQueryPropiedadesByCedula,
-    handleQueryPropiedadesByArchive,
     handleQueryPropiedadesByFilters,
 
     // Metodo de envio

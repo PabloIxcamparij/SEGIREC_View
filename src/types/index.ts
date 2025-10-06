@@ -4,6 +4,13 @@ export type QueryBody = {
   servicios?: string[];
   deudaMinima?: number | "";
   deudaMaxima?: number | "";
+  cedula?: string;
+  nombre?: string;
+  codigoBaseImponible?: string[];
+  areaMaxima?: number | "";
+  areaMinima?: number | "";
+  monImponibleMinimo?: number | "";
+  monImponibleMaximo?: number | "";
 };
 
 export type Persona = {
@@ -16,6 +23,7 @@ export type Persona = {
   valorDeLaDeuda: number;
   areaDeLaPropiedad: number;
   fechaVencimiento: string;
+  numeroDeFinca: string
 };
 
 export type QueryResponse = {
@@ -25,19 +33,4 @@ export type QueryResponse = {
 export type SendEmailsResponse = {
   message: string;
   destinatarios: string[];
-};
-
-export type ServicesCatalago = {
-  codServic: string;
-  desServic: string;
-}
-
-export type BaseImponibleCatalago = {
-  Codigo: string;
-  Descripción: string;
-}
-
-export type AttributesState = {
-  cedula: boolean;
-  name: boolean;
 };

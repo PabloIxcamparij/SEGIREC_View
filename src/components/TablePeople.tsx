@@ -16,6 +16,7 @@ const BASE_COLUMNS: ColumnDefinition[] = [
 
 // Columnas para el caso de Servicios
 const SERVICE_COLUMNS: ColumnDefinition[] = [
+  {key : "numeroDeFinca", header: "N° Finca"},
   { key: "servicio", header: "Servicio" },
   { key: "valorDeLaDeuda", header: "Deuda" },
   { key: "fechaVencimiento", header: "Vencimiento" },
