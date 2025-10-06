@@ -63,7 +63,7 @@ export default function QueryPropiedades() {
       if (areaMinima !== "") query.areaMinima = Number(areaMinima);
       if (namePerson.trim() !== "") query.nombre = namePerson.trim();
       if (baseImponibleCatalogo.length > 0)
-        query.servicios = baseImponibleCatalogo;
+        query.codigoBaseImponible = baseImponibleCatalogo;
       if (monImponibleMinimo !== "")
         query.monImponibleMinimo = Number(monImponibleMinimo);
       if (monImponibleMaximo !== "")
