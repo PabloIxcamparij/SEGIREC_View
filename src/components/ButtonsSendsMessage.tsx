@@ -7,7 +7,7 @@ export default function ButtonsSendsMessage({ handleSubmit, isConsultando }: { h
     } = useSendMessageContext();
 
     return (
-        <div className="flex flex-wrap w-[90%] lg:w-[50%] xl:w-[40%] justify-end gap-2">
+        <div className="flex flex-wrap w-[90%] lg:w-[50%] justify-end gap-2">
             <button
                 onClick={handleSubmit}
                 disabled={isConsultando}

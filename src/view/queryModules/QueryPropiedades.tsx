@@ -11,6 +11,7 @@ import {
   InputSelect,
   DoubleInput,
   OneInputProps,
+  ToggleSwitch,
 } from "../../components/ContainerInputs";
 
 const distritos = [
@@ -44,15 +45,39 @@ export default function QueryPropiedades() {
   } = useSendMessageContext();
 
   const [isConsulting, setIsConsulting] = useState(false);
-
   const [baseImponibleCatalogo, setBaseImponibleCatalogoCatalogo] = useState(
     []
   );
+  const [peopleWithMultipleProperties, setPeopleWithMultipleProperties] =
+    useState(false);
+  const [peopleWithDebt, setPeopleWithDebt] = useState(false);
 
   // Handle submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsConsulting(true);
+
+    if (
+      monImponibleMaximo !== "" &&
+      monImponibleMinimo !== "" &&
+      monImponibleMaximo < monImponibleMinimo
+    ) {
+      showToast(
+        "error",
+        "El monto imponible máximo no puede ser menor que el monto imponible mínimo."
+      );
+      setIsConsulting(false);
+      return;
+    }
+
+    if (areaMaxima !== "" && areaMinima !== "" && areaMaxima < areaMinima) {
+      showToast(
+        "error",
+        "El área máxima no puede ser menor que el área mínima."
+      );
+      setIsConsulting(false);
+      return;
+    }
 
     try {
       const query: QueryBody = {};
@@ -68,6 +93,12 @@ export default function QueryPropiedades() {
         query.monImponibleMinimo = Number(monImponibleMinimo);
       if (monImponibleMaximo !== "")
         query.monImponibleMaximo = Number(monImponibleMaximo);
+
+      // Los valores booleanos se usan directamente, pero es buena práctica
+      // incluirlos en el objeto 'query' solo si son 'true' para evitar
+      // enviar parámetros innecesarios si el backend lo permite/requiere.
+      if (peopleWithDebt) query.onlyWithDebt = true;
+      if (peopleWithMultipleProperties) query.onlyWithMultipleProperties = true;
 
       await handleQueryPeopleWithProperties(query);
     } catch (error) {
@@ -101,7 +132,7 @@ export default function QueryPropiedades() {
     <div className="flex flex-col items-center w-full gap-6 p-4">
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 flex flex-col w-[90%] lg:w-[50%] xl:w-[60%] border-2 border-principal rounded-2xl shadow-xl p-6"
+        className="space-y-4 flex flex-col w-[90%] lg:w-[50%] border-2 border-principal rounded-2xl shadow-xl p-6"
       >
         <h1 className="text-xl text-principal font-bold">
           Consulta de Propiedades
@@ -110,7 +141,7 @@ export default function QueryPropiedades() {
           Ingrese uno o más filtros para refinar la búsqueda.
         </h2>
 
-        {/* Distritos */}
+        {/* --- FILTROS DE INPUTS --- */}
         <InputSelect
           label="Filtrar por Distritos"
           options={distritos}
@@ -118,8 +149,6 @@ export default function QueryPropiedades() {
           onChangeValues={setDistrito}
           placeholder="Seleccione distritos..."
         />
-
-        {/*  Base Imponible */}
         <InputSelect
           label="Filtrar por Base Imponible"
           options={baseImponibleCatalogo}
@@ -127,21 +156,17 @@ export default function QueryPropiedades() {
           onChangeValues={setCodigoBaseImponible}
           placeholder="Seleccione servicios..."
         />
-
-        {/*  Monto Imponible */}
         <DoubleInput
-          label="Filtrar por Monto Imponible"
+          label="Filtrar por Monto Imponible (Mín. / Máx.)"
           valueMin={monImponibleMinimo}
           valueMax={monImponibleMaximo}
           onChangeMin={(value) => setMonImponibleMinimo(value as number | "")}
           onChangeMax={(value) => setMonImponibleMaximo(value as number | "")}
-          placeholderMin="Área mínima"
-          placeholderMax="Área máxima"
+          placeholderMin="Monto mínimo"
+          placeholderMax="Monto máximo"
         />
-
-        {/* Área */}
         <DoubleInput
-          label="Filtrar por Área"
+          label="Filtrar por Área (Mín. / Máx.)"
           valueMin={areaMinima}
           valueMax={areaMaxima}
           onChangeMin={(value) => setAreaMinima(value as number | "")}
@@ -149,22 +174,31 @@ export default function QueryPropiedades() {
           placeholderMin="Área mínima"
           placeholderMax="Área máxima"
         />
-
-        {/*Cedula */}
         <OneInputProps
           label="Filtrar por Cédula"
           value={cedula}
           onChange={(value) => setCedula(value as string)}
           placeholder="Ingrese la cédula..."
         />
-
-        {/*Nombre */}
         <OneInputProps
           label="Filtrar por Nombre"
           value={namePerson}
           onChange={(value) => setNamePerson(value as string)}
           placeholder="Ingrese el nombre..."
         />
+        {/* --- TOGGLE SWITCHES --- */}
+        <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <ToggleSwitch
+            label="Personas con deudas"
+            checked={peopleWithDebt}
+            onChange={setPeopleWithDebt}
+          />
+          <ToggleSwitch
+            label="Personas con múltiples propiedades"
+            checked={peopleWithMultipleProperties}
+            onChange={setPeopleWithMultipleProperties}
+          />
+        </div>
       </form>
 
       {/* Botón enviar */}

@@ -11,6 +11,8 @@ export type QueryBody = {
   areaMinima?: number | "";
   monImponibleMinimo?: number | "";
   monImponibleMaximo?: number | "";
+  onlyWithDebt?: boolean;
+  onlyWithMultipleProperties?: boolean;
 };
 
 export type Persona = {
