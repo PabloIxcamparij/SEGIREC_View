@@ -1,7 +1,7 @@
 // src/hooks/useSendMessage.ts
 import { useState } from "react";
 import {
-  queryPropiedadesByFilters,
+  queryPeopleWithProperties,
   queryPeopleWithDebt,
   sendEmails,
 } from "../service/QueryService";
@@ -30,9 +30,9 @@ export function useQueryPropiedades() {
   const [personas, setPersonas] = useState<Persona[]>([]);
 
   //Consultar personas por filtros
-  const handleQueryPropiedadesByFilters = async (filtros: QueryBody) => {
+  const handleQueryPeopleWithProperties = async (filtros: QueryBody) => {
     const body: QueryBody = filtros;
-    const response = await queryPropiedadesByFilters(body);
+    const response = await queryPeopleWithProperties(body);
     if (response) {
       setPersonas(response.personas);
       showToast("success", "Consulta exitosa", "Cargando Resultados");
@@ -78,6 +78,12 @@ export function useQueryPropiedades() {
   return {
     distrito,
     setDistrito,
+    cedula,
+    setCedula,
+    namePerson,
+    setNamePerson,
+
+    // Estados para la consulta por propiedades
     areaMinima,
     setAreaMinima,
     areaMaxima,
@@ -97,12 +103,6 @@ export function useQueryPropiedades() {
     servicio,
     setServicio,
 
-    // Estados para consulta por atributos
-    cedula,
-    setCedula,
-    namePerson,
-    setNamePerson,
-
     // Resultados
     personas,
 
@@ -111,7 +111,7 @@ export function useQueryPropiedades() {
 
     // Metodos de consulta
     handleQueryMorosidadByFilters,
-    handleQueryPropiedadesByFilters,
+    handleQueryPeopleWithProperties,
 
     // Metodo de envio
     handleSendMessage,

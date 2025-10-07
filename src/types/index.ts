@@ -19,11 +19,19 @@ export type Persona = {
   apellido: string;
   correo: string;
   distrito: string;
+  numeroDeFinca: string;
+  
+  //Morosidad
   servicio: string;
   valorDeLaDeuda: number;
-  areaDeLaPropiedad: number;
   fechaVencimiento: string;
-  numeroDeFinca: string
+
+  // Propiedades
+  areaDeLaPropiedad: number;
+  fechaVigencia: string;
+  estadoPropiedad: string;
+  montoImponible: number;
+  codigoBaseImponible: string;
 };
 
 export type QueryResponse = {

@@ -85,7 +85,7 @@ export default function QueryMorosidad() {
     <div className="flex flex-col items-center w-full gap-6 p-4">
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 flex flex-col w-[90%] lg:w-[50%] xl:w-[40%] border-2 border-principal rounded-2xl shadow-xl p-6"
+        className="space-y-4 flex flex-col w-[90%] lg:w-[50%] xl:w-[60%] border-2 border-principal rounded-2xl shadow-xl p-6"
       >
         <h1 className="text-xl text-principal font-bold">
           Consulta de Morosidad

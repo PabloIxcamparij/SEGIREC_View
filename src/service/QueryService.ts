@@ -9,9 +9,9 @@ Routeo de servicios para consultar la tabla Propiedades_No_Declaradas
 Consultar por; filtros, cedula, nombre y cargando un archivo
 */
 
-export async function queryPropiedadesByFilters(body: QueryBody): Promise<QueryResponse | null> {
+export async function queryPeopleWithProperties(body: QueryBody): Promise<QueryResponse | null> {
   try {
-    const { data } = await axiosClient.post<QueryResponse>("/message/queryPropiedadesByFilters", body);
+    const { data } = await axiosClient.post<QueryResponse>("/message/queryPeopleWithProperties", body);
     return data;
   } catch (error: any) {
     return errorHandler(error, "consultar filtrados");

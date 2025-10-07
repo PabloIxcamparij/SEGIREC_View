@@ -40,7 +40,7 @@ export default function QueryPropiedades() {
     setNamePerson,
     personas,
     handleLimpiar,
-    handleQueryPropiedadesByFilters,
+    handleQueryPeopleWithProperties,
   } = useSendMessageContext();
 
   const [isConsulting, setIsConsulting] = useState(false);
@@ -62,14 +62,14 @@ export default function QueryPropiedades() {
       if (areaMaxima !== "") query.areaMaxima = Number(areaMaxima);
       if (areaMinima !== "") query.areaMinima = Number(areaMinima);
       if (namePerson.trim() !== "") query.nombre = namePerson.trim();
-      if (baseImponibleCatalogo.length > 0)
-        query.codigoBaseImponible = baseImponibleCatalogo;
+      if (codigoBaseImponible.length > 0)
+        query.codigoBaseImponible = codigoBaseImponible;
       if (monImponibleMinimo !== "")
         query.monImponibleMinimo = Number(monImponibleMinimo);
       if (monImponibleMaximo !== "")
         query.monImponibleMaximo = Number(monImponibleMaximo);
 
-      await handleQueryPropiedadesByFilters(query);
+      await handleQueryPeopleWithProperties(query);
     } catch (error) {
       showToast("error", "Error en lectura", String(error));
     } finally {
@@ -101,7 +101,7 @@ export default function QueryPropiedades() {
     <div className="flex flex-col items-center w-full gap-6 p-4">
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 flex flex-col w-[90%] lg:w-[50%] xl:w-[40%] border-2 border-principal rounded-2xl shadow-xl p-6"
+        className="space-y-4 flex flex-col w-[90%] lg:w-[50%] xl:w-[60%] border-2 border-principal rounded-2xl shadow-xl p-6"
       >
         <h1 className="text-xl text-principal font-bold">
           Consulta de Propiedades

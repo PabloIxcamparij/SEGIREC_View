@@ -10,13 +10,13 @@ interface ColumnDefinition {
 // Columnas base (siempre presentes)
 const BASE_COLUMNS: ColumnDefinition[] = [
   { key: "cedula", header: "Cédula" },
-  { key: "nombre", header: "Nombre" },
   { key: "distrito", header: "Distrito" },
+  { key: "nombre", header: "Nombre" },
 ];
 
 // Columnas para el caso de Servicios
 const SERVICE_COLUMNS: ColumnDefinition[] = [
-  {key : "numeroDeFinca", header: "N° Finca"},
+  { key: "numeroDeFinca", header: "N° Finca" },
   { key: "servicio", header: "Servicio" },
   { key: "valorDeLaDeuda", header: "Deuda" },
   { key: "fechaVencimiento", header: "Vencimiento" },
@@ -24,7 +24,11 @@ const SERVICE_COLUMNS: ColumnDefinition[] = [
 
 // Columnas para el caso de Áreas
 const AREA_COLUMNS: ColumnDefinition[] = [
-  { key: "areaDeLaPropiedad", header: "Área (m²)" },
+  { key: "apellido", header: "Apellido" },
+  { key: "areaDeLaPropiedad", header: "Área" },
+  { key: "estadoPropiedad", header: "Estado" },
+  { key: "montoImponible", header: "Monto Imponible" },
+  { key: "codigoBaseImponible", header: "Código Base Imponible" },
 ];
 
 /**
@@ -52,7 +56,7 @@ export default function TablePeople() {
   const columns = getDynamicColumns(personas[0]);
 
   return (
-    <div className="w-full md:w-4/5 lg:w-3/5 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8">
+    <div className="w-full md:w-4/5 lg:w-[80%] bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8">
       <h2 className="text-xl font-bold mb-4 text-principal flex justify-between items-center">
         Resultados
         <span className="text-sm text-black font-normal">
@@ -73,9 +77,15 @@ export default function TablePeople() {
           </thead>
           <tbody>
             {personas.map((p, idx) => (
-              <tr key={idx} className="text-center odd:bg-white even:bg-gray-50">
+              <tr
+                key={idx}
+                className="text-center odd:bg-white even:bg-gray-50"
+              >
                 {columns.map((col) => (
-                  <td key={`${idx}-${col.key as string}`} className="p-2 border">
+                  <td
+                    key={`${idx}-${col.key as string}`}
+                    className="p-2 border"
+                  >
                     {p[col.key] !== undefined && p[col.key] !== null
                       ? String(p[col.key])
                       : "N/A"}
