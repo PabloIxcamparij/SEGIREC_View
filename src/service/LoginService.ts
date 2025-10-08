@@ -22,6 +22,17 @@ export async function createUser(body: { Nombre: string; Correo: string; Clave: 
   }
 }
 
+//
+export async function deleteUser(id: number) {
+  try {
+    const { data } = await axiosClient.delete("/auth/deleteUser", { data: { id } });
+    return data;
+  } catch (error: any) {
+    errorHandler(error, "Eliminación de usuario");
+  }
+}
+
+// Obtiene la lista de usuarios del sistema
 export async function getUsers() {
   try {
     const { data } = await axiosClient.get("/auth/getUsers");

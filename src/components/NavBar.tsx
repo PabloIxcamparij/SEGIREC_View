@@ -21,6 +21,7 @@ export default function NavBar() {
     { href: "/home", label: "Inicio" },
     { href: "/reports", label: "Reportes" },
     { href: "/lock", label: "Actividad" },
+    { href: "/user/admin", label: "Administración" },
   ];
 
   const submenuItemsSendMessage = [
