@@ -12,6 +12,16 @@ export async function login(body: { Nombre: string; Clave: string }) {
   }
 }
 
+// Crea un nuevo usuario
+export async function createUser(body: { Nombre: string; Correo: string; Clave: string; Rol: string; }) {
+  try {
+    const { data } = await axiosClient.post("/auth/register", body);
+    return data;
+  } catch (error: any) {
+    errorHandler(error, "Registro de usuario");
+  }
+}
+
 // Cierra la sesión del usuario
 // Se borran las cookies de sesión en el servidor
 export async function logout() {

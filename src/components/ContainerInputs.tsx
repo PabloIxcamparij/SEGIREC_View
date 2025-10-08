@@ -1,6 +1,11 @@
 import React from "react";
-import Select from "react-select";
-import type { MultiValue } from "react-select";
+import Select from "react-select"; // Importa SingleValue para el tipado
+import type { MultiValue, SingleValue } from "react-select";
+
+
+/********************************************************
+ * Props para un select (simple o múltiple)
+ ******************************************************** */ 
 
 interface Option {
   value: string;
@@ -30,34 +35,55 @@ export const InputSelect: React.FC<InputSelectProps> = ({
     selectedValues.includes(opt.value)
   );
 
+  // Define el tipo de dato para el handler de cambio
+  type SelectValue = MultiValue<Option> | SingleValue<Option>;
+
+  const handleChange = (selected: SelectValue) => {
+    let values: string[] = [];
+
+    if (isMulti) {
+      // Caso 1: isMulti = true (selected es un array)
+      values = (selected as MultiValue<Option>).map((opt) => opt.value);
+    } else {
+      // Caso 2: isMulti = false (selected es un objeto de opción o null)
+      const singleSelected = selected as SingleValue<Option>;
+
+      if (singleSelected) {
+        values = [singleSelected.value];
+      }
+      // Si es null, 'values' queda como [] (deselección)
+    }
+
+    onChangeValues(values);
+  };
+
   return (
     <div className={`w-full ${className}`}>
       <label className="block font-medium mb-1">{label}</label>
       <Select
         isMulti={isMulti}
         options={options}
-        value={selectedOptions}
-        onChange={(selected) => {
-          const values = (selected as MultiValue<Option>).map(
-            (opt: Option) => opt.value
-          );
-          onChangeValues(values);
-        }}
+        // Para selección simple, 'value' espera un único objeto o null.
+        // Dado que solo queremos una opción, tomamos el primer elemento de selectedOptions.
+        value={isMulti ? selectedOptions : selectedOptions[0] || null} 
+        onChange={handleChange} // Usamos la función de manejo corregida
         className="text-left"
         placeholder={placeholder}
       />
     </div>
   );
 };
-///
 
+/********************************************************
+ * Props para un input de texto simple
+ ******************************************************** */ 
 interface OneInputProps {
   label: string;
   value: string | number;
   onChange: (value: string) => void;
   placeholder: string;
   className?: string;
-  type?: "number" | "text";
+  type?: "number" | "text" | "password";
 }
 
 export const OneInputProps: React.FC<OneInputProps> = ({
@@ -82,7 +108,9 @@ export const OneInputProps: React.FC<OneInputProps> = ({
   );
 };
 
-///
+/********************************************************
+ * Props para un input de texto doble (mínimo y máximo)
+ ******************************************************** */ 
 interface DoubleInputProps {
   label: string;
   valueMin: string | number;

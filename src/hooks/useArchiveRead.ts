@@ -1,4 +1,4 @@
-import Papa from "papaparse";
+// import Papa from "papaparse";
 import * as ExcelJS from "exceljs";
 import { useState } from "react";
 // import { useSendMessageContext } from "../context/SendMessageContext";
@@ -21,19 +21,19 @@ export function useArchiveRead() {
     }
   };
 
-  const procesarCSV = (file: File) => {
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (result) => {
-        const datos = result.data as Record<string, string>[];
-        const Cedulas = datos
-          .map((row) => row["Cedula"] || row["cedula"])
-          .filter(Boolean);
-        // handleQueryPropiedadesByArchive(Cedulas);
-      },
-    });
-  };
+  // const procesarCSV = (file: File) => {
+  //   Papa.parse(file, {
+  //     header: true,
+  //     skipEmptyLines: true,
+  //     complete: (result) => {
+  //       const datos = result.data as Record<string, string>[];
+  //       const Cedulas = datos
+  //         .map((row) => row["Cedula"] || row["cedula"])
+  //         .filter(Boolean);
+  //       // handleQueryPropiedadesByArchive(Cedulas);
+  //     },
+  //   });
+  // };
 
   const procesarExcel = async (file: File) => {
     const data = await file.arrayBuffer();
@@ -77,7 +77,7 @@ export function useArchiveRead() {
     archivo,
     nombreArchivo,
     handleFileChange,
-    procesarCSV,
+    // procesarCSV,
     procesarExcel,
   };
 }
