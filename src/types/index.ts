@@ -36,6 +36,14 @@ export type Persona = {
   codigoBaseImponible: string;
 };
 
+export type User = {
+  id: number;
+  Nombre: string;
+  Correo: string;
+  Rol: string;
+  Activo: boolean;
+};
+
 export type QueryResponse = {
   personas: Persona[];
 };

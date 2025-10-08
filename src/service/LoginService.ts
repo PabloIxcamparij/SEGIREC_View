@@ -22,6 +22,15 @@ export async function createUser(body: { Nombre: string; Correo: string; Clave: 
   }
 }
 
+export async function getUsers() {
+  try {
+    const { data } = await axiosClient.get("/auth/getUsers");
+    return data.users;
+  } catch (error: any) {
+    errorHandler(error, "Obtención de usuarios");
+  }
+}
+
 // Cierra la sesión del usuario
 // Se borran las cookies de sesión en el servidor
 export async function logout() {

@@ -17,7 +17,7 @@ import LoginView from "./view/auth/LoginView";
 
 // Servicios
 import { checkAuth } from "./service/LoginService";
-import UserCreate from "./view/auth/adminModules/UserCreate";
+import AdminView from "./view/auth/adminModules/AdminView";
 
 // Protección de rutas, si no está autenticado redirige al login
 // Esta función se usa como loader en las rutas protegidas
@@ -60,8 +60,8 @@ export const router = createBrowserRouter([
       },
       /// Rutas de administración - Solo accesibles para administradores
       {
-        path: "user/create",
-        element: <UserCreate />,
+        path: "user/admin",
+        element: <AdminView />,
       }
     ],
   },
