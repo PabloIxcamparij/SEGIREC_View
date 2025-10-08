@@ -22,7 +22,7 @@ export async function createUser(body: { Nombre: string; Correo: string; Clave: 
   }
 }
 
-//
+// Elimina un usuario por su ID
 export async function deleteUser(id: number) {
   try {
     const { data } = await axiosClient.delete("/auth/deleteUser", { data: { id } });
@@ -39,6 +39,26 @@ export async function getUsers() {
     return data.users;
   } catch (error: any) {
     errorHandler(error, "Obtención de usuarios");
+  }
+}
+
+// Obtiene un usuario por su ID
+export async function getUserById(id: number) {
+  try {
+    const { data } = await axiosClient.get(`/auth/getUserById/${id}`);
+    return data.user; // <- ya que en el backend devuelves { user }
+  } catch (error: any) {
+    errorHandler(error, "Obtención de usuario por ID");
+  }
+}
+
+// Actualiza un usuario por su ID
+export async function updateUser(body: { id: number; Nombre: string; Correo: string; Rol: string; Activo: boolean; }) {
+  try {
+    const { data } = await axiosClient.put(`/auth/updateUser/${body.id}`, body);
+    return data;
+  } catch (error: any) {
+    errorHandler(error, "Actualización de usuario");
   }
 }
 

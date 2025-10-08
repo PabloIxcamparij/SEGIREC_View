@@ -42,6 +42,7 @@ export type User = {
   Correo: string;
   Rol: string;
   Activo: boolean;
+  Clave?: string; // Opcional, ya que no siempre se envía
 };
 
 export type QueryResponse = {

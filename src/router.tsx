@@ -60,8 +60,10 @@ export const router = createBrowserRouter([
       },
       /// Rutas de administración - Solo accesibles para administradores
       {
-        path: "user/admin",
+        path: "admin",
+        loader: protectedRoutesLoader,
         element: <AdminView />,
+        
       }
     ],
   },
