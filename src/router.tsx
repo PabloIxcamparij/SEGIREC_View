@@ -16,7 +16,7 @@ import ReportsView from "./view/ReportsView";
 import LoginView from "./view/auth/LoginView";
 
 // Servicios
-import { checkAuth } from "./service/LoginService";
+import { checkAdmin, checkAuth } from "./service/LoginService";
 import AdminView from "./view/auth/adminModules/AdminView";
 
 // Protección de rutas, si no está autenticado redirige al login
@@ -29,6 +29,14 @@ const protectedRoutesLoader = async () => {
   return null;
 };
 
+const isAdminLoader = async () => {
+  const isAdmin = await checkAdmin();
+  if (!isAdmin) {
+    return redirect("/home");
+  }
+  return null;
+}
+
 export const router = createBrowserRouter([
   {
     element: <LayoutMessages />,
@@ -36,19 +44,29 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "propiedades",
+        loader: protectedRoutesLoader,
         element: <QueryPropiedades />,
       },
       {
         path: "morosidad",
+        loader: protectedRoutesLoader,
         element: <QueryMorosidad />,
       },
       {
         path: "envioMasivo",
+        loader: protectedRoutesLoader,
         element: <QueryEnvioMasivo />,
       },
       {
         path: "home",
         element: <HomeView />,
+      },
+      /// Rutas de administración - Solo accesibles para administradores
+      {
+        path: "admin",
+        loader: isAdminLoader,
+        element: <AdminView />,
+        
       },
       {
         path: "lock",
@@ -58,13 +76,6 @@ export const router = createBrowserRouter([
         path: "reports",
         element: <ReportsView />,
       },
-      /// Rutas de administración - Solo accesibles para administradores
-      {
-        path: "admin",
-        loader: protectedRoutesLoader,
-        element: <AdminView />,
-        
-      }
     ],
   },
   {
