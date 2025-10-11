@@ -49,7 +49,7 @@ export default function AdminView() {
 
   return (
     <div className="flex flex-col items-center gap-6 p-4">
-      <div className="overflow-x-auto w-full md:w-4/5 lg:w-[80%] bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8">
+      <div className="bg-white border-2 border-principal overflow-x-auto w-full md:w-4/5 lg:w-[80%] backdrop-blur-md rounded-2xl shadow-xl p-8">
         <table className="w-full text-center border-collapse gap-2">
           <thead>
             <tr>

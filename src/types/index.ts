@@ -26,6 +26,7 @@ export type Persona = {
   
   //Morosidad
   servicio: string;
+  numeroDeCuenta: string;
   CodServicio: string;
   valorDeLaDeuda: number;
   fechaVencimiento: string;

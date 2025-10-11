@@ -163,7 +163,7 @@ export default function UserCreate({ userToEdit, onClearEdit, onUserAction }: Us
   const clearButtonText = isEditing ? "Cancelar Edición / Crear Nuevo" : "Limpiar Campos";
 
   return (
-    <div className="flex flex-col items-center w-full gap-6 p-4">
+    <div className=" flex flex-col items-center w-full gap-6 p-4">
       <form
         onSubmit={handleSubmit}
         className="space-y-4 flex flex-col w-[90%] lg:w-[50%] border-2 border-principal rounded-2xl shadow-xl p-6"
@@ -174,6 +174,16 @@ export default function UserCreate({ userToEdit, onClearEdit, onUserAction }: Us
         <h2 className="text-sm text-gray-500">
           {subtitle}
         </h2>
+
+        {/* --- Select de Roles --- */}
+        <InputSelect
+          label="Rol del Usuario (Seleccione uno)"
+          options={roles}
+          selectedValues={rol}
+          onChangeValues={setRol}
+          placeholder="Seleccione un único rol..."
+          isMulti={false}
+        />
         
         {/* --- Campo Nombre --- */}
         <OneInputProps
@@ -200,15 +210,6 @@ export default function UserCreate({ userToEdit, onClearEdit, onUserAction }: Us
           type="password"
         />
 
-        {/* --- Select de Roles --- */}
-        <InputSelect
-          label="Rol del Usuario (Seleccione uno)"
-          options={roles}
-          selectedValues={rol}
-          onChangeValues={setRol}
-          placeholder="Seleccione un único rol..."
-          isMulti={false}
-        />
 
         {/* --- Select de Estado (Solo visible/habilitado en modo Edición) --- */}
         {isEditing && (

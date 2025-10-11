@@ -116,7 +116,7 @@ export default function NavBar() {
 
       {/* Sidebar en móvil */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 py-4 bg-white transform ${
+        className={`border-r-2 fixed top-0 left-0 h-full w-64 py-4 bg-white transform ${
           open ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out lg:hidden z-50`}
       >
@@ -124,7 +124,7 @@ export default function NavBar() {
           <span className="font-bold text-lg p-4">Menú</span>
           <button
             onClick={() => setOpen(false)}
-            className="text-lg font-extrabold text-red-500 px-10 hover:text-red-300 transition-colors"
+            className="text-lg font-extrabold text-red-500 px-2 mr-5 rounded-2xl hover:text-red-300 transition-colors"
           >
             X
           </button>
@@ -170,14 +170,6 @@ export default function NavBar() {
           </button>
         </nav>
       </div>
-
-      {/* Overlay para cerrar sidebar */}
-      {open && (
-        <div
-          className="fixed inset-0 bg-black/40 bg-opacity-50 lg:hidden"
-          onClick={() => setOpen(false)}
-        />
-      )}
     </div>
   );
 }
