@@ -1,4 +1,4 @@
-import type { QueryBody, QueryResponse, SendEmailsResponse } from "../types";
+import type { Persona, QueryBody, QueryResponse, SendEmailsResponse } from "../types";
 import { axiosClient } from "../utils/axiosClient";
 import {errorHandler} from "../utils/errorHandler";
 
@@ -31,9 +31,9 @@ export async function queryPeopleWithDebt(body: QueryBody): Promise<QueryRespons
 
 
 // Enviar correos
-export async function sendEmails(destinatarios: string[]): Promise<SendEmailsResponse | null> {
+export async function sendEmails(personas : Persona[] ): Promise<SendEmailsResponse | null> {
   try {
-    const { data } = await axiosClient.post<SendEmailsResponse>("/message/sendMessage", { destinatarios });
+    const { data } = await axiosClient.post<SendEmailsResponse>("/message/sendMessage", { personas });
     return data;
   } catch (error: any) {
     return errorHandler(error, "enviar correos");

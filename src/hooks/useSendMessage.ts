@@ -52,8 +52,9 @@ export function useQueryPropiedades() {
 
   // Enviar correos
   const handleSendMessage = async () => {
-    const correos = personas.map((p) => p.correo);
-    const response = await sendEmails(correos);
+
+    const response = await sendEmails(personas);
+    
     if (response) {
       showToast("success", "Correos enviados", "Cargando Resultados");
     }

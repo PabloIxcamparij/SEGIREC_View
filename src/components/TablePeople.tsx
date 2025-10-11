@@ -24,7 +24,7 @@ const SERVICE_COLUMNS: ColumnDefinition[] = [
 
 // Columnas para el caso de Áreas
 const AREA_COLUMNS: ColumnDefinition[] = [
-  { key: "apellido", header: "Apellido" },
+  { key: "numeroDeDerecho", header: "N° Derecho" },
   { key: "areaDeLaPropiedad", header: "Área" },
   { key: "estadoPropiedad", header: "Estado" },
   { key: "montoImponible", header: "Monto Imponible" },

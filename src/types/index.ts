@@ -18,15 +18,18 @@ export type QueryBody = {
 export type Persona = {
   cedula: string;
   nombre: string;
-  apellido: string;
   correo: string;
   distrito: string;
   numeroDeFinca: string;
+  telefono: string;
+  direccion: string;
   
   //Morosidad
   servicio: string;
+  CodServicio: string;
   valorDeLaDeuda: number;
   fechaVencimiento: string;
+  periodo: number;
 
   // Propiedades
   areaDeLaPropiedad: number;
@@ -34,6 +37,7 @@ export type Persona = {
   estadoPropiedad: string;
   montoImponible: number;
   codigoBaseImponible: string;
+  numeroDeDerecho: string;
 };
 
 export type User = {
