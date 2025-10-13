@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { QueryBody } from "../../types";
 
-import { showToast } from "../../utils/toastUtils";
+import { showToast, showToastConfirmSend } from "../../utils/toastUtils";
 import { useSendMessageContext } from "../../context/SendMessageContext";
 import { queryServiceCatalogo } from "../../service/utilsService";
 
@@ -42,8 +42,10 @@ export default function QueryMorosidad() {
   } = useSendMessageContext();
 
   const [isConsulting, setIsConsulting] = useState(false);
-  const [serviciosCatalogo, setServiciosCatalogo] = useState([]);
   const [peopleWithDebt, setPeopleWithDebt] = useState(false);
+  const [serviciosCatalogo, setServiciosCatalogo] = useState([]);
+  const [sending, setSending] = useState(false);
+
 
   // Submit
   const handleSubmit = async (e: React.FormEvent) => {
@@ -77,6 +79,21 @@ export default function QueryMorosidad() {
     } finally {
       setIsConsulting(false);
     }
+  };
+
+  const handleSendMessage = async () => {
+      // Confirmación previa
+      showToastConfirmSend(async () => {
+        try {
+          setSending(true);
+          await handleSendMessageMorosidad();
+        } catch (error) {
+          console.error(error);
+          showToast("error", "Error durante el envío de mensajes");
+        } finally {
+          setSending(false);
+        }
+      });
   };
 
   // Reset al desmontar
@@ -159,8 +176,9 @@ export default function QueryMorosidad() {
       {/* Botón enviar */}
       <ButtonsSendsMessage
         handleSubmit={handleSubmit}
+        sending={sending}
         isConsultando={isConsulting}
-        handleSendMessage={handleSendMessageMorosidad}
+        handleSendMessage={handleSendMessage}
       />
 
       {personas.length > 0 && <TablePeople />}

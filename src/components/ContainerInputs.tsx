@@ -172,19 +172,19 @@ export const ToggleSwitch : React.FC<ToggleSwitchProps> = ({
   const switchTranslate = checked ? "translate-x-full" : "translate-x-0";
 
   return (
-    <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg shadow-sm bg-white">
-      <span className="text-sm font-medium text-gray-700">{label}</span>
+    <div className="flex items-center justify-between p-3 border border-black rounded-lg shadow-sm bg-white">
+      <span className="block font-medium mb-1">{label}</span>
       <button
         type="button"
         role="switch"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
-        className={`relative inline-flex flex-shrink-0 h-6 w-11 transition-colors ease-in-out duration-200 rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-principal ${switchBg}`}
+        className={`items-center relative inline-flex flex-shrink-0 h-8 w-15 transition-colors ease-in-out duration-200 rounded-full cursor-pointer botder-white focus:outline-none ${switchBg}`}
       >
         <span className="sr-only">Toggle {label}</span>
         <span
           aria-hidden="true"
-          className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200 ${switchTranslate}`}
+          className={`pointer-events-none inline-block h-8 w-8 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200 ${switchTranslate}`}
         />
       </button>
     </div>

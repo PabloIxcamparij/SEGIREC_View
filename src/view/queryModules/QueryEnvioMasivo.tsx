@@ -50,9 +50,12 @@ export default function QueryEnvioMasivo() {
     <div className="flex flex-col items-center w-full gap-6 p-4">
       {/* Bloque de carga de archivo */}
       <div className="space-y-4 flex flex-col w-[90%] lg:w-[50%] border-2 border-principal rounded-2xl shadow-xl p-6">
-        <h1 className="text-xl text-principal font-bold">Cargar Archivo para Envío Masivo</h1>
+        <h1 className="text-xl text-principal font-bold">
+          Cargar Archivo para Envío Masivo
+        </h1>
         <h2 className="text-sm text-gray-500">
-          Arrastre o seleccione el archivo que contiene los datos de las personas.
+          Arrastre o seleccione el archivo que contiene los datos de las
+          personas.
         </h2>
 
         <div
@@ -66,7 +69,10 @@ export default function QueryEnvioMasivo() {
             id="file-upload"
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           />
-          <label htmlFor="file-upload" className="flex flex-col items-center justify-center p-4">
+          <label
+            htmlFor="file-upload"
+            className="flex flex-col items-center justify-center p-4"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-10 w-10 text-white"
@@ -92,7 +98,10 @@ export default function QueryEnvioMasivo() {
           <>
             {/* Campo de Asunto */}
             <div className="flex flex-col">
-              <label htmlFor="asunto" className="text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="asunto"
+                className="text-sm font-medium text-gray-700 mb-1"
+              >
                 Asunto del Mensaje
               </label>
               <input
@@ -107,7 +116,10 @@ export default function QueryEnvioMasivo() {
 
             {/* Campo de Mensaje */}
             <div className="flex flex-col">
-              <label htmlFor="mensaje" className="text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="mensaje"
+                className="text-sm font-medium text-gray-700 mb-1"
+              >
                 Mensaje Personalizado
               </label>
               <textarea
@@ -125,10 +137,10 @@ export default function QueryEnvioMasivo() {
 
       {/* Botones */}
       <ButtonsSendsMessage
-        handleSubmit={procesarExcel}
-        isConsultando={cargando}
-        handleSendMessage={handleSendMessage}
         sending={sending}
+        isConsultando={cargando}
+        handleSubmit={procesarExcel}
+        handleSendMessage={handleSendMessage}
       />
 
       {personas.length > 0 && <TablePeople />}

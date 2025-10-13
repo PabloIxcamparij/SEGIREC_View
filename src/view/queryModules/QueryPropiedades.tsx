@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { QueryBody } from "../../types";
 
-import { showToast } from "../../utils/toastUtils";
+import { showToast, showToastConfirmSend } from "../../utils/toastUtils";
 import { useSendMessageContext } from "../../context/SendMessageContext";
 import { queryBaseImponibleCatalogo } from "../../service/utilsService";
 
@@ -52,6 +52,7 @@ export default function QueryPropiedades() {
   const [peopleWithMultipleProperties, setPeopleWithMultipleProperties] =
     useState(false);
   const [peopleWithDebt, setPeopleWithDebt] = useState(false);
+  const [sending, setSending] = useState(false);
 
   // Handle submit
   const handleSubmit = async (e: React.FormEvent) => {
@@ -107,6 +108,21 @@ export default function QueryPropiedades() {
     } finally {
       setIsConsulting(false);
     }
+  };
+
+  const handleSendMessage = async () => {
+    // Confirmación previa
+    showToastConfirmSend(async () => {
+      try {
+        setSending(true);
+        await handleSendMessagePropiedades();
+      } catch (error) {
+        console.error(error);
+        showToast("error", "Error durante el envío de mensajes");
+      } finally {
+        setSending(false);
+      }
+    });
   };
 
   // Reset al desmontar
@@ -204,9 +220,10 @@ export default function QueryPropiedades() {
 
       {/* Botón enviar */}
       <ButtonsSendsMessage
-        handleSubmit={handleSubmit}
+        sending={sending}
         isConsultando={isConsulting}
-        handleSendMessage={handleSendMessagePropiedades}
+        handleSubmit={handleSubmit}
+        handleSendMessage={handleSendMessage}
       />
 
       {personas.length > 0 && <TablePeople />}
