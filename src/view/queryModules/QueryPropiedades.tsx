@@ -41,6 +41,7 @@ export default function QueryPropiedades() {
     setNamePerson,
     personas,
     handleLimpiar,
+    handleSendMessagePropiedades,
     handleQueryPeopleWithProperties,
   } = useSendMessageContext();
 
@@ -205,6 +206,7 @@ export default function QueryPropiedades() {
       <ButtonsSendsMessage
         handleSubmit={handleSubmit}
         isConsultando={isConsulting}
+        handleSendMessage={handleSendMessagePropiedades}
       />
 
       {personas.length > 0 && <TablePeople />}

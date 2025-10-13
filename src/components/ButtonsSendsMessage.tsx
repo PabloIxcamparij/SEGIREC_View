@@ -1,9 +1,8 @@
 import { useSendMessageContext } from "../context/SendMessageContext";
 
-export default function ButtonsSendsMessage({ handleSubmit, isConsultando }: { handleSubmit: any, isConsultando: boolean }) {
+export default function ButtonsSendsMessage({ handleSubmit, handleSendMessage, isConsultando }: { handleSubmit: any, isConsultando: boolean,handleSendMessage : any }) {
     const {
         handleLimpiar,
-        handleSendMessage,
         personas,
     } = useSendMessageContext();
 

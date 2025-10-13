@@ -39,6 +39,9 @@ export type Persona = {
   montoImponible: number;
   codigoBaseImponible: string;
   numeroDeDerecho: string;
+  
+  //Envio masivo
+  detalle: string;
 };
 
 export type User = {

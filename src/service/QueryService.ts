@@ -31,9 +31,27 @@ export async function queryPeopleWithDebt(body: QueryBody): Promise<QueryRespons
 
 
 // Enviar correos
-export async function sendEmails(personas : Persona[] ): Promise<SendEmailsResponse | null> {
+export async function sendMessageOfMorosidad(personas : Persona[] ): Promise<SendEmailsResponse | null> {
   try {
-    const { data } = await axiosClient.post<SendEmailsResponse>("/message/sendMessage", { personas });
+    const { data } = await axiosClient.post<SendEmailsResponse>("/message/sendMessageOfMorosidad", { personas });
+    return data;
+  } catch (error: any) {
+    return errorHandler(error, "enviar correos");
+  }
+}
+
+export async function sendMessageOfPropiedades(personas : Persona[] ): Promise<SendEmailsResponse | null> {
+  try {
+    const { data } = await axiosClient.post<SendEmailsResponse>("/message/sendMessageOfPropiedades", { personas });
+    return data;
+  } catch (error: any) {
+    return errorHandler(error, "enviar correos");
+  }
+}
+
+export async function sendMessageMassive(personas : Persona[], mensaje : string, asunto: string ): Promise<SendEmailsResponse | null> {
+  try {
+    const { data } = await axiosClient.post<SendEmailsResponse>("/message/sendMessageMassive", { personas, mensaje, asunto });
     return data;
   } catch (error: any) {
     return errorHandler(error, "enviar correos");

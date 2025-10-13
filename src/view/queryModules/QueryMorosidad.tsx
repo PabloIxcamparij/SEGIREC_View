@@ -36,8 +36,9 @@ export default function QueryMorosidad() {
     namePerson,
     setNamePerson,
     personas,
-    handleQueryMorosidadByFilters,
     handleLimpiar,
+    handleSendMessageMorosidad,
+    handleQueryMorosidadByFilters,
   } = useSendMessageContext();
 
   const [isConsulting, setIsConsulting] = useState(false);
@@ -159,6 +160,7 @@ export default function QueryMorosidad() {
       <ButtonsSendsMessage
         handleSubmit={handleSubmit}
         isConsultando={isConsulting}
+        handleSendMessage={handleSendMessageMorosidad}
       />
 
       {personas.length > 0 && <TablePeople />}

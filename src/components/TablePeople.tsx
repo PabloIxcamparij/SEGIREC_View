@@ -31,6 +31,14 @@ const AREA_COLUMNS: ColumnDefinition[] = [
   { key: "codigoBaseImponible", header: "Código Base Imponible" },
 ];
 
+// Columnas para el caso de Áreas
+const DETALLE_COLUMNS: ColumnDefinition[] = [
+  { key: "cedula", header: "Cédula" },
+  { key: "nombre", header: "Nombre" },
+  { key: "correo", header: "Correo" },
+  { key: "telefono", header: "telefono" },
+];
+
 /**
  * Determina el conjunto dinámico de columnas
  * según los atributos disponibles en la persona.
@@ -42,6 +50,10 @@ function getDynamicColumns(person: Persona): ColumnDefinition[] {
 
   if (person.areaDeLaPropiedad !== undefined) {
     return [...BASE_COLUMNS, ...AREA_COLUMNS];
+  }
+
+  if(person.detalle !== undefined){
+    return [...DETALLE_COLUMNS];
   }
 
   return BASE_COLUMNS; // fallback si no hay coincidencia
@@ -56,7 +68,7 @@ export default function TablePeople() {
   const columns = getDynamicColumns(personas[0]);
 
   return (
-    <div className="w-full md:w-4/5 lg:w-[80%] bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8">
+    <div className="w-full md:w-4/5 lg:w-[80%] bg-white/80 border-2 border-principal backdrop-blur-md rounded-2xl shadow-xl p-8">
       <h2 className="text-xl font-bold mb-4 text-principal flex justify-between items-center">
         Resultados
         <span className="text-sm text-black font-normal">

@@ -3,7 +3,9 @@ import { useState } from "react";
 import {
   queryPeopleWithProperties,
   queryPeopleWithDebt,
-  sendEmails,
+  sendMessageOfMorosidad,
+  sendMessageOfPropiedades,
+  sendMessageMassive,
 } from "../service/QueryService";
 import type { Persona, QueryBody } from "../types";
 import { showToast } from "../utils/toastUtils";
@@ -23,6 +25,10 @@ export function useQueryPropiedades() {
 
   const [deudaMinima, setDeudaMinima] = useState<number | "">("");
   const [deudaMaxima, setDeudaMaxima] = useState<number | "">("");
+
+  // Estados para el envio masivo
+  const [asunto, setAsunto] = useState("");
+  const [mensaje, setMensaje] = useState("");
 
   // Estado para consultas por atributos
   const [cedula, setCedula] = useState("");
@@ -50,19 +56,36 @@ export function useQueryPropiedades() {
     }
   };
 
-  // Enviar correos
-  const handleSendMessage = async () => {
-
-    const response = await sendEmails(personas);
+  // Enviar Mensajes
+  const handleSendMessageMorosidad = async () => {
+    const response =  await sendMessageOfMorosidad(personas);
     
     if (response) {
-      showToast("success", "Correos enviados", "Cargando Resultados");
-    }
-  };
+      showToast("success", "Mensajes enviados");
+    } 
+  }
+
+  const handleSendMessagePropiedades = async () => {
+    const response =  await sendMessageOfPropiedades(personas);
+    
+    if (response) {
+      showToast("success", "Mensajes enviados");
+    } 
+  }
+
+  const handleSendMessageMassive = async (mensaje : string, asunto :string) => {
+    const response =  await sendMessageMassive(personas, mensaje, asunto);
+    
+    if (response) {
+      showToast("success", "Mensajes enviados");
+    } 
+  }
 
   // Limpiar
   const handleLimpiar = () => {
     setCedula("");
+    setAsunto("");
+    setMensaje("");
     setNamePerson("");
     setAreaMaxima("");
     setAreaMinima("");
@@ -104,8 +127,15 @@ export function useQueryPropiedades() {
     servicio,
     setServicio,
 
+    // Estados para el envio masivo
+    asunto,
+    setAsunto,
+    mensaje,
+    setMensaje,
+
     // Resultados
     personas,
+    setPersonas,
 
     // Metodo limpiar
     handleLimpiar,
@@ -115,6 +145,8 @@ export function useQueryPropiedades() {
     handleQueryPeopleWithProperties,
 
     // Metodo de envio
-    handleSendMessage,
+    handleSendMessageMassive,
+    handleSendMessageMorosidad,
+    handleSendMessagePropiedades,
   };
 }
