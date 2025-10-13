@@ -1,13 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useArchiveRead } from "../../hooks/useReadArchive";
 import { useSendMessageContext } from "../../context/SendMessageContext";
+import { showToast, showToastConfirmSend } from "../../utils/toastUtils";
 import TablePeople from "../../components/TablePeople";
 import ButtonsSendsMessage from "../../components/ButtonsSendsMessage";
-import { showToast } from "../../utils/toastUtils";
 
 export default function QueryEnvioMasivo() {
   const { handleFileChange, nombreArchivo, archivo, procesarExcel, cargando } =
     useArchiveRead();
+
   const {
     handleSendMessageMassive,
     handleLimpiar,
@@ -18,17 +19,26 @@ export default function QueryEnvioMasivo() {
     personas,
   } = useSendMessageContext();
 
+  const [sending, setSending] = useState(false);
+
   const handleSendMessage = async () => {
-    if (asunto == "" || mensaje == "") {
-      showToast("error", "Los campos de asunto y mensajes no pueden ir vacios");
+    if (asunto === "" || mensaje === "") {
+      showToast("error", "Los campos de asunto y mensaje no pueden ir vacíos");
       return;
     }
 
-    try {
-      await handleSendMessageMassive(mensaje, asunto);
-    } catch (error) {
-      console.log(error);
-    }
+    // Confirmación previa
+    showToastConfirmSend(async () => {
+      try {
+        setSending(true);
+        await handleSendMessageMassive(mensaje, asunto);
+      } catch (error) {
+        console.error(error);
+        showToast("error", "Error durante el envío de mensajes");
+      } finally {
+        setSending(false);
+      }
+    });
   };
 
   // Reset al desmontar
@@ -38,16 +48,13 @@ export default function QueryEnvioMasivo() {
 
   return (
     <div className="flex flex-col items-center w-full gap-6 p-4">
-      <div className="space-y-4 flex flex-col w-[90%] lg:w-[50%] xl:w-[40%] border-2 border-principal rounded-2xl shadow-xl p-6">
-        <h1 className="text-xl text-principal font-bold">
-          Cargar Archivo para Envío Masivo
-        </h1>
+      {/* Bloque de carga de archivo */}
+      <div className="space-y-4 flex flex-col w-[90%] lg:w-[50%] border-2 border-principal rounded-2xl shadow-xl p-6">
+        <h1 className="text-xl text-principal font-bold">Cargar Archivo para Envío Masivo</h1>
         <h2 className="text-sm text-gray-500">
-          Arrastre o seleccione el archivo que contiene los datos de las
-          personas.
+          Arrastre o seleccione el archivo que contiene los datos de las personas.
         </h2>
 
-        {/* --- Bloque de Carga de Archivo --- */}
         <div
           className={`relative w-full p-2 border-2 border-dashed border-black rounded-xl cursor-pointer
                       ${archivo ? "bg-principal" : "bg-gray-400"}`}
@@ -59,11 +66,7 @@ export default function QueryEnvioMasivo() {
             id="file-upload"
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           />
-          <label
-            htmlFor="file-upload"
-            className="flex flex-col items-center justify-center p-4"
-          >
-            {/* SVG y texto del archivo */}
+          <label htmlFor="file-upload" className="flex flex-col items-center justify-center p-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-10 w-10 text-white"
@@ -85,15 +88,11 @@ export default function QueryEnvioMasivo() {
           </label>
         </div>
 
-        {/* --- Espacio para personas cargadas y campos de mensaje --- */}
         {personas.length > 0 && (
           <>
             {/* Campo de Asunto */}
             <div className="flex flex-col">
-              <label
-                htmlFor="asunto"
-                className="text-sm font-medium text-gray-700 mb-1"
-              >
+              <label htmlFor="asunto" className="text-sm font-medium text-gray-700 mb-1">
                 Asunto del Mensaje
               </label>
               <input
@@ -106,12 +105,9 @@ export default function QueryEnvioMasivo() {
               />
             </div>
 
-            {/* Campo de Mensaje Personalizado */}
+            {/* Campo de Mensaje */}
             <div className="flex flex-col">
-              <label
-                htmlFor="mensaje"
-                className="text-sm font-medium text-gray-700 mb-1"
-              >
+              <label htmlFor="mensaje" className="text-sm font-medium text-gray-700 mb-1">
                 Mensaje Personalizado
               </label>
               <textarea
@@ -119,7 +115,7 @@ export default function QueryEnvioMasivo() {
                 rows={5}
                 value={mensaje}
                 onChange={(e) => setMensaje(e.target.value)}
-                placeholder="Escriba aquí el cuerpo del mensaje. Puede usar campos como ${persona.nombre} o ${persona.cedula} para personalizar."
+                placeholder="Escriba aquí el cuerpo del mensaje..."
                 className="p-2 border border-gray-300 rounded-lg focus:ring-principal focus:border-principal resize-y"
               />
             </div>
@@ -127,10 +123,12 @@ export default function QueryEnvioMasivo() {
         )}
       </div>
 
+      {/* Botones */}
       <ButtonsSendsMessage
         handleSubmit={procesarExcel}
         isConsultando={cargando}
         handleSendMessage={handleSendMessage}
+        sending={sending}
       />
 
       {personas.length > 0 && <TablePeople />}

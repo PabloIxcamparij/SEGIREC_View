@@ -16,10 +16,10 @@ export function useQueryPropiedades() {
   const [servicio, setServicio] = useState<string[]>([]);
 
   const [codigoBaseImponible, setCodigoBaseImponible] = useState<string[]>([]);
-  
+
   const [areaMinima, setAreaMinima] = useState<number | "">("");
   const [areaMaxima, setAreaMaxima] = useState<number | "">("");
-  
+
   const [monImponibleMinimo, setMonImponibleMinimo] = useState<number | "">("");
   const [monImponibleMaximo, setMonImponibleMaximo] = useState<number | "">("");
 
@@ -58,28 +58,28 @@ export function useQueryPropiedades() {
 
   // Enviar Mensajes
   const handleSendMessageMorosidad = async () => {
-    const response =  await sendMessageOfMorosidad(personas);
-    
+    const response = await sendMessageOfMorosidad(personas);
+
     if (response) {
-      showToast("success", "Mensajes enviados");
-    } 
-  }
+      showToast("success", "Mensajes enviados correctamente");
+    }
+  };
 
   const handleSendMessagePropiedades = async () => {
-    const response =  await sendMessageOfPropiedades(personas);
-    
-    if (response) {
-      showToast("success", "Mensajes enviados");
-    } 
-  }
+    const response = await sendMessageOfPropiedades(personas);
 
-  const handleSendMessageMassive = async (mensaje : string, asunto :string) => {
-    const response =  await sendMessageMassive(personas, mensaje, asunto);
-    
     if (response) {
-      showToast("success", "Mensajes enviados");
-    } 
-  }
+      showToast("success", "Mensajes enviados correctamente");
+    }
+  };
+
+  const handleSendMessageMassive = async (mensaje: string, asunto: string) => {
+    const response = await sendMessageMassive(personas, mensaje, asunto);
+
+    if (response) {
+      showToast("success", "Mensajes enviados correctamente");
+    }
+  };
 
   // Limpiar
   const handleLimpiar = () => {

@@ -5,7 +5,7 @@ import { RouterProvider } from "react-router";
 import "./index.css";
 import { router } from "./router";
 import { Toast } from "primereact/toast";
-import { setToastRef } from "./utils/toastUtils";
+import { setToastRef } from "./utils/toastUtils.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
