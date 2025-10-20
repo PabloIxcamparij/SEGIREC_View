@@ -24,6 +24,7 @@ const SERVICE_COLUMNS: ColumnDefinition[] = [
 
 // Columnas para el caso de Áreas
 const AREA_COLUMNS: ColumnDefinition[] = [
+  { key: "numeroDeFinca", header: "N° Finca" },
   { key: "numeroDeDerecho", header: "N° Derecho" },
   { key: "areaDeLaPropiedad", header: "Área" },
   { key: "estadoPropiedad", header: "Estado" },
@@ -31,7 +32,7 @@ const AREA_COLUMNS: ColumnDefinition[] = [
   { key: "codigoBaseImponible", header: "Código Base Imponible" },
 ];
 
-// Columnas para el caso de Áreas
+// Columnas para el caso de Envio Masivo
 const DETALLE_COLUMNS: ColumnDefinition[] = [
   { key: "cedula", header: "Cédula" },
   { key: "nombre", header: "Nombre" },
@@ -52,7 +53,7 @@ function getDynamicColumns(person: Persona): ColumnDefinition[] {
     return [...BASE_COLUMNS, ...AREA_COLUMNS];
   }
 
-  if(person.detalle !== undefined){
+  if (person.detalle !== undefined) {
     return [...DETALLE_COLUMNS];
   }
 

@@ -30,6 +30,10 @@ export default function QueryPropiedades() {
     areaMaxima,
     setAreaMaxima,
     monImponibleMinimo,
+    numeroFinca,
+    setNumeroFinca,
+    numeroDerecho,
+    setNumeroDerecho,
     setMonImponibleMinimo,
     monImponibleMaximo,
     setMonImponibleMaximo,
@@ -60,22 +64,14 @@ export default function QueryPropiedades() {
     setIsConsulting(true);
 
     if (
-      monImponibleMaximo !== "" &&
-      monImponibleMinimo !== "" &&
-      monImponibleMaximo < monImponibleMinimo
+      (monImponibleMaximo !== "" &&
+        monImponibleMinimo !== "" &&
+        monImponibleMaximo < monImponibleMinimo) ||
+      (areaMaxima !== "" && areaMinima !== "" && areaMaxima < areaMinima)
     ) {
       showToast(
         "error",
-        "El monto imponible máximo no puede ser menor que el monto imponible mínimo."
-      );
-      setIsConsulting(false);
-      return;
-    }
-
-    if (areaMaxima !== "" && areaMinima !== "" && areaMaxima < areaMinima) {
-      showToast(
-        "error",
-        "El área máxima no puede ser menor que el área mínima."
+        "El valor maximo no puede menor al valor minimo."
       );
       setIsConsulting(false);
       return;
@@ -89,6 +85,8 @@ export default function QueryPropiedades() {
       if (areaMaxima !== "") query.areaMaxima = Number(areaMaxima);
       if (areaMinima !== "") query.areaMinima = Number(areaMinima);
       if (namePerson.trim() !== "") query.nombre = namePerson.trim();
+      if (numeroDerecho.trim() !== "") query.numeroDerecho = numeroDerecho.trim();
+      if (numeroFinca.trim() !== "") query.numeroFinca = numeroFinca.trim();
       if (codigoBaseImponible.length > 0)
         query.codigoBaseImponible = codigoBaseImponible;
       if (monImponibleMinimo !== "")
@@ -125,11 +123,6 @@ export default function QueryPropiedades() {
     });
   };
 
-  // Reset al desmontar
-  useEffect(() => {
-    return () => handleLimpiar();
-  }, []);
-
   useEffect(() => {
     if (baseImponibleCatalogo.length === 0) {
       const fetchServicios = async () => {
@@ -144,6 +137,11 @@ export default function QueryPropiedades() {
       fetchServicios();
     }
   }, [baseImponibleCatalogo]);
+
+  // Reset al desmontar
+  useEffect(() => {
+    return () => handleLimpiar();
+  }, []);
 
   return (
     <div className="flex flex-col items-center w-full gap-6 p-4">
@@ -194,19 +192,32 @@ export default function QueryPropiedades() {
         <OneInputProps
           label="Filtrar por Cédula"
           value={cedula}
-          onChange={(value) => setCedula(value as string)}
+          onChange={setCedula}
           placeholder="Ingrese la cédula..."
         />
         <OneInputProps
           label="Filtrar por Nombre"
           value={namePerson}
-          onChange={(value) => setNamePerson(value as string)}
+          onChange={setNamePerson}
           placeholder="Ingrese el nombre..."
         />
+        <OneInputProps
+          label="Filtrar por Numero De Finca"
+          value={numeroFinca}
+          onChange={setNumeroFinca}
+          placeholder="Ingrese el numero de finca..."
+        />
+        <OneInputProps
+          label="Filtrar por Numero De Derecho"
+          value={numeroDerecho}
+          onChange={setNumeroDerecho}
+          placeholder="Ingrese el numero de derecho..."
+        />
+
         {/* --- TOGGLE SWITCHES --- */}
         <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <ToggleSwitch
-            label="Personas con deudas"
+            label="Personas con estado Vencido"
             checked={peopleWithDebt}
             onChange={setPeopleWithDebt}
           />

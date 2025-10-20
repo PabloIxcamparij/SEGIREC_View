@@ -6,6 +6,8 @@ export type QueryBody = {
   deudaMaxima?: number | "";
   cedula?: string;
   nombre?: string;
+  numeroFinca?: string;
+  numeroDerecho?: string;
   codigoBaseImponible?: string[];
   areaMaxima?: number | "";
   areaMinima?: number | "";

@@ -26,6 +26,9 @@ export function useQueryPropiedades() {
   const [deudaMinima, setDeudaMinima] = useState<number | "">("");
   const [deudaMaxima, setDeudaMaxima] = useState<number | "">("");
 
+  const [numeroDerecho, setNumeroDerecho] = useState("");
+  const [numeroFinca, setNumeroFinca] = useState("");
+
   // Estados para el envio masivo
   const [asunto, setAsunto] = useState("");
   const [mensaje, setMensaje] = useState("");
@@ -91,6 +94,8 @@ export function useQueryPropiedades() {
     setAreaMinima("");
     setDeudaMinima("");
     setDeudaMaxima("");
+    setNumeroFinca("");
+    setNumeroDerecho("");
     setMonImponibleMinimo("");
     setMonImponibleMaximo("");
     setDistrito([]);
@@ -106,6 +111,10 @@ export function useQueryPropiedades() {
     setCedula,
     namePerson,
     setNamePerson,
+    numeroDerecho,
+    setNumeroDerecho,
+    numeroFinca,
+    setNumeroFinca,
 
     // Estados para la consulta por propiedades
     areaMinima,

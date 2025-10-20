@@ -31,6 +31,8 @@ export default function QueryMorosidad() {
     setDeudaMinima,
     deudaMaxima,
     setDeudaMaxima,
+    numeroFinca,
+    setNumeroFinca,
     cedula,
     setCedula,
     namePerson,
@@ -67,6 +69,7 @@ export default function QueryMorosidad() {
       if (distrito.length > 0) query.distritos = distrito;
       if (servicio.length > 0) query.servicios = servicio;
       if (cedula.trim() !== "") query.cedula = cedula.trim();
+      if (numeroFinca.trim() !== "") query.numeroFinca = numeroFinca.trim()
       if (deudaMinima !== "") query.deudaMinima = Number(deudaMinima);
       if (deudaMaxima !== "") query.deudaMaxima = Number(deudaMaxima);
       if (namePerson.trim() !== "") query.nombre = namePerson.trim();
@@ -96,10 +99,6 @@ export default function QueryMorosidad() {
       });
   };
 
-  // Reset al desmontar
-  useEffect(() => {
-    return () => handleLimpiar();
-  }, []);
 
   // Cargar servicios
   useEffect(() => {
@@ -112,6 +111,11 @@ export default function QueryMorosidad() {
     }
   }, [serviciosCatalogo]);
 
+  // Reset al desmontar
+  useEffect(() => {
+    return () => handleLimpiar();
+  }, []);
+  
   return (
     <div className="flex flex-col items-center w-full gap-6 p-4">
       <form
@@ -161,6 +165,13 @@ export default function QueryMorosidad() {
           value={namePerson}
           onChange={setNamePerson}
           placeholder="Ingrese el nombre..."
+        />
+
+        <OneInputProps
+          label="Numero De Finca"
+          value={numeroFinca}
+          onChange={setNumeroFinca}
+          placeholder="Ingrese el numero..."
         />
 
         {/* --- TOGGLE SWITCHES --- */}
