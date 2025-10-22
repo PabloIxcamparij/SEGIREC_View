@@ -55,6 +55,20 @@ export type User = {
   Clave?: string; // Opcional, ya que no siempre se envía
 };
 
+export type Activities = {
+  id: number,
+  Nombre: string;
+  Tipo: string
+  Detalle: string;
+  Estado: string
+  FiltrosAplicados: string;
+  NumeroDeMensajes: string;
+  NumeroDeCorreosEnviadosCorrectamente: string;
+  NumeroDeWhatsAppEnviadosCorrectamente: string;
+  createdAt: string;
+}
+
+
 export type QueryResponse = {
   personas: Persona[];
 };

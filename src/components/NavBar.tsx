@@ -20,7 +20,7 @@ export default function NavBar() {
   const navItems = [
     { href: "/home", label: "Inicio" },
     { href: "/reports", label: "Reportes" },
-    { href: "/lock", label: "Actividad" },
+    { href: "/logs", label: "Actividad" },
     { href: "/admin", label: "Administración" },
   ];
 

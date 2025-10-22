@@ -19,3 +19,13 @@ export async function queryBaseImponibleCatalogo() {
   }
 }
 
+export async function queryActivities() {
+  try {
+    console.log("first")
+    const { data } = await axiosClient.get("/utils/activities");
+    return data;
+  } catch (error: any) {
+    errorHandler(error, "Cargado Las Actividades del sistema");
+  }
+}
+

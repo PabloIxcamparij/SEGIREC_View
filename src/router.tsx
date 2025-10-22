@@ -7,9 +7,11 @@ import QueryMorosidad from "./view/queryModules/QueryMorosidad";
 import QueryEnvioMasivo from "./view/queryModules/QueryEnvioMasivo";
 import QueryPropiedades from "./view/queryModules/QueryPropiedades";
 
-// Admin views
 import HomeView from "./view/HomeView";
-import LockView from "./view/LockView";
+
+// Admin views
+import AdminView from "./view/auth/adminModules/AdminView";
+import LogsView from "./view/auth/adminModules/LogsView";
 import ReportsView from "./view/ReportsView";
 
 // Auth views
@@ -17,7 +19,6 @@ import LoginView from "./view/auth/LoginView";
 
 // Servicios
 import { checkAdmin, checkAuth } from "./service/LoginService";
-import AdminView from "./view/auth/adminModules/AdminView";
 
 // Protección de rutas, si no está autenticado redirige al login
 // Esta función se usa como loader en las rutas protegidas
@@ -69,8 +70,9 @@ export const router = createBrowserRouter([
         
       },
       {
-        path: "lock",
-        element: <LockView />,
+        path: "logs",
+        loader: isAdminLoader,
+        element: <LogsView />,
       },
       {
         path: "reports",
