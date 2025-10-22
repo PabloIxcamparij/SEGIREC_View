@@ -74,7 +74,7 @@ export default function QueryMorosidad() {
       if (deudaMaxima !== "") query.deudaMaxima = Number(deudaMaxima);
       if (namePerson.trim() !== "") query.nombre = namePerson.trim();
 
-      if (peopleWithDebt) query.unicamenteConDeudas = true;
+      if (peopleWithDebt) query.conDeudas = true;
 
       await handleQueryMorosidadByFilters(query);
     } catch (error) {

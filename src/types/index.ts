@@ -13,8 +13,8 @@ export type QueryBody = {
   areaMinima?: number | "";
   monImponibleMinimo?: number | "";
   monImponibleMaximo?: number | "";
-  unicamenteConDeudas?: boolean;
-  unicamenteConVariasPropiedades?: boolean;
+  variasPropiedades?: boolean;
+  conDeudas?: boolean;
 };
 
 export type Persona = {

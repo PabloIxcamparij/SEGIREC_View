@@ -97,8 +97,8 @@ export default function QueryPropiedades() {
       // Los valores booleanos se usan directamente, pero es buena práctica
       // incluirlos en el objeto 'query' solo si son 'true' para evitar
       // enviar parámetros innecesarios si el backend lo permite/requiere.
-      if (peopleWithDebt) query.unicamenteConDeudas = true;
-      if (peopleWithMultipleProperties) query.unicamenteConVariasPropiedades = true;
+      if (peopleWithDebt) query.conDeudas = true;
+      if (peopleWithMultipleProperties) query.variasPropiedades = true;
 
       await handleQueryPeopleWithProperties(query);
     } catch (error) {
