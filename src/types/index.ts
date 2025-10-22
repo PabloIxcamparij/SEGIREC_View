@@ -55,20 +55,6 @@ export type User = {
   Clave?: string; // Opcional, ya que no siempre se envía
 };
 
-export type Activities = {
-  id: number,
-  Nombre: string;
-  Tipo: string
-  Detalle: string;
-  Estado: string
-  FiltrosAplicados: string;
-  NumeroDeMensajes: string;
-  NumeroDeCorreosEnviadosCorrectamente: string;
-  NumeroDeWhatsAppEnviadosCorrectamente: string;
-  createdAt: string;
-}
-
-
 export type QueryResponse = {
   personas: Persona[];
 };
@@ -76,4 +62,42 @@ export type QueryResponse = {
 export type SendEmailsResponse = {
   message: string;
   destinatarios: string[];
+};
+
+/**
+ * Tipos para el control de actividades
+ */
+
+// Tipo base (padre)
+export type ActivityBase = {
+  id: number;
+  IdUsuario: number;
+  Tipo: string;
+  Detalle: string;
+  Estado: string;
+  createdAt: string;
+  updatedAt: string;
+  Usuario: {
+    id: number;
+    Nombre: string;
+    Correo: string;
+  };
+};
+
+// Hijo 1: Consultas
+export type ConsultaActivity = ActivityBase & {
+  Filtros: {
+    id: number;
+    FiltrosAplicados: string;
+  }
+};
+
+// Hijo 2: Envío de mensajes
+export type EnvioActivity = ActivityBase & {
+  Envios: {
+    id: number;
+    NumeroDeMensajes: number;
+    NumeroDeCorreosEnviadosCorrectamente: number;
+    NumeroDeWhatsAppEnviadosCorrectamente: number;
+  }
 };
