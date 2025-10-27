@@ -2,8 +2,7 @@ import {
   getUsers,
   deleteUser,
   getUserById,
-  // Asumiendo que updateUser existe
-} from "../../../service/LoginService";
+} from "../../../service/Admin.service";
 import type { User } from "../../../types";
 import { useEffect, useState } from "react";
 import UserCreate from "./UserCreate";

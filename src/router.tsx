@@ -18,7 +18,7 @@ import ReportsView from "./view/ReportsView";
 import LoginView from "./view/auth/LoginView";
 
 // Servicios
-import { checkAdmin, checkAuth } from "./service/LoginService";
+import { checkAdmin, checkAuth } from "./service/Auth.service";
 
 // Protección de rutas, si no está autenticado redirige al login
 // Esta función se usa como loader en las rutas protegidas

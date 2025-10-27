@@ -3,10 +3,12 @@ import { useState } from "react";
 import {
   queryPeopleWithProperties,
   queryPeopleWithDebt,
+} from "../service/QueryPeople.service";
+import {
   sendMessageOfMorosidad,
   sendMessageOfPropiedades,
   sendMessageMassive,
-} from "../service/QueryService";
+} from "../service/SendMessage.service";
 import type { Persona, QueryBody } from "../types";
 import { showToast } from "../utils/toastUtils";
 

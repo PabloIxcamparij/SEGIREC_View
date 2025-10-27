@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router";
-import { logout } from "../service/LoginService";
+import { logout } from "../service/Auth.service";
 import { showToast } from "../utils/toastUtils";
 
 const handleLogout = async () => {

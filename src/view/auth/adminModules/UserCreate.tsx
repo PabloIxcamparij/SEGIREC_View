@@ -1,11 +1,11 @@
 import { showToast } from "../../../utils/toastUtils";
-import { useState, useEffect } from "react"; // Importar useEffect
-import { createUser, updateUser } from "../../../service/LoginService"; // Asumir que existe updateUser
+import { useState, useEffect } from "react"; 
+import { createUser, updateUser } from "../../../service/Admin.service";
 import {
   InputSelect,
   OneInputProps,
-} from "../../../components/ContainerInputs"; 
-import type { User } from "../../../types"; // Importar el tipo User
+} from "../../../components/ContainerInputs";
+import type { User } from "../../../types";
 
 const roles = [
   { value: "Administrador", label: "Rol de Administrador" },
@@ -27,7 +27,11 @@ interface UserCreateProps {
 }
 
 // Cambiamos 'label' por el objeto completo 'UserToEdit' y la función de limpiar
-export default function UserCreate({ userToEdit, onClearEdit, onUserAction }: UserCreateProps) {
+export default function UserCreate({
+  userToEdit,
+  onClearEdit,
+  onUserAction,
+}: UserCreateProps) {
   const [isConsulting, setIsConsulting] = useState(false);
 
   // Determinar el modo: true si se está editando un usuario
@@ -51,7 +55,6 @@ export default function UserCreate({ userToEdit, onClearEdit, onUserAction }: Us
   const [correo, setCorreo] = useState<string>("");
   const [clave, setClave] = useState<string>("");
   const [activo, setActivo] = useState<string[]>([]);
-
 
   // 2. useEffect para cargar los datos del usuario a editar
   useEffect(() => {
@@ -79,11 +82,14 @@ export default function UserCreate({ userToEdit, onClearEdit, onUserAction }: Us
       );
       return false;
     }
-    
+
     // El campo Activo es obligatorio en modo EDICIÓN.
     if (isEditing && activo.length === 0) {
-        showToast("error", "Debe seleccionar un estado (Activo/Inactivo) al editar.");
-        return false;
+      showToast(
+        "error",
+        "Debe seleccionar un estado (Activo/Inactivo) al editar."
+      );
+      return false;
     }
 
     // c. Validación de Correo BÁSICA
@@ -106,7 +112,7 @@ export default function UserCreate({ userToEdit, onClearEdit, onUserAction }: Us
     e.preventDefault();
 
     if (!validateForm()) {
-      return; 
+      return;
     }
 
     setIsConsulting(true);
@@ -114,17 +120,17 @@ export default function UserCreate({ userToEdit, onClearEdit, onUserAction }: Us
     try {
       if (isEditing && userToEdit) {
         // --- Modo Edición ---
-        const body = { 
+        const body = {
           // Asumimos que la función de edición requiere el ID y el nuevo estado Activo
-          id: userToEdit.id, 
-          Nombre: nombre, 
-          Correo: correo, 
+          id: userToEdit.id,
+          Nombre: nombre,
+          Correo: correo,
 
-          // Si clave no está vacía, la enviamos para cambiarla, sino, la omitimos (o enviamos la antigua si el backend lo requiere). 
+          // Si clave no está vacía, la enviamos para cambiarla, sino, la omitimos (o enviamos la antigua si el backend lo requiere).
           // Por simplicidad, la incluimos si no está vacía. Si está vacía, asumimos que no cambia.
-          Clave: clave || userToEdit.Clave, 
+          Clave: clave || userToEdit.Clave,
           Rol: rol[0],
-          Activo: activo[0] === 'true', // Enviar Activo como booleano
+          Activo: activo[0] === "true", // Enviar Activo como booleano
         };
 
         // Asume que updateUser existe en tu servicio
@@ -134,33 +140,38 @@ export default function UserCreate({ userToEdit, onClearEdit, onUserAction }: Us
         }
       } else {
         // --- Modo Creación ---
-        const body = { 
-          Nombre: nombre, 
-          Correo: correo, 
-          Clave: clave, 
-          Rol: rol[0] 
+        const body = {
+          Nombre: nombre,
+          Correo: correo,
+          Clave: clave,
+          Rol: rol[0],
         };
         const response = await createUser(body);
         if (response) {
           showToast("success", "Usuario creado exitosamente");
         }
       }
-      
+
       cleanState(); // Limpiar formulario y resetear a modo Creación
       onUserAction(); // Recargar la lista en AdminView
-
     } catch (error) {
       showToast("error", "Ocurrió un error al procesar la acción.");
     } finally {
       setIsConsulting(false);
     }
   };
-  
+
   // 5. Textos dinámicos
-  const title = isEditing ? `Editando Usuario: ${userToEdit?.Nombre}` : "Creación de un nuevo Usuario";
-  const subtitle = isEditing ? "Modifique los campos necesarios para actualizar el usuario" : "Ingrese los datos del nuevo usuario";
+  const title = isEditing
+    ? `Editando Usuario: ${userToEdit?.Nombre}`
+    : "Creación de un nuevo Usuario";
+  const subtitle = isEditing
+    ? "Modifique los campos necesarios para actualizar el usuario"
+    : "Ingrese los datos del nuevo usuario";
   const buttonText = isEditing ? "Guardar Cambios" : "Crear Usuario";
-  const clearButtonText = isEditing ? "Cancelar Edición / Crear Nuevo" : "Limpiar Campos";
+  const clearButtonText = isEditing
+    ? "Cancelar Edición / Crear Nuevo"
+    : "Limpiar Campos";
 
   return (
     <div className=" flex flex-col items-center w-full gap-6 p-4">
@@ -168,12 +179,8 @@ export default function UserCreate({ userToEdit, onClearEdit, onUserAction }: Us
         onSubmit={handleSubmit}
         className="space-y-4 flex flex-col w-[90%] lg:w-[50%] border-2 border-principal rounded-2xl shadow-xl p-6"
       >
-        <h1 className="text-xl text-principal font-bold">
-          {title} 
-        </h1>
-        <h2 className="text-sm text-gray-500">
-          {subtitle}
-        </h2>
+        <h1 className="text-xl text-principal font-bold">{title}</h1>
+        <h2 className="text-sm text-gray-500">{subtitle}</h2>
 
         {/* --- Select de Roles --- */}
         <InputSelect
@@ -184,7 +191,7 @@ export default function UserCreate({ userToEdit, onClearEdit, onUserAction }: Us
           placeholder="Seleccione un único rol..."
           isMulti={false}
         />
-        
+
         {/* --- Campo Nombre --- */}
         <OneInputProps
           label="Nombre del usuario"
@@ -203,24 +210,29 @@ export default function UserCreate({ userToEdit, onClearEdit, onUserAction }: Us
 
         {/* --- Campo Clave (Se mantiene el tipo password) --- */}
         <OneInputProps
-          label={`Contraseña ${isEditing ? "(Dejar vacío para no cambiar)" : ""}`}
+          label={`Contraseña ${
+            isEditing ? "(Dejar vacío para no cambiar)" : ""
+          }`}
           value={clave}
           onChange={setClave}
-          placeholder={isEditing ? "Ingrese nueva clave o deje vacío" : "Ingrese la contraseña"}
+          placeholder={
+            isEditing
+              ? "Ingrese nueva clave o deje vacío"
+              : "Ingrese la contraseña"
+          }
           type="password"
         />
 
-
         {/* --- Select de Estado (Solo visible/habilitado en modo Edición) --- */}
         {isEditing && (
-            <InputSelect
-                label="Estado del Usuario"
-                options={activoOptions}
-                selectedValues={activo}
-                onChangeValues={setActivo}
-                placeholder="Seleccione un estado..."
-                isMulti={false}
-            />
+          <InputSelect
+            label="Estado del Usuario"
+            options={activoOptions}
+            selectedValues={activo}
+            onChangeValues={setActivo}
+            placeholder="Seleccione un estado..."
+            isMulti={false}
+          />
         )}
 
         {/* --- Botones --- */}
@@ -229,9 +241,17 @@ export default function UserCreate({ userToEdit, onClearEdit, onUserAction }: Us
             type="submit"
             disabled={isConsulting}
             className={`p-3 text-white rounded-md font-bold transition duration-300
-              ${isConsulting ? "bg-gray-400 cursor-not-allowed" : "bg-principal hover:bg-principal-dark"}`}
+              ${
+                isConsulting
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-principal hover:bg-principal-dark"
+              }`}
           >
-            {isConsulting ? (isEditing ? "Guardando..." : "Creando Usuario...") : buttonText}
+            {isConsulting
+              ? isEditing
+                ? "Guardando..."
+                : "Creando Usuario..."
+              : buttonText}
           </button>
 
           <button

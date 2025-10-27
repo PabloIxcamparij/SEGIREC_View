@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { login } from "../../service/LoginService";
+import { login } from "../../service/Auth.service";
 import { useNavigate } from "react-router";
 import { showToast } from "../../utils/toastUtils";
 

@@ -3,7 +3,7 @@ import type { QueryBody } from "../../types";
 
 import { showToast, showToastConfirmSend } from "../../utils/toastUtils";
 import { useSendMessageContext } from "../../context/SendMessageContext";
-import { queryBaseImponibleCatalogo } from "../../service/utilsService";
+import { queryBaseImponibleCatalogo } from "../../service/Utils.service";
 
 import TablePeople from "../../components/TablePeople";
 import ButtonsSendsMessage from "../../components/ButtonsSendsMessage";

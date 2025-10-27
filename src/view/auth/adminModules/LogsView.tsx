@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { queryActivities } from "../../../service/utilsService";
+import { queryActivities } from "../../../service/Utils.service";
 import type { ConsultaActivity, EnvioActivity } from "../../../types";
 
 export default function LogsView() {
