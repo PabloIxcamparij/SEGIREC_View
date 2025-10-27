@@ -79,7 +79,7 @@ export default function NavBar() {
               Enviar Mensajes ▾
             </button>
             {submenuOpen && (
-              <div className="absolute top-full left-0 bg-white text-black border-2 rounded-2xl mt-7 w-81.5 z-50">
+              <div className="absolute top-full left-0 bg-white text-black border-2 rounded-2xl mt-10 w-81.5 z-50">
                 {submenuItemsSendMessage.map((item) => (
                   <Link
                     key={item.href}

@@ -190,3 +190,44 @@ export const ToggleSwitch : React.FC<ToggleSwitchProps> = ({
     </div>
   );
 };
+
+/********************************************************
+ * Props para un input que es usado en las tablas de actividades
+ ******************************************************** */ 
+interface FilterInputProps {
+    type: 'text' | 'date' | 'select';
+    value: string;
+    placeholder?: string;
+    options?: string[]; // Solo para 'select'
+    onChange: (value: string) => void;
+}
+
+export function FilterInput({ type, value, placeholder, options, onChange }: FilterInputProps) {
+    const commonClasses = "w-full text-xs p-1 border rounded";
+
+    if (type === 'select' && options) {
+        return (
+            <select
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                className={`${commonClasses} bg-white`}
+            >
+                <option value="">Todos</option>
+                {options.map(opt => (
+                    <option key={opt} value={opt}>{opt}</option>
+                ))}
+            </select>
+        );
+    }
+
+    // Para 'text' o 'date'
+    return (
+        <input
+            type={type}
+            placeholder={placeholder}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className={commonClasses}
+        />
+    );
+}

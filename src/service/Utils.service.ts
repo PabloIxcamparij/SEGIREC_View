@@ -19,9 +19,18 @@ export async function queryBaseImponibleCatalogo() {
   }
 }
 
-export async function queryActivities(page = 1) {
+export async function activitiesOfQuery(page = 1) {
   try {
-    const { data } = await axiosClient.get(`/utils/activities?page=${page}`);
+    const { data } = await axiosClient.get(`/utils/activitiesOfQuery?page=${page}`);
+    return data;
+  } catch (error: any) {
+    errorHandler(error, "Cargando las actividades del sistema");
+  }
+}
+
+export async function queryActivitiesMessage(page = 1) {
+  try {
+    const { data } = await axiosClient.get(`/utils/activitiesOfMessage?page=${page}`);
     return data;
   } catch (error: any) {
     errorHandler(error, "Cargando las actividades del sistema");
