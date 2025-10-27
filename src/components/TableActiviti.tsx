@@ -28,6 +28,12 @@ export default function TableActivity({
       <div className="flex justify-end mb-4 gap-2">
         <button
           onClick={onClearFilters}
+          className="px-4 py-2 border-2 border-gray-200 text-black text-sm rounded-lg hover:bg-gray-200 transition-colors"
+        >
+          Descargar Registros
+        </button>
+        <button
+          onClick={onClearFilters}
           className="px-4 py-2 bg-gray-500 text-white text-sm rounded-lg hover:bg-gray-600 transition-colors"
         >
           Limpiar Filtros

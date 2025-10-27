@@ -57,7 +57,7 @@ export default function LogsView() {
                 </tr>
 
                 {/* Fila de Filtros */}
-                <tr className="bg-gray-100 top-[60px] z-10 border-b border-gray-300">
+                <tr>
                   <td className="py-2 px-3">
                     <FilterInput
                       type="text"
@@ -155,7 +155,7 @@ export default function LogsView() {
                 </tr>
 
                 {/* Fila de Filtros */}
-                <tr className="bg-gray-100 top-[60px] z-10 border-b border-gray-300">
+                <tr>
                   <td className="py-2 px-3">
                     <FilterInput
                       type="text"

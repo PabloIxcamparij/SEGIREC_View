@@ -1,4 +1,3 @@
-// Hook: useLogActivity
 // Descripción: Gestiona la carga, filtrado y paginación de las actividades de consulta y envío.
 // Incluye estados separados para filtros, paginación y carga, así como lógica memorizada de filtrado.
 

@@ -2,10 +2,9 @@ import React from "react";
 import Select from "react-select"; // Importa SingleValue para el tipado
 import type { MultiValue, SingleValue } from "react-select";
 
-
 /********************************************************
  * Props para un select (simple o múltiple)
- ******************************************************** */ 
+ ******************************************************** */
 
 interface Option {
   value: string;
@@ -65,7 +64,7 @@ export const InputSelect: React.FC<InputSelectProps> = ({
         options={options}
         // Para selección simple, 'value' espera un único objeto o null.
         // Dado que solo queremos una opción, tomamos el primer elemento de selectedOptions.
-        value={isMulti ? selectedOptions : selectedOptions[0] || null} 
+        value={isMulti ? selectedOptions : selectedOptions[0] || null}
         onChange={handleChange} // Usamos la función de manejo corregida
         className="text-left"
         placeholder={placeholder}
@@ -76,7 +75,7 @@ export const InputSelect: React.FC<InputSelectProps> = ({
 
 /********************************************************
  * Props para un input de texto simple
- ******************************************************** */ 
+ ******************************************************** */
 interface OneInputProps {
   label: string;
   value: string | number;
@@ -110,7 +109,7 @@ export const OneInputProps: React.FC<OneInputProps> = ({
 
 /********************************************************
  * Props para un input de texto doble (mínimo y máximo)
- ******************************************************** */ 
+ ******************************************************** */
 interface DoubleInputProps {
   label: string;
   valueMin: string | number;
@@ -161,7 +160,7 @@ interface ToggleSwitchProps {
   onChange: (checked: boolean) => void;
 }
 
-export const ToggleSwitch : React.FC<ToggleSwitchProps> = ({
+export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   label,
   checked,
   onChange,
@@ -193,41 +192,49 @@ export const ToggleSwitch : React.FC<ToggleSwitchProps> = ({
 
 /********************************************************
  * Props para un input que es usado en las tablas de actividades
- ******************************************************** */ 
+ ******************************************************** */
 interface FilterInputProps {
-    type: 'text' | 'date' | 'select';
-    value: string;
-    placeholder?: string;
-    options?: string[]; // Solo para 'select'
-    onChange: (value: string) => void;
+  type: "text" | "date" | "select";
+  value: string;
+  placeholder?: string;
+  options?: string[]; // Solo para 'select'
+  onChange: (value: string) => void;
 }
 
-export function FilterInput({ type, value, placeholder, options, onChange }: FilterInputProps) {
-    const commonClasses = "w-full text-xs p-1 border rounded";
+export function FilterInput({
+  type,
+  value,
+  placeholder,
+  options,
+  onChange,
+}: FilterInputProps) {
+  const commonClasses = "w-full text-xs p-2 border rounded";
 
-    if (type === 'select' && options) {
-        return (
-            <select
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
-                className={`${commonClasses} bg-white`}
-            >
-                <option value="">Todos</option>
-                {options.map(opt => (
-                    <option key={opt} value={opt}>{opt}</option>
-                ))}
-            </select>
-        );
-    }
-
-    // Para 'text' o 'date'
+  if (type === "select" && options) {
     return (
-        <input
-            type={type}
-            placeholder={placeholder}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            className={commonClasses}
-        />
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={`${commonClasses} `}
+      >
+        <option value="">Todos</option>
+        {options.map((opt) => (
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
+        ))}
+      </select>
     );
+  }
+
+  // Para 'text' o 'date'
+  return (
+    <input
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={commonClasses}
+    />
+  );
 }
