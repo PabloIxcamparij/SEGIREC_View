@@ -18,20 +18,26 @@ import ReportsView from "./view/ReportsView";
 import LoginView from "./view/auth/LoginView";
 
 // Servicios
-import { verifyRol } from "./service/Auth.service";
+import { verifyRol, verifyAuth } from "./service/Auth.service";
 
 // Protección de rutas, si no está autenticado redirige al login
 // Esta función se usa como loader en las rutas protegidas
 const createRoleLoader = (requiredRole: string) => async () => {
-    // Llamamos al servicio con el rol requerido
-    // **Nota: verifyRol ahora debe manejar varios roles, no solo uno (ver punto 3)**
-    const isAllowed = await verifyRol(requiredRole); 
+  // Llamamos al servicio con el rol requerido
+  // **Nota: verifyRol ahora debe manejar varios roles, no solo uno (ver punto 3)**
+  const isAuth = await verifyAuth();
 
-    if (!isAllowed) {
-        return redirect("/");
-    }
-    return null;
-}
+  if (!isAuth) {
+    return redirect("/");
+  }
+
+  const isAllowed = await verifyRol(requiredRole);
+
+  if (!isAllowed) {
+    return redirect("/home");
+  }
+  return null;
+};
 
 export const router = createBrowserRouter([
   {
@@ -62,7 +68,6 @@ export const router = createBrowserRouter([
         path: "admin",
         loader: createRoleLoader("Administrador"),
         element: <AdminView />,
-        
       },
       {
         path: "logs",

@@ -22,13 +22,24 @@ export async function logout() {
     errorHandler(error, "Cierre de sesión");
   }
 }
+export const verifyAuth = async (): Promise<boolean> => {
+  try {
+    const { data } = await axiosClient.get(`/auth/verifyAuth`);
+    return data;
+  } catch (error) {
+    errorHandler(error, "Autenticando");
+    return false;
+  }
+};
 
 export const verifyRol = async (rol: string): Promise<boolean> => {
   try {
     const { data } = await axiosClient.get(`/auth/verifyRol?rol=${rol}`);
     return data;
   } catch (error) {
-    errorHandler(error, "Chequeo de administrador");
+    errorHandler(error, "Autenticacion de roles");
     return false;
   }
 };
+
+
