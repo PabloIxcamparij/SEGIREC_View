@@ -4,7 +4,7 @@ import { errorHandler } from "../utils/errorHandler";
 // Crea un nuevo usuario
 export async function createUser(body: { Nombre: string; Correo: string; Clave: string; Rol: string; }) {
   try {
-    const { data } = await axiosClient.post("/admin/register", body);
+    const { data } = await axiosClient.post("/admin/createUser", body);
     return data;
   } catch (error: any) {
     errorHandler(error, "Registro de usuario");

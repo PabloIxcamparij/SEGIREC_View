@@ -8,7 +8,7 @@ export function errorHandler(error: any, contexto: string): null {
     error.message ||
     "Error desconocido";
 
-  showToast("error", "Error en consulta", error.response.data.message);
+  showToast("error", "Error en consulta", error.response.data.error);
   console.error(`Error en ${contexto}:`, mensaje, error.response?.data);
   return null;
 }

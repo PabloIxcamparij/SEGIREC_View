@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { useLogActivity } from "../../../hooks/useLogsActiviti";
-import TableActivity from "../../../components/TableActiviti";
-import { FilterInput } from "../../../components/ContainerInputs";
+import { useLogActivity } from "../../hooks/useLogsActiviti";
+import TableActivity from "../../components/TableActiviti";
+import { FilterInput } from "../../components/ContainerInputs";
 
 export default function LogsView() {
   const {

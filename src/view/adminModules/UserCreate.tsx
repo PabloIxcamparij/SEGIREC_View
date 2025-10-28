@@ -1,11 +1,11 @@
-import { showToast } from "../../../utils/toastUtils";
+import { showToast } from "../../utils/toastUtils";
 import { useState, useEffect } from "react"; 
-import { createUser, updateUser } from "../../../service/Admin.service";
+import { createUser, updateUser } from "../../service/Admin.service";
 import {
   InputSelect,
   OneInputProps,
-} from "../../../components/ContainerInputs";
-import type { User } from "../../../types";
+} from "../../components/ContainerInputs";
+import type { User } from "../../types";
 
 const roles = [
   { value: "Administrador", label: "Rol de Administrador" },
@@ -22,11 +22,10 @@ const activoOptions = [
 // Definición de Props extendida
 interface UserCreateProps {
   userToEdit: User | null;
-  onClearEdit: () => void; // Función para notificar a AdminView que borre el usuario a editar
-  onUserAction: () => void; // Función para recargar la lista de usuarios después de crear/editar
+  onClearEdit: () => void;
+  onUserAction: () => void;
 }
 
-// Cambiamos 'label' por el objeto completo 'UserToEdit' y la función de limpiar
 export default function UserCreate({
   userToEdit,
   onClearEdit,
@@ -34,27 +33,26 @@ export default function UserCreate({
 }: UserCreateProps) {
   const [isConsulting, setIsConsulting] = useState(false);
 
-  // Determinar el modo: true si se está editando un usuario
   const isEditing = !!userToEdit;
 
-  // 1. Estados iniciales (Función para limpiar)
-  const cleanState = () => {
-    setNombre("");
-    setCorreo("");
-    setClave("");
-    setRol([]);
-    setActivo([]);
-    // Si estamos editando, también notificamos al padre (AdminView) para que regrese al modo Crear
-    if (isEditing) {
-      onClearEdit();
-    }
-  };
-
-  const [rol, setRol] = useState<string[]>([]);
+  // ESTADOS
+  const [rol, setRol] = useState<string[]>([]); // Sigue siendo un array para el Select
   const [nombre, setNombre] = useState<string>("");
   const [correo, setCorreo] = useState<string>("");
   const [clave, setClave] = useState<string>("");
   const [activo, setActivo] = useState<string[]>([]);
+
+  // 1. FUNCIÓN DE LIMPIEZA
+  const cleanState = () => {
+    setNombre("");
+    setCorreo("");
+    setClave("");
+    setRol([]); // Limpiar roles seleccionados
+    setActivo([]);
+    if (isEditing) {
+      onClearEdit();
+    }
+  };
 
   // 2. useEffect para cargar los datos del usuario a editar
   useEffect(() => {
@@ -62,19 +60,34 @@ export default function UserCreate({
       // Modo Edición: Cargar datos
       setNombre(userToEdit.Nombre);
       setCorreo(userToEdit.Correo);
-      setClave(""); // La clave casi nunca se precarga por seguridad. El usuario debe ingresarla al editar si es necesario.
-      setRol([userToEdit.Rol]);
-      // Convertir el booleano 'Activo' a string para el Select
+      setClave(""); 
+      
+      // CAMBIO CLAVE: Cargar roles desde el string (separado por ';')
+      const userRolesArray = userToEdit.Rol.split(';').filter(r => r.trim() !== '');
+      setRol(userRolesArray);
+      
       setActivo([userToEdit.Activo ? "true" : "false"]);
     } else {
       // Modo Creación: Limpiar campos
       cleanState();
     }
-  }, [userToEdit]); // Ejecutar cuando userToEdit cambie
+  }, [userToEdit]);
+
+  // FUNCIÓN PARA MANEJAR EL CAMBIO DE ROL CON LÓGICA DE EXCEPCIÓN
+  const handleRolChange = (newRoles: string[]) => {
+    // Si la nueva selección incluye 'Administrador', el array final solo debe contener 'Administrador'.
+    if (newRoles.includes("Administrador")) {
+      setRol(["Administrador"]);
+      showToast("info", "El rol 'Administrador' otorga acceso total y es exclusivo.");
+    } else {
+      // Si no se seleccionó 'Administrador', se acepta la selección completa.
+      setRol(newRoles);
+    }
+  };
 
   // 3. Modificación de la función de validación
   const validateForm = () => {
-    // a. Validación de campos vacíos. La clave solo es obligatoria en modo CREACIÓN.
+    // a. Validación de campos vacíos.
     if (!nombre || !correo || rol.length === 0 || (!isEditing && !clave)) {
       showToast(
         "error",
@@ -98,12 +111,6 @@ export default function UserCreate({
       return false;
     }
 
-    // d. Validación de un único rol
-    if (rol.length !== 1) {
-      showToast("error", "Debe seleccionar un único Rol.");
-      return false;
-    }
-
     return true;
   };
 
@@ -117,23 +124,22 @@ export default function UserCreate({
 
     setIsConsulting(true);
 
+    // CAMBIO CLAVE: Convertir el array de roles a un string separado por ;
+    const rolString = rol.join(';');
+
     try {
       if (isEditing && userToEdit) {
         // --- Modo Edición ---
         const body = {
-          // Asumimos que la función de edición requiere el ID y el nuevo estado Activo
           id: userToEdit.id,
           Nombre: nombre,
           Correo: correo,
-
-          // Si clave no está vacía, la enviamos para cambiarla, sino, la omitimos (o enviamos la antigua si el backend lo requiere).
-          // Por simplicidad, la incluimos si no está vacía. Si está vacía, asumimos que no cambia.
           Clave: clave || userToEdit.Clave,
-          Rol: rol[0],
-          Activo: activo[0] === "true", // Enviar Activo como booleano
+          // CAMBIO: Enviar el string de roles
+          Rol: rolString, 
+          Activo: activo[0] === "true", 
         };
 
-        // Asume que updateUser existe en tu servicio
         const response = await updateUser(body);
         if (response) {
           showToast("success", "Usuario actualizado exitosamente");
@@ -144,7 +150,8 @@ export default function UserCreate({
           Nombre: nombre,
           Correo: correo,
           Clave: clave,
-          Rol: rol[0],
+          // CAMBIO: Enviar el string de roles
+          Rol: rolString, 
         };
         const response = await createUser(body);
         if (response) {
@@ -152,8 +159,8 @@ export default function UserCreate({
         }
       }
 
-      cleanState(); // Limpiar formulario y resetear a modo Creación
-      onUserAction(); // Recargar la lista en AdminView
+      cleanState(); 
+      onUserAction(); 
     } catch (error) {
       showToast("error", "Ocurrió un error al procesar la acción.");
     } finally {
@@ -161,7 +168,7 @@ export default function UserCreate({
     }
   };
 
-  // 5. Textos dinámicos
+  // 5. Textos dinámicos (Sin cambios)
   const title = isEditing
     ? `Editando Usuario: ${userToEdit?.Nombre}`
     : "Creación de un nuevo Usuario";
@@ -182,17 +189,19 @@ export default function UserCreate({
         <h1 className="text-xl text-principal font-bold">{title}</h1>
         <h2 className="text-sm text-gray-500">{subtitle}</h2>
 
-        {/* --- Select de Roles --- */}
+        {/* --- Select de Roles (CAMBIADO) --- */}
         <InputSelect
-          label="Rol del Usuario (Seleccione uno)"
+          label="Rol(es) del Usuario"
           options={roles}
           selectedValues={rol}
-          onChangeValues={setRol}
-          placeholder="Seleccione un único rol..."
-          isMulti={false}
+          // CAMBIO: Usar la función de manejo con lógica de exclusividad
+          onChangeValues={handleRolChange} 
+          placeholder="Seleccione uno o más roles..."
+          isMulti={true} // AGREGADO: Habilitar selección múltiple
         />
 
-        {/* --- Campo Nombre --- */}
+        {/* ... Resto de Inputs (Sin cambios) ... */}
+        
         <OneInputProps
           label="Nombre del usuario"
           value={nombre}
@@ -200,7 +209,6 @@ export default function UserCreate({
           placeholder="Ingrese el nombre del usuario"
         />
 
-        {/* --- Campo Correo --- */}
         <OneInputProps
           label="Correo Electrónico"
           value={correo}
@@ -208,7 +216,6 @@ export default function UserCreate({
           placeholder="Ingrese el correo electrónico"
         />
 
-        {/* --- Campo Clave (Se mantiene el tipo password) --- */}
         <OneInputProps
           label={`Contraseña ${
             isEditing ? "(Dejar vacío para no cambiar)" : ""
@@ -223,7 +230,6 @@ export default function UserCreate({
           type="password"
         />
 
-        {/* --- Select de Estado (Solo visible/habilitado en modo Edición) --- */}
         {isEditing && (
           <InputSelect
             label="Estado del Usuario"
@@ -257,7 +263,7 @@ export default function UserCreate({
           <button
             type="button"
             className="p-3 text-principal rounded-md font-bold hover:bg-gray-300 transition duration-300"
-            onClick={cleanState} // Llama a la nueva función cleanState
+            onClick={cleanState}
           >
             {clearButtonText}
           </button>

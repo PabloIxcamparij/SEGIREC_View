@@ -2,8 +2,8 @@ import {
   getUsers,
   deleteUser,
   getUserById,
-} from "../../../service/Admin.service";
-import type { User } from "../../../types";
+} from "../../service/Admin.service";
+import type { User } from "../../types";
 import { useEffect, useState } from "react";
 import UserCreate from "./UserCreate";
 

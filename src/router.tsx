@@ -10,8 +10,8 @@ import QueryPropiedades from "./view/queryModules/QueryPropiedades";
 import HomeView from "./view/HomeView";
 
 // Admin views
-import AdminView from "./view/auth/adminModules/AdminView";
-import LogsView from "./view/auth/adminModules/LogsView";
+import AdminView from "./view/adminModules/AdminView";
+import LogsView from "./view/adminModules/LogsView";
 import ReportsView from "./view/ReportsView";
 
 // Auth views
@@ -28,7 +28,7 @@ const createRoleLoader = (requiredRole: string) => async () => {
     const isAllowed = await verifyRol(requiredRole); 
 
     if (!isAllowed) {
-        return redirect("/home");
+        return redirect("/");
     }
     return null;
 }
