@@ -23,24 +23,12 @@ export async function logout() {
   }
 }
 
-// Verifica si el usuario tiene una sesión activa
-// Retorna true si la sesión es válida, false en caso contrario
-export const checkAuth= async (): Promise<boolean> => {
+export const verifyRol = async (rol: string): Promise<boolean> => {
   try {
-    const { data } = await axiosClient.get("/auth/verify");
-    return data;
-  } catch (error) {
-    errorHandler(error, "Chequeo de sesión");
-    return false;
-  }
-}
-
-export const checkAdmin = async (): Promise<boolean> => {
-  try {
-    const { data } = await axiosClient.get("/auth/verifyAdmin");
+    const { data } = await axiosClient.get(`/auth/verifyRol?rol=${rol}`);
     return data;
   } catch (error) {
     errorHandler(error, "Chequeo de administrador");
     return false;
   }
-}
+};

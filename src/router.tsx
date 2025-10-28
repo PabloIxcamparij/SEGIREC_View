@@ -18,44 +18,39 @@ import ReportsView from "./view/ReportsView";
 import LoginView from "./view/auth/LoginView";
 
 // Servicios
-import { checkAdmin, checkAuth } from "./service/Auth.service";
+import { verifyRol } from "./service/Auth.service";
 
 // Protección de rutas, si no está autenticado redirige al login
 // Esta función se usa como loader en las rutas protegidas
-const protectedRoutesLoader = async () => {
-  const isAuthenticated = await checkAuth();
-  if (!isAuthenticated) {
-    return redirect("/");
-  }
-  return null;
-};
+const createRoleLoader = (requiredRole: string) => async () => {
+    // Llamamos al servicio con el rol requerido
+    // **Nota: verifyRol ahora debe manejar varios roles, no solo uno (ver punto 3)**
+    const isAllowed = await verifyRol(requiredRole); 
 
-const isAdminLoader = async () => {
-  const isAdmin = await checkAdmin();
-  if (!isAdmin) {
-    return redirect("/home");
-  }
-  return null;
+    if (!isAllowed) {
+        return redirect("/home");
+    }
+    return null;
 }
 
 export const router = createBrowserRouter([
   {
     element: <LayoutMessages />,
-    loader: protectedRoutesLoader,
+    loader: createRoleLoader("General"),
     children: [
       {
         path: "propiedades",
-        loader: protectedRoutesLoader,
+        loader: createRoleLoader("Propiedades"),
         element: <QueryPropiedades />,
       },
       {
         path: "morosidad",
-        loader: protectedRoutesLoader,
+        loader: createRoleLoader("Morosidad"),
         element: <QueryMorosidad />,
       },
       {
         path: "envioMasivo",
-        loader: protectedRoutesLoader,
+        loader: createRoleLoader("EnvioMasivo"),
         element: <QueryEnvioMasivo />,
       },
       {
@@ -65,13 +60,13 @@ export const router = createBrowserRouter([
       /// Rutas de administración - Solo accesibles para administradores
       {
         path: "admin",
-        loader: isAdminLoader,
+        loader: createRoleLoader("Administrador"),
         element: <AdminView />,
         
       },
       {
         path: "logs",
-        loader: isAdminLoader,
+        loader: createRoleLoader("Auditor"),
         element: <LogsView />,
       },
       {
