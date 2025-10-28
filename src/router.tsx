@@ -22,14 +22,18 @@ import { verifyRol, verifyAuth } from "./service/Auth.service";
 
 // Protección de rutas, si no está autenticado redirige al login
 // Esta función se usa como loader en las rutas protegidas
-const createRoleLoader = (requiredRole: string) => async () => {
-  // Llamamos al servicio con el rol requerido
-  // **Nota: verifyRol ahora debe manejar varios roles, no solo uno (ver punto 3)**
+
+const protectRoute = async () => {
   const isAuth = await verifyAuth();
 
   if (!isAuth) {
     return redirect("/");
   }
+};
+
+const createRoleLoader = (requiredRole: string) => async () => {
+  // Llamamos al servicio con el rol requerido
+  protectRoute();
 
   const isAllowed = await verifyRol(requiredRole);
 
@@ -42,7 +46,7 @@ const createRoleLoader = (requiredRole: string) => async () => {
 export const router = createBrowserRouter([
   {
     element: <LayoutMessages />,
-    loader: createRoleLoader("General"),
+    loader: protectRoute,
     children: [
       {
         path: "propiedades",
