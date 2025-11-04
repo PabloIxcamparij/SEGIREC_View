@@ -29,3 +29,21 @@ export async function sendMessageMassive(personas : Persona[], mensaje : string,
     return errorHandler(error, "enviar mensajes");
   }
 }
+
+export const requestCodePrioritaryMessage = async () => {
+  try {
+    await axiosClient.post("/message/requestCodePrioritaryMessage");
+  } catch (error: any) {
+    return errorHandler(error, "solicitar código de mensaje prioritario");
+  }
+} 
+
+export const confirmCodePrioritaryMessage = async (code: string): Promise<boolean> => {
+  try {
+    const { data } = await axiosClient.post("/message/confirmCodePrioritaryMessage", { code });
+    return data;
+  } catch (error: any) {
+    errorHandler(error, "confirmar código de mensaje prioritario");
+    return false;
+  }
+}

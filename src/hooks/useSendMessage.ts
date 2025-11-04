@@ -5,9 +5,11 @@ import {
   queryPeopleWithDebt,
 } from "../service/QueryPeople.service";
 import {
+  sendMessageMassive,
   sendMessageOfMorosidad,
   sendMessageOfPropiedades,
-  sendMessageMassive,
+  requestCodePrioritaryMessage,
+  confirmCodePrioritaryMessage,
 } from "../service/SendMessage.service";
 import type { Persona, QueryBody } from "../types";
 import { showToast } from "../utils/toastUtils";
@@ -86,6 +88,23 @@ export function useQueryPropiedades() {
     }
   };
 
+  const handleRequestCodePrioritaryMessage = async () => {
+    await requestCodePrioritaryMessage();
+    showToast("success", "Código de mensaje prioritario solicitado", "El codigo sera enviado al correo del administrador");
+  };
+
+  const handleConfirmCodePrioritaryMessage = async (code: string) => {
+
+    const response = await confirmCodePrioritaryMessage(code);
+
+    if (response) {
+      showToast("success", "Código verificado", "");
+    }
+
+    return response;
+  };
+
+
   // Limpiar
   const handleLimpiar = () => {
     setCedula("");
@@ -159,5 +178,9 @@ export function useQueryPropiedades() {
     handleSendMessageMassive,
     handleSendMessageMorosidad,
     handleSendMessagePropiedades,
+
+    // Metodos para envio prioritario
+    handleRequestCodePrioritaryMessage,
+    handleConfirmCodePrioritaryMessage,
   };
 }

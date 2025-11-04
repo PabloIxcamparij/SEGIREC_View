@@ -1,4 +1,5 @@
 import { useSendMessageContext } from "../context/SendMessageContext";
+import { showToastConfirmSendPrioritary } from "../utils/toastUtils";
 
 export default function ButtonsSendsMessage({
   handleSubmit,
@@ -11,7 +12,12 @@ export default function ButtonsSendsMessage({
   isConsultando: boolean;
   sending: boolean;
 }) {
-  const { handleLimpiar, personas } = useSendMessageContext();
+  const {
+    handleLimpiar,
+    personas,
+    handleRequestCodePrioritaryMessage,
+    handleConfirmCodePrioritaryMessage,
+  } = useSendMessageContext();
 
   return (
     <div className="flex flex-wrap w-[90%] lg:w-[50%] justify-end gap-2">
@@ -22,7 +28,6 @@ export default function ButtonsSendsMessage({
       >
         {isConsultando ? "Consultando..." : "Consultar"}
       </button>
-
       <button
         type="button"
         onClick={handleLimpiar}
@@ -30,7 +35,6 @@ export default function ButtonsSendsMessage({
       >
         Limpiar
       </button>
-
       <button
         type="button"
         onClick={handleSendMessage}
@@ -42,6 +46,25 @@ export default function ButtonsSendsMessage({
         }`}
       >
         {sending ? "Enviando..." : "Enviar Mensaje"}
+      </button>
+      <button
+        type="button"
+        onClick={() =>
+          // Modificamos el onClick para pasar las dos funciones
+          showToastConfirmSendPrioritary(
+            handleRequestCodePrioritaryMessage,
+            handleConfirmCodePrioritaryMessage 
+          )
+        }
+        disabled={personas.length === 0 || sending}
+        className={`px-4 py-2 rounded text-white ${
+          sending
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-red-600 hover:bg-red-700"
+        }`}
+      >
+        {sending ? "Enviando..." : "Envio Prioritario"}
+        
       </button>
     </div>
   );
