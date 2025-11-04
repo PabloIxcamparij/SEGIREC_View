@@ -87,7 +87,7 @@ export default function UserCreate({
 
   // 3. Modificación de la función de validación
   const validateForm = () => {
-    // a. Validación de campos vacíos.
+    // Validación de campos vacíos.
     if (!nombre || !correo || rol.length === 0 || (!isEditing && !clave)) {
       showToast(
         "error",
@@ -105,10 +105,22 @@ export default function UserCreate({
       return false;
     }
 
-    // c. Validación de Correo BÁSICA
+    // Validación de Correo BÁSICA
     if (!correo.includes("@") || !correo.includes(".")) {
       showToast("error", "Por favor, ingrese un Correo electrónico válido.");
       return false;
+    }
+
+    // Validación de longitud de Clave (solo si se ingresó o es Creación)
+    if (clave) {
+      if (clave.length < 6) {
+        showToast("error", "La Contraseña debe tener al menos 6 caracteres.");
+        return false;
+      }
+      if (clave.length > 12) {
+        showToast("error", "La Contraseña no debe exceder los 12 caracteres.");
+        return false;
+      }
     }
 
     return true;
