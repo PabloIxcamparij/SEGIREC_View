@@ -4,13 +4,16 @@ import { showToastConfirmSendPrioritary } from "../utils/toastUtils";
 export default function ButtonsSendsMessage({
   handleSubmit,
   handleSendMessage,
+  handleSendMessagePrioritary,
   isConsultando,
   sending,
 }: {
   handleSubmit: any;
   handleSendMessage: any;
+  handleSendMessagePrioritary: any;
   isConsultando: boolean;
   sending: boolean;
+ 
 }) {
   const {
     handleLimpiar,
@@ -53,7 +56,8 @@ export default function ButtonsSendsMessage({
           // Modificamos el onClick para pasar las dos funciones
           showToastConfirmSendPrioritary(
             handleRequestCodePrioritaryMessage,
-            handleConfirmCodePrioritaryMessage 
+            handleConfirmCodePrioritaryMessage,
+            handleSendMessagePrioritary
           )
         }
         disabled={personas.length === 0 || sending}

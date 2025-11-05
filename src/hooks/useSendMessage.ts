@@ -33,6 +33,7 @@ export function useQueryPropiedades() {
   const [numeroDerecho, setNumeroDerecho] = useState("");
   const [numeroFinca, setNumeroFinca] = useState("");
 
+
   // Estados para el envio masivo
   const [asunto, setAsunto] = useState("");
   const [mensaje, setMensaje] = useState("");
@@ -41,6 +42,8 @@ export function useQueryPropiedades() {
   const [cedula, setCedula] = useState("");
   const [namePerson, setNamePerson] = useState("");
   const [personas, setPersonas] = useState<Persona[]>([]);
+
+  const [isPrioritarySending, setIsPrioritarySending] = useState(false);
 
   //Consultar personas por filtros
   const handleQueryPeopleWithProperties = async (filtros: QueryBody) => {
@@ -65,7 +68,8 @@ export function useQueryPropiedades() {
 
   // Enviar Mensajes
   const handleSendMessageMorosidad = async () => {
-    const response = await sendMessageOfMorosidad(personas);
+    const response = await sendMessageOfMorosidad(personas, isPrioritarySending);
+    setIsPrioritarySending(false);
 
     if (response) {
       showToast("success", "Mensajes enviados correctamente");
@@ -73,21 +77,26 @@ export function useQueryPropiedades() {
   };
 
   const handleSendMessagePropiedades = async () => {
-    const response = await sendMessageOfPropiedades(personas);
+    const response = await sendMessageOfPropiedades(personas, isPrioritarySending);
+    setIsPrioritarySending(false);
+    if (response) {
+      showToast("success", "Mensajes enviados correctamente");
+    }
+  };
+
+  const handleSendMessageMassive = async () => {
+    const isTrue = isPrioritarySending;
+
+    setIsPrioritarySending(false);
+    
+    const response = await sendMessageMassive(personas, mensaje, asunto, isTrue);
 
     if (response) {
       showToast("success", "Mensajes enviados correctamente");
     }
   };
 
-  const handleSendMessageMassive = async (mensaje: string, asunto: string) => {
-    const response = await sendMessageMassive(personas, mensaje, asunto);
-
-    if (response) {
-      showToast("success", "Mensajes enviados correctamente");
-    }
-  };
-
+  // Enviar como prioritario
   const handleRequestCodePrioritaryMessage = async () => {
     await requestCodePrioritaryMessage();
     showToast("success", "Código de mensaje prioritario solicitado", "El codigo sera enviado al correo del administrador");
@@ -99,11 +108,11 @@ export function useQueryPropiedades() {
 
     if (response) {
       showToast("success", "Código verificado", "");
+      setIsPrioritarySending(true);
     }
 
     return response;
-  };
-
+  };    
 
   // Limpiar
   const handleLimpiar = () => {

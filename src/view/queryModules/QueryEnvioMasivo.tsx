@@ -31,7 +31,7 @@ export default function QueryEnvioMasivo() {
     showToastConfirmSend(async () => {
       try {
         setSending(true);
-        await handleSendMessageMassive(mensaje, asunto);
+        await handleSendMessageMassive();
       } catch (error) {
         console.error(error);
         showToast("error", "Error durante el envío de mensajes");
@@ -141,6 +141,7 @@ export default function QueryEnvioMasivo() {
         isConsultando={cargando}
         handleSubmit={procesarExcel}
         handleSendMessage={handleSendMessage}
+        handleSendMessagePrioritary={handleSendMessage}
       />
 
       {personas.length > 0 && <TablePeople />}

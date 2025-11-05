@@ -63,7 +63,8 @@ export const showToastConfirmSendPrioritary = (
 
   // Ahora onConfirm recibe el código y el toast?.remove
   onRequest: () => Promise<void>, 
-  onConfirm: (code: string) => Promise<boolean>
+  onConfirm: (code: string) => Promise<boolean>,
+  onSend: () => Promise<void>,
 ) => {
   if (!toast) return;
 
@@ -74,16 +75,13 @@ export const showToastConfirmSendPrioritary = (
     severity: "info",
     summary: "Confirme el envío prioritario",
     sticky: true, // Hacemos el toast persistente (como un modal)
-    content: (props) => {
+    content: () => {
       // Usamos un estado interno para el input del código
       const [verificationCode, setVerificationCode] = useState<string>('');
       const [isCodeRequested, setIsCodeRequested] = useState<boolean>(false);
       const [isCodeVerified, setIsCodeVerified] = useState<boolean>(false);
       const [isVerifying, setIsVerifying] = useState<boolean>(false);
       const [isRequesting, setIsRequesting] = useState<boolean>(false);
-
-      // Función para remover el toast
-      const removeToast = () => toast?.remove(props.message);
       
       const handleRequest = async () => {
         setIsRequesting(true);
@@ -134,7 +132,7 @@ export const showToastConfirmSendPrioritary = (
             <Button
               label="Comenzar envio"
               className="p-button-text"
-              onClick={removeToast}
+              onClick={onSend}
               disabled={!isCodeVerified}
             />
             
