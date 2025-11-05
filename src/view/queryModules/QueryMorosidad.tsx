@@ -190,6 +190,7 @@ export default function QueryMorosidad() {
         sending={sending}
         isConsultando={isConsulting}
         handleSendMessage={handleSendMessage}
+        handleSendMessagePrioritary={handleSendMessage}
       />
 
       {personas.length > 0 && <TablePeople />}

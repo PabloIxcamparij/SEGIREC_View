@@ -33,7 +33,6 @@ export function useQueryPropiedades() {
   const [numeroDerecho, setNumeroDerecho] = useState("");
   const [numeroFinca, setNumeroFinca] = useState("");
 
-
   // Estados para el envio masivo
   const [asunto, setAsunto] = useState("");
   const [mensaje, setMensaje] = useState("");
@@ -43,7 +42,7 @@ export function useQueryPropiedades() {
   const [namePerson, setNamePerson] = useState("");
   const [personas, setPersonas] = useState<Persona[]>([]);
 
-  const [isPrioritarySending, setIsPrioritarySending] = useState(false);
+  let priorityToken = "";
 
   //Consultar personas por filtros
   const handleQueryPeopleWithProperties = async (filtros: QueryBody) => {
@@ -68,8 +67,13 @@ export function useQueryPropiedades() {
 
   // Enviar Mensajes
   const handleSendMessageMorosidad = async () => {
-    const response = await sendMessageOfMorosidad(personas, isPrioritarySending);
-    setIsPrioritarySending(false);
+    // 1. Capturar el token
+    const tokenToSend = priorityToken;
+    // 2. Revocar el permiso inmediatamente (limpiar el token)
+    priorityToken = "";
+
+    // 3. Llamada al servicio, pasando el token
+    const response = await sendMessageOfMorosidad(personas, tokenToSend);
 
     if (response) {
       showToast("success", "Mensajes enviados correctamente");
@@ -77,19 +81,28 @@ export function useQueryPropiedades() {
   };
 
   const handleSendMessagePropiedades = async () => {
-    const response = await sendMessageOfPropiedades(personas, isPrioritarySending);
-    setIsPrioritarySending(false);
+    console.log(priorityToken);
+
+    const tokenToSend = priorityToken;
+    priorityToken = "";
+
+    const response = await sendMessageOfPropiedades(personas, tokenToSend);
+
     if (response) {
       showToast("success", "Mensajes enviados correctamente");
     }
   };
 
   const handleSendMessageMassive = async () => {
-    const isTrue = isPrioritarySending;
+    const tokenToSend = priorityToken;
+    priorityToken = "";
 
-    setIsPrioritarySending(false);
-    
-    const response = await sendMessageMassive(personas, mensaje, asunto, isTrue);
+    const response = await sendMessageMassive(
+      personas,
+      mensaje,
+      asunto,
+      tokenToSend
+    );
 
     if (response) {
       showToast("success", "Mensajes enviados correctamente");
@@ -99,20 +112,36 @@ export function useQueryPropiedades() {
   // Enviar como prioritario
   const handleRequestCodePrioritaryMessage = async () => {
     await requestCodePrioritaryMessage();
-    showToast("success", "Código de mensaje prioritario solicitado", "El codigo sera enviado al correo del administrador");
+    showToast(
+      "success",
+      "Código de mensaje prioritario solicitado",
+      "El codigo sera enviado al correo del administrador"
+    );
   };
 
+  // export const confirmCodePrioritaryMessage = async (code: string): Promise<{ success: boolean; token?: string }> => { ... }
   const handleConfirmCodePrioritaryMessage = async (code: string) => {
-
+    // Asumo que tu servicio ahora devuelve { success: boolean, token?: string }
     const response = await confirmCodePrioritaryMessage(code);
 
-    if (response) {
-      showToast("success", "Código verificado", "");
-      setIsPrioritarySending(true);
+    if (response.success && response.token) {
+      showToast(
+        "success",
+        "Código verificado",
+        "Permiso prioritario concedido. Realice el envío en los próximos 60 segundos."
+      );
+      priorityToken = response.token;
+      // console.log(response.token);
+      // console.log(response.success);
+
+      // console.log(priorityToken);
+    } else {
+      priorityToken = "";
     }
 
-    return response;
-  };    
+    // Retornamos el éxito al toast para que se cierre
+    return response.success;
+  };
 
   // Limpiar
   const handleLimpiar = () => {
@@ -132,6 +161,7 @@ export function useQueryPropiedades() {
     setServicio([]);
     setPersonas([]);
     setCodigoBaseImponible([]);
+    priorityToken = "";
   };
 
   return {
