@@ -233,7 +233,6 @@ export default function QueryPropiedades() {
         isConsultando={isConsulting}
         handleSubmit={handleSubmit}
         handleSendMessage={handleSendMessage}
-        handleSendMessagePrioritary={handleSendMessage}
       />
 
       {personas.length > 0 && <TablePeople />}
