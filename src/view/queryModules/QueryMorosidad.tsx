@@ -45,9 +45,10 @@ export default function QueryMorosidad() {
 
   const [isConsulting, setIsConsulting] = useState(false);
   const [peopleWithDebt, setPeopleWithDebt] = useState(false);
-  const [serviciosCatalogo, setServiciosCatalogo] = useState([]);
+  const [serviciosCatalogo, setServiciosCatalogo] = useState<
+    { value: string; label: string }[]
+  >([]);
   const [sending, setSending] = useState(false);
-
 
   // Submit
   const handleSubmit = async (e: React.FormEvent) => {
@@ -69,7 +70,7 @@ export default function QueryMorosidad() {
       if (distrito.length > 0) query.distritos = distrito;
       if (servicio.length > 0) query.servicios = servicio;
       if (cedula.trim() !== "") query.cedula = cedula.trim();
-      if (numeroFinca.trim() !== "") query.numeroFinca = numeroFinca.trim()
+      if (numeroFinca.trim() !== "") query.numeroFinca = numeroFinca.trim();
       if (deudaMinima !== "") query.deudaMinima = Number(deudaMinima);
       if (deudaMaxima !== "") query.deudaMaxima = Number(deudaMaxima);
       if (namePerson.trim() !== "") query.nombre = namePerson.trim();
@@ -85,35 +86,38 @@ export default function QueryMorosidad() {
   };
 
   const handleSendMessage = async () => {
-      // Confirmación previa
-        try {
-          setSending(true);
-          await handleSendMessageMorosidad();
-        } catch (error) {
-          console.error(error);
-          showToast("error", "Error durante el envío de mensajes");
-        } finally {
-          setSending(false);
-        }
+    // Confirmación previa
+    try {
+      setSending(true);
+      await handleSendMessageMorosidad();
+    } catch (error) {
+      console.error(error);
+      showToast("error", "Error durante el envío de mensajes");
+    } finally {
+      setSending(false);
+    }
   };
-
 
   // Cargar servicios
   useEffect(() => {
     if (serviciosCatalogo.length === 0) {
       queryServiceCatalogo()
-        .then(setServiciosCatalogo)
-        .catch((error) =>
-          console.error("Error al cargar el catálogo de servicios:", error)
-        );
+        .then((data) => {
+          setServiciosCatalogo(Array.isArray(data) ? data : []);
+        })
+        .catch((error) => {
+          console.error("Error al cargar catálogo de servicios:", error);
+          showToast("error", "No se pudo cargar el catálogo de servicios");
+          setServiciosCatalogo([]); // valor seguro
+        });
     }
-  }, [serviciosCatalogo]);
+  }, []);
 
   // Reset al desmontar
   useEffect(() => {
     return () => handleLimpiar();
   }, []);
-  
+
   return (
     <div className="flex flex-col items-center w-full gap-6 p-4">
       <form

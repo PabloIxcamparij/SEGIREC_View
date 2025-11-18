@@ -80,6 +80,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "reports",
+        loader: createRoleLoader("Reportes"),
         element: <ReportsView />,
       },
     ],

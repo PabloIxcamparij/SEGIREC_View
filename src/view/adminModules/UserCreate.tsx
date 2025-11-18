@@ -9,9 +9,11 @@ import type { User } from "../../types";
 
 const roles = [
   { value: "Administrador", label: "Rol de Administrador" },
-  { value: "Morosidad", label: "Trabajar exclusivamente morosidad" },
-  { value: "Propiedades", label: "Trabajar exclusivamente propiedades" },
-  { value: "EnviosDeMensajes", label: "Poder exclusivamente enviar mensajes" },
+  { value: "Auditor", label : "Rol de auditor, ver actividad"},
+  { value: "Reportes", label : "Realizar reportes del sistema"},
+  { value: "Morosidad", label: "Enviar mensajes sobre morosidad" },
+  { value: "Propiedades", label: "Enviar mensajes sobre propiedades" },
+  { value: "EnviosDeMensajes", label: "Enviar mensajes de manera masiva" },
 ];
 
 const activoOptions = [
@@ -203,7 +205,7 @@ export default function UserCreate({
 
         {/* --- Select de Roles (CAMBIADO) --- */}
         <InputSelect
-          label="Rol(es) del Usuario"
+          label="Rol(es) / Capacidades del Usuario"
           options={roles}
           selectedValues={rol}
           // CAMBIO: Usar la función de manejo con lógica de exclusividad

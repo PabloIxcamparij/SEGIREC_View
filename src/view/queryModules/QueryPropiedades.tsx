@@ -50,9 +50,9 @@ export default function QueryPropiedades() {
   } = useSendMessageContext();
 
   const [isConsulting, setIsConsulting] = useState(false);
-  const [baseImponibleCatalogo, setBaseImponibleCatalogoCatalogo] = useState(
-    []
-  );
+  const [baseImponibleCatalogo, setBaseImponibleCatalogoCatalogo] = useState<
+    { value: string; label: string }[]
+  >([]);
   const [peopleWithMultipleProperties, setPeopleWithMultipleProperties] =
     useState(false);
   const [peopleWithDebt, setPeopleWithDebt] = useState(false);
@@ -69,10 +69,7 @@ export default function QueryPropiedades() {
         monImponibleMaximo < monImponibleMinimo) ||
       (areaMaxima !== "" && areaMinima !== "" && areaMaxima < areaMinima)
     ) {
-      showToast(
-        "error",
-        "El valor maximo no puede menor al valor minimo."
-      );
+      showToast("error", "El valor maximo no puede menor al valor minimo.");
       setIsConsulting(false);
       return;
     }
@@ -85,7 +82,8 @@ export default function QueryPropiedades() {
       if (areaMaxima !== "") query.areaMaxima = Number(areaMaxima);
       if (areaMinima !== "") query.areaMinima = Number(areaMinima);
       if (namePerson.trim() !== "") query.nombre = namePerson.trim();
-      if (numeroDerecho.trim() !== "") query.numeroDerecho = numeroDerecho.trim();
+      if (numeroDerecho.trim() !== "")
+        query.numeroDerecho = numeroDerecho.trim();
       if (numeroFinca.trim() !== "") query.numeroFinca = numeroFinca.trim();
       if (codigoBaseImponible.length > 0)
         query.codigoBaseImponible = codigoBaseImponible;
@@ -110,31 +108,30 @@ export default function QueryPropiedades() {
 
   const handleSendMessage = async () => {
     // Confirmación previa
-      try {
-        setSending(true);
-        await handleSendMessagePropiedades();
-      } catch (error) {
-        console.error(error);
-        showToast("error", "Error durante el envío de mensajes");
-      } finally {
-        setSending(false);
-      }
+    try {
+      setSending(true);
+      await handleSendMessagePropiedades();
+    } catch (error) {
+      console.error(error);
+      showToast("error", "Error durante el envío de mensajes");
+    } finally {
+      setSending(false);
+    }
   };
 
   useEffect(() => {
     if (baseImponibleCatalogo.length === 0) {
-      const fetchServicios = async () => {
-        try {
-          const data = await queryBaseImponibleCatalogo();
-          setBaseImponibleCatalogoCatalogo(data);
-        } catch (error) {
-          console.error("Error al cargar el catálogo de servicios:", error);
-        }
-      };
-
-      fetchServicios();
+      queryBaseImponibleCatalogo()
+        .then((data) => {
+          setBaseImponibleCatalogoCatalogo(Array.isArray(data) ? data : []);
+        })
+        .catch((error) => {
+          console.error("Error al cargar catálogo base imponible:", error);
+          showToast("error", "No se pudo cargar el catálogo base imponible");
+          setBaseImponibleCatalogoCatalogo([]); // valor seguro
+        });
     }
-  }, [baseImponibleCatalogo]);
+  }, []);
 
   // Reset al desmontar
   useEffect(() => {

@@ -68,6 +68,7 @@ export const InputSelect: React.FC<InputSelectProps> = ({
         onChange={handleChange} // Usamos la función de manejo corregida
         className="text-left"
         placeholder={placeholder}
+        isDisabled={options.length === 0}
       />
     </div>
   );
