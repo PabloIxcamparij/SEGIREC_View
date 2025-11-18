@@ -3,7 +3,10 @@
 
 import { useState, useMemo } from "react";
 import type { ConsultaActivity, EnvioActivity } from "../types";
-import { activitiesOfQuery, queryActivitiesMessage } from "../service/Utils.service";
+import {
+  activitiesOfQuery,
+  queryActivitiesMessage,
+} from "../service/Utils.service";
 
 // === Tipos de filtros para cada tipo de actividad ===
 interface QueryFilters {
@@ -100,13 +103,16 @@ export function useLogActivity() {
 
   // === Filtrado memorizado de consultas ===
   const filteredConsultas = useMemo(() => {
-    const hasFilters = Object.values(queryFilters).some((value) => value !== "");
+    const hasFilters = Object.values(queryFilters).some(
+      (value) => value !== ""
+    );
     if (!hasFilters) return allConsultas;
 
     return allConsultas.filter((c) => {
       if (!isMatch(c.Usuario?.Nombre, queryFilters.nombre)) return false;
       if (!isMatch(c.Detalle, queryFilters.detalle)) return false;
-      if (!isMatch(c.Filtros?.FiltrosAplicados, queryFilters.filtros)) return false;
+      if (!isMatch(c.Filtros?.FiltrosAplicados, queryFilters.filtros))
+        return false;
       if (
         queryFilters.estado &&
         queryFilters.estado !== "Todos" &&
@@ -114,7 +120,8 @@ export function useLogActivity() {
       )
         return false;
       if (queryFilters.fecha) {
-        const itemDate = new Date(c.createdAt).toISOString().split("T")[0];
+        const dateObj = new Date(c.createdAt);
+        const itemDate = dateObj.toLocaleDateString("en-CA");
         if (itemDate !== queryFilters.fecha) return false;
       }
       return true;
@@ -123,7 +130,9 @@ export function useLogActivity() {
 
   // === Filtrado memorizado de envíos ===
   const filteredEnvios = useMemo(() => {
-    const hasFilters = Object.values(messageFilters).some((value) => value !== "");
+    const hasFilters = Object.values(messageFilters).some(
+      (value) => value !== ""
+    );
     if (!hasFilters) return allEnvios;
 
     return allEnvios.filter((e) => {
@@ -136,7 +145,8 @@ export function useLogActivity() {
       )
         return false;
       if (messageFilters.fecha) {
-        const itemDate = new Date(e.createdAt).toISOString().split("T")[0];
+        const dateObj = new Date(e.createdAt);
+        const itemDate = dateObj.toLocaleDateString("en-CA");
         if (itemDate !== messageFilters.fecha) return false;
       }
       return true;
@@ -144,11 +154,17 @@ export function useLogActivity() {
   }, [allEnvios, messageFilters]);
 
   // === Manejadores de cambio y limpieza de filtros ===
-  const handleQueryFilterChange = (field: keyof QueryFilters, value: string) => {
+  const handleQueryFilterChange = (
+    field: keyof QueryFilters,
+    value: string
+  ) => {
     setQueryFilters((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleMessageFilterChange = (field: keyof MessageFilters, value: string) => {
+  const handleMessageFilterChange = (
+    field: keyof MessageFilters,
+    value: string
+  ) => {
     setMessageFilters((prev) => ({ ...prev, [field]: value }));
   };
 
