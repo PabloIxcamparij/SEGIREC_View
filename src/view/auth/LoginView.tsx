@@ -37,7 +37,7 @@ export default function LoginView() {
       <div className="w-full max-w-md">
         <div className="text-center mb-2">
           <h1 className="text-3xl font-bold">Inicio de sesion</h1>
-          <p className="text-gray-800">Ingresa tus credenciales para acceder</p>
+          <p className="text-gray-800">Ingresa sus credenciales para acceder</p>
         </div>
 
         <div className=" p-8">
