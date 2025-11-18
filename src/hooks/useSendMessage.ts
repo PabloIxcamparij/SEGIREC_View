@@ -14,6 +14,11 @@ import {
 import type { Persona, QueryBody } from "../types";
 import { showToast } from "../utils/toastUtils";
 
+/**
+ * Hook personalizado para gestionar consultas y envíos de mensajes relacionados con propiedades y morosidad.
+ * @returns Un objeto con estados y métodos para manejar consultas y envíos de mensajes.
+ */
+
 export function useQueryPropiedades() {
   // Estados para los filtros
   const [distrito, setDistrito] = useState<string[]>([]);
@@ -44,7 +49,10 @@ export function useQueryPropiedades() {
 
   let priorityToken = "";
 
-  //Consultar personas por filtros
+  /**
+   * Metodo para consultar personas por Propiedades
+   * @param filtros Filtros para la consulta.
+   */
   const handleQueryPeopleWithProperties = async (filtros: QueryBody) => {
     const body: QueryBody = filtros;
     const response = await queryPeopleWithProperties(body);
@@ -54,7 +62,10 @@ export function useQueryPropiedades() {
     }
   };
 
-  //Consultar personas por filtros
+  /**
+   * Metodo para consultar personas por Morosidad
+   * @param filtros Filtros para la consulta.
+   */
   const handleQueryMorosidadByFilters = async (filtros: QueryBody) => {
     const body: QueryBody = filtros;
 
@@ -65,24 +76,10 @@ export function useQueryPropiedades() {
     }
   };
 
-  // Enviar Mensajes
-  const handleSendMessageMorosidad = async () => {
-    // 1. Capturar el token
-    const tokenToSend = priorityToken;
-    // 2. Revocar el permiso inmediatamente (limpiar el token)
-    priorityToken = "";
-
-    // 3. Llamada al servicio, pasando el token
-    const response = await sendMessageOfMorosidad(personas, tokenToSend);
-
-    if (response) {
-      showToast("success", "Mensajes enviados correctamente");
-    }
-  };
-
+  /**
+   * Metodo para enviar mensajes de Propiedades
+   */
   const handleSendMessagePropiedades = async () => {
-    console.log(priorityToken);
-
     const tokenToSend = priorityToken;
     priorityToken = "";
 
@@ -93,6 +90,23 @@ export function useQueryPropiedades() {
     }
   };
 
+  /**
+   * Metodo para enviar mensajes de Morosidad
+   */
+  const handleSendMessageMorosidad = async () => {
+    const tokenToSend = priorityToken;
+    priorityToken = "";
+
+    const response = await sendMessageOfMorosidad(personas, tokenToSend);
+
+    if (response) {
+      showToast("success", "Mensajes enviados correctamente");
+    }
+  };
+
+  /**
+   * Metodo para enviar mensajes masivos
+   */
   const handleSendMessageMassive = async () => {
     const tokenToSend = priorityToken;
     priorityToken = "";
@@ -109,43 +123,55 @@ export function useQueryPropiedades() {
     }
   };
 
-  // Enviar como prioritario
-  const handleRequestCodePrioritaryMessage = async () => {
-    const response = await requestCodePrioritaryMessage();
+  //-----------------------------------------------------------
+  // Metodos para el manejo de mensajes prioritarios
+  //-----------------------------------------------------------
+
+  /**
+   * Peticion de codigo para envio prioritario
+   * @param whatsApp valor booleano que indica si el mensaje es por WhatsApp
+   * @param priority valor booleano que indica si el mensaje es prioritario
+   * @returns Regresa true si se logro el envio del mensaje correctamente
+   */
+  const handleRequestCodePrioritaryMessage = async (
+    whatsApp: boolean,
+    priority: boolean
+  ): Promise<boolean | null> => {
+    const response = await requestCodePrioritaryMessage({ whatsApp, priority });
     if (response) {
       showToast(
         "success",
         "Código de mensaje prioritario solicitado",
-        "El codigo sera enviado al correo del administrador"
+        "El código será enviado al correo del administrador"
       );
+      return true;
     }
+    return false;
   };
 
   // export const confirmCodePrioritaryMessage = async (code: string): Promise<{ success: boolean; token?: string }> => { ... }
-  const handleConfirmCodePrioritaryMessage = async (code: string) => {
-    // Asumo que tu servicio ahora devuelve { success: boolean, token?: string }
-    const response = await confirmCodePrioritaryMessage(code);
+  /**
+   * Confirma el código para el envío prioritario
+   * @param code Código de verificación recibido por correo.
+   * @returns Regresa true si el código es válido, false en caso contrario. Ademas de el token si es exitoso.
+   */
+const handleConfirmCodePrioritaryMessage = async (code: string) => {
+  const response = await confirmCodePrioritaryMessage(code);
 
-    if (response.success && response.token) {
-      showToast(
-        "success",
-        "Código verificado",
-        "Permiso prioritario concedido. Realice el envío en los próximos 60 segundos."
-      );
-      priorityToken = response.token;
-      // console.log(response.token);
-      // console.log(response.success);
+  if (response.success && response.token) {
+    showToast("success", "Código verificado", "Permiso otorgado.");
+    priorityToken = response.token;
+    return response;
+  }
 
-      // console.log(priorityToken);
-    } else {
-      priorityToken = "";
-    }
+  priorityToken = "";
 
-    // Retornamos el éxito al toast para que se cierre
-    return response.success;
-  };
+  return response; // <-- siempre retorna el mismo tipo
+};
 
-  // Limpiar
+  /**
+   * Metodo para limpiar todos los estados
+   */
   const handleLimpiar = () => {
     setCedula("");
     setAsunto("");

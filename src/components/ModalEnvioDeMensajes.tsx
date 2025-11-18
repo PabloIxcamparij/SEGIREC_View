@@ -1,6 +1,18 @@
 import { useState, useEffect } from "react";
 import Modal from "./Modal";
 import { ToggleSwitch } from "../components/ContainerInputs";
+import { showToast } from "../utils/toastUtils";
+
+export interface ModalEnvioOpcionesProps {
+  open: boolean;
+  onClose: () => void;
+  onRequestCode: (
+    sendWhatsApp: boolean,
+    prioritario: boolean
+  ) => Promise<boolean | null>;
+  onVerifyCode: (code: string) => any;
+  handleSendMessage: () => Promise<void>;
+}
 
 export default function ModalEnvioOpciones({
   open,
@@ -8,18 +20,20 @@ export default function ModalEnvioOpciones({
   onRequestCode,
   onVerifyCode,
   handleSendMessage,
-} : any) {
+}: ModalEnvioOpcionesProps) {
   // --- ESTADOS PRINCIPALES ---
   const [sendWhatsApp, setSendWhatsApp] = useState(false);
   const [prioritario, setPrioritario] = useState(false);
 
-  const [requested, setRequested] = useState(false);        // Se solicitó código
+  const [requested, setRequested] = useState(false); // Se solicitó código
   const [verificationCode, setVerificationCode] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
-  const [isValid, setIsValid] = useState(false);            // Código validado
+  const [isValid, setIsValid] = useState(false); // Código validado
   const [isRequesting, setIsRequesting] = useState(false);
 
-  const [attempts, setAttempts] = useState(0);              // Intentos fallidos
+  const [attemptsRemaining, setAttemptsRemaining] = useState<number | null>(
+    null
+  );
 
   const switchSelected = sendWhatsApp || prioritario;
 
@@ -38,36 +52,62 @@ export default function ModalEnvioOpciones({
     setIsVerifying(false);
     setIsValid(false);
     setIsRequesting(false);
-    setAttempts(0);
+    setAttemptsRemaining(0);
   };
 
   // --- SOLICITAR CÓDIGO ---
   const solicitarCodigo = async () => {
-    setIsRequesting(true);
-    await onRequestCode();
-    setIsRequesting(false);
-    setRequested(true); // Oculta switches / muestra input
+    try {
+      setIsRequesting(true);
+      const response = await onRequestCode(sendWhatsApp, prioritario);
+
+      console.log(response);
+      if (response) {
+        setRequested(true);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsRequesting(false);
+    }
   };
 
   // --- VERIFICAR CÓDIGO ---
   const verificarCodigo = async () => {
     setIsVerifying(true);
-    const valid = await onVerifyCode(verificationCode);
+    const result = await onVerifyCode(verificationCode);
     setIsVerifying(false);
 
-    if (valid) {
+    if (result.success) {
       setIsValid(true);
-      setRequested(false); // Oculta el espacio de verificación
+      setRequested(false);
       setVerificationCode("");
-    } else {
-      setVerificationCode("");
-      setAttempts((prev) => prev + 1);
+      return;
+    }
 
-      if (attempts + 1 >= 3) {
-        // Abandono del ciclo
-        resetAll();
-        onClose();
-      }
+    // Reseteamos campo
+    setVerificationCode("");
+
+    // Si backend dice límite superado → cerrar modal
+    if (result.attemptsRemaining === 0) {
+      showToast(
+        "error",
+        "Código incorrecto",
+        "Ha superado el límite de intentos."
+      );
+      resetAll();
+      onClose();
+      return;
+    }
+
+    // Mostrar intentos restantes
+    if (result.attemptsRemaining != null) {
+      showToast(
+        "error",
+        "Código incorrecto",
+        `Intentos restantes: ${result.attemptsRemaining}`
+      );
+      setAttemptsRemaining(result.attemptsRemaining);
     }
   };
 
@@ -102,7 +142,6 @@ export default function ModalEnvioOpciones({
       )}
 
       <div className="mt-5 flex flex-col gap-3">
-
         {/* --- BOTÓN SOLICITAR CÓDIGO (solo antes del ciclo) --- */}
         {!requested && !isValid && (
           <button
@@ -129,7 +168,6 @@ export default function ModalEnvioOpciones({
               placeholder="Ingrese el código"
               className="border rounded px-3 py-2"
             />
-
             <button
               onClick={verificarCodigo}
               disabled={verificationCode.length < 6 || isVerifying}
@@ -141,10 +179,11 @@ export default function ModalEnvioOpciones({
             >
               {isVerifying ? "Verificando..." : "Verificar Código"}
             </button>
-
-            <p className="text-xs text-gray-500">
-              Intentos: {attempts} / 3
-            </p>
+            {requested && (
+              <p className="text-xs text-gray-500">
+                Intentos restantes: {attemptsRemaining ?? "—"}
+              </p>
+            )}{" "}
           </div>
         )}
 

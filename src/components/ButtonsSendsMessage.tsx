@@ -2,17 +2,20 @@ import { useState } from "react";
 import { useSendMessageContext } from "../context/SendMessageContext";
 import ModalEnvioOpciones from "../components/ModalEnvioDeMensajes";
 
+export interface ButtonsSendsMessageProps {
+  handleSubmit: (e: React.FormEvent) => Promise<void>;
+  handleSendMessage: () => Promise<void>;
+  isConsultando: boolean;
+  sending: boolean;
+}
+
+
 export default function ButtonsSendsMessage({
   handleSubmit,
   handleSendMessage,
   isConsultando,
   sending,
-}: {
-  handleSubmit: any;
-  handleSendMessage: any;
-  isConsultando: boolean;
-  sending: boolean;
-}) {
+}: ButtonsSendsMessageProps) {
   const [modalOpen, setModalOpen] = useState(false);
 
   const abrirModal = () => {
