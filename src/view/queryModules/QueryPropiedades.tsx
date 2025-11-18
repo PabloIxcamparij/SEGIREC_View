@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { QueryBody } from "../../types";
 
-import { showToast, showToastConfirmSend } from "../../utils/toastUtils";
+import { showToast } from "../../utils/toastUtils";
 import { useSendMessageContext } from "../../context/SendMessageContext";
 import { queryBaseImponibleCatalogo } from "../../service/Utils.service";
 
@@ -110,7 +110,6 @@ export default function QueryPropiedades() {
 
   const handleSendMessage = async () => {
     // Confirmación previa
-    showToastConfirmSend(async () => {
       try {
         setSending(true);
         await handleSendMessagePropiedades();
@@ -120,7 +119,6 @@ export default function QueryPropiedades() {
       } finally {
         setSending(false);
       }
-    });
   };
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { QueryBody } from "../../types";
 
-import { showToast, showToastConfirmSend } from "../../utils/toastUtils";
+import { showToast } from "../../utils/toastUtils";
 import { useSendMessageContext } from "../../context/SendMessageContext";
 import { queryServiceCatalogo } from "../../service/Utils.service";
 
@@ -86,7 +86,6 @@ export default function QueryMorosidad() {
 
   const handleSendMessage = async () => {
       // Confirmación previa
-      showToastConfirmSend(async () => {
         try {
           setSending(true);
           await handleSendMessageMorosidad();
@@ -96,7 +95,6 @@ export default function QueryMorosidad() {
         } finally {
           setSending(false);
         }
-      });
   };
 
 
@@ -190,7 +188,6 @@ export default function QueryMorosidad() {
         sending={sending}
         isConsultando={isConsulting}
         handleSendMessage={handleSendMessage}
-        handleSendMessagePrioritary={handleSendMessage}
       />
 
       {personas.length > 0 && <TablePeople />}

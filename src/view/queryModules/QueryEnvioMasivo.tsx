@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useArchiveRead } from "../../hooks/useReadArchive";
 import { useSendMessageContext } from "../../context/SendMessageContext";
-import { showToast, showToastConfirmSend } from "../../utils/toastUtils";
+import { showToast } from "../../utils/toastUtils";
 import TablePeople from "../../components/TablePeople";
 import ButtonsSendsMessage from "../../components/ButtonsSendsMessage";
 
@@ -28,7 +28,6 @@ export default function QueryEnvioMasivo() {
     }
 
     // Confirmación previa
-    showToastConfirmSend(async () => {
       try {
         setSending(true);
         await handleSendMessageMassive();
@@ -38,7 +37,6 @@ export default function QueryEnvioMasivo() {
       } finally {
         setSending(false);
       }
-    });
   };
 
   // Reset al desmontar

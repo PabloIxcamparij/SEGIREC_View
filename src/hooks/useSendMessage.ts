@@ -111,12 +111,14 @@ export function useQueryPropiedades() {
 
   // Enviar como prioritario
   const handleRequestCodePrioritaryMessage = async () => {
-    await requestCodePrioritaryMessage();
-    showToast(
-      "success",
-      "Código de mensaje prioritario solicitado",
-      "El codigo sera enviado al correo del administrador"
-    );
+    const response = await requestCodePrioritaryMessage();
+    if (response) {
+      showToast(
+        "success",
+        "Código de mensaje prioritario solicitado",
+        "El codigo sera enviado al correo del administrador"
+      );
+    }
   };
 
   // export const confirmCodePrioritaryMessage = async (code: string): Promise<{ success: boolean; token?: string }> => { ... }
