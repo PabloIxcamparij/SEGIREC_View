@@ -99,5 +99,6 @@ export type EnvioActivity = ActivityBase & {
     NumeroDeMensajes: number;
     NumeroDeCorreosEnviadosCorrectamente: number;
     NumeroDeWhatsAppEnviadosCorrectamente: number;
+    DetalleIndividual: string;
   }
 };

@@ -44,7 +44,7 @@ export default function LogsView() {
         onLoadMore={handleLoadMoreQueries}
         onClearFilters={handleClearQueryFilters}
         tableContent={
-          <div className="max-h-96 overflow-y-auto overflow-x-auto">
+          <div className="max-h-150 overflow-y-auto overflow-x-auto">
             <table className="w-full text-center border-collapse">
               <thead>
                 {/* === FILAS DE CABECERA === */}
@@ -109,7 +109,9 @@ export default function LogsView() {
                       <td className="py-3 px-3">{c.Usuario.Nombre}</td>
                       <td className="py-3 px-3">{c.Detalle}</td>
                       <td className="py-3 px-3 max-w-[250px] md:max-w-[300px] lg:max-w-[400px] overflow-x-auto text-left">
-                        {formatearFiltros(c.Filtros?.FiltrosAplicados)}
+                        <div className="max-h-60 overflow-y-auto pr-2">
+                          {formatearFiltros(c.Filtros?.FiltrosAplicados)}
+                        </div>
                       </td>
                       <td className="py-3 px-3">
                         {new Date(c.createdAt).toLocaleString()}
@@ -140,7 +142,7 @@ export default function LogsView() {
         onLoadMore={handleLoadMoreMessages}
         onClearFilters={handleClearMessageFilters}
         tableContent={
-          <div className="max-h-96 overflow-y-auto overflow-x-auto">
+          <div className="max-h-150 overflow-y-auto overflow-x-auto">
             <table className="w-full text-center border-collapse">
               <thead>
                 {/* === FILAS DE CABECERA === */}
@@ -150,6 +152,9 @@ export default function LogsView() {
                   <th className="py-4 px-3 min-w-[120px]">Mensajes</th>
                   <th className="py-4 px-3 min-w-[120px]">Correos</th>
                   <th className="py-4 px-3 min-w-[120px]">WhatsApp</th>
+                  <th className="py-4 px-3 min-w-[350px]">
+                    Regitros individuales
+                  </th>
                   <th className="py-4 px-3 min-w-[150px]">Fecha</th>
                   <th className="py-4 px-3 min-w-[100px]">Estado</th>
                 </tr>
@@ -174,6 +179,7 @@ export default function LogsView() {
                   </td>
                   <td className="py-2 px-3">{/* Mensajes - No se filtra */}</td>
                   <td className="py-2 px-3">{/* Correos - No se filtra */}</td>
+                  <td className="py-2 px-3">{/* WhatsApp - No se filtra */}</td>
                   <td className="py-2 px-3">{/* WhatsApp - No se filtra */}</td>
                   <td className="py-2 px-3">
                     <FilterInput
@@ -207,6 +213,13 @@ export default function LogsView() {
                       </td>
                       <td className="py-3 px-3">
                         {e.Envios.NumeroDeWhatsAppEnviadosCorrectamente}
+                      </td>
+                      <td className="py-3 px-3 max-w-[380px]">
+                        <div className="max-h-60 overflow-y-auto pr-2">
+                          {formatearDetalleIndividual(
+                            e.Envios.DetalleIndividual
+                          )}
+                        </div>
                       </td>
                       <td className="py-3 px-3">
                         {new Date(e.createdAt).toLocaleString()}
@@ -252,6 +265,43 @@ const formatearFiltros = (texto?: string) => {
           • {parte}
         </li>
       ))}
+    </ul>
+  );
+};
+
+/**
+ * Metodo para formatear el json
+ * @param detalle
+ * @returns
+ */
+
+const formatearDetalleIndividual = (detalle: any) => {
+  if (!detalle || !Array.isArray(detalle)) {
+    return "Sin registros individuales";
+  }
+
+  return (
+    <ul className="text-left space-y-4">
+      {detalle.map((d, i) => {
+        const correoTxt = d.correo_ok ? "CorreoEnviado" : "CorreoNoEnviado";
+        const whatsappTxt = d.whatsapp_ok
+          ? "WhatsAppEnviado"
+          : "WhatsAppNoEnviado";
+
+        return (
+          <li
+            key={i}
+            className="border border-gray-300 rounded-lg p-3 bg-white shadow-sm"
+          >
+            <div className="font-semibold">{d.nombre}</div>
+            <div className="ml-4">· Cédula: {d.cedula}</div>
+            <div className="ml-4">· Correo: {d.correo}</div>
+            <div className="ml-4">· Tel: {d.telefono}</div>
+            <div className="ml-4">· {correoTxt}</div>
+            <div className="ml-4">· {whatsappTxt}</div>
+          </li>
+        );
+      })}
     </ul>
   );
 };
