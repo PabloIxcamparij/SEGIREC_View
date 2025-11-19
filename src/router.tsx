@@ -12,7 +12,7 @@ import HomeView from "./view/HomeView";
 // Admin views
 import AdminView from "./view/adminModules/AdminView";
 import LogsView from "./view/adminModules/LogsView";
-import ReportsView from "./view/ReportsView";
+import ReportsView from "./view/adminModules/ReportsView";
 
 // Auth views
 import LoginView from "./view/auth/LoginView";
