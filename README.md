@@ -114,10 +114,10 @@ npm run dev
 
 ### Variables de Entorno
 > .[!IMPORTANT].
->Crea un archivo `.env` con las siguientes variables:
->```env
->VITE_BASE_URL_SERVER=tu_backend_url
->```
+> Crea un archivo `.env` con las siguientes variables:
+> ```env
+> VITE_BASE_URL_SERVER=tu_backend_url
+> ```
 
 ### Configuración Nginx
 El proyecto incluye configuración optimizada de Nginx para:
