@@ -113,7 +113,6 @@ npm run dev
 ## Configuración
 
 ### Variables de Entorno
-> .[!IMPORTANT].
 > Crea un archivo `.env` con las siguientes variables:
 > ```env
 > VITE_BASE_URL_SERVER=tu_backend_url
