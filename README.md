@@ -9,13 +9,9 @@
 ## Tabla de Contenidos
 - [Descripción](#descripción)
 - [Características](#características)
-- [Tecnologías](#tecnologías)
 - [Instalación](#instalación)
 - [Configuración](#configuración)
-- [Uso](#uso)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Despliegue](#despliegue)
-- [API y Backend](#api-y-backend)
+- [Desarrollo](#desarrollo)
 
 ## Descripción
 
@@ -117,7 +113,7 @@ npm run dev
 ## Configuración
 
 ### Variables de Entorno
-> .[!IMPORTANT]
+> .[!IMPORTANT].
 >Crea un archivo `.env` con las siguientes variables:
 >```env
 >VITE_BASE_URL_SERVER=tu_backend_url
@@ -139,12 +135,6 @@ npm run build        # Build para producción
 npm run preview      # Preview del build
 npm run lint         # Análisis de código
 ```
-## Características Avanzadas
-
-### Procesamiento de Archivos
-- Soporte para Excel (.xlsx) con exceljs
-- Procesamiento de CSV con papaparse
-- Validación de datos de entrada
 
 ### Gestión de Estado
 - Toast notifications con PrimeReact
