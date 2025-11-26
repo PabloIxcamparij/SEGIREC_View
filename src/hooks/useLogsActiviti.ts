@@ -14,14 +14,16 @@ interface QueryFilters {
   detalle: string;
   filtros: string;
   estado: string;
-  fecha: string;
+  fechaInicio: string;
+  fechaFin: string;
 }
 
 interface MessageFilters {
   nombre: string;
   detalle: string;
   estado: string;
-  fecha: string;
+  fechaInicio: string;
+  fechaFin: string;
 }
 
 export function useLogActivity() {
@@ -31,14 +33,16 @@ export function useLogActivity() {
     detalle: "",
     filtros: "",
     estado: "",
-    fecha: "",
+    fechaInicio: "",
+    fechaFin: "",
   });
 
   const [messageFilters, setMessageFilters] = useState<MessageFilters>({
     nombre: "",
     detalle: "",
     estado: "",
-    fecha: "",
+    fechaInicio: "",
+    fechaFin: "",
   });
 
   // === Estados de datos ===
@@ -119,10 +123,17 @@ export function useLogActivity() {
         c.Estado !== queryFilters.estado
       )
         return false;
-      if (queryFilters.fecha) {
-        const dateObj = new Date(c.createdAt);
-        const itemDate = dateObj.toLocaleDateString("en-CA");
-        if (itemDate !== queryFilters.fecha) return false;
+      if (queryFilters.fechaInicio || queryFilters.fechaFin) {
+        const itemTime = new Date(c.createdAt).getTime();
+        const inicioTime = queryFilters.fechaInicio
+          ? new Date(queryFilters.fechaInicio).getTime()
+          : null;
+        const finTime = queryFilters.fechaFin
+          ? new Date(queryFilters.fechaFin).getTime()
+          : null;
+
+        if (inicioTime && itemTime < inicioTime) return false;
+        if (finTime && itemTime > finTime) return false;
       }
       return true;
     });
@@ -144,10 +155,17 @@ export function useLogActivity() {
         e.Estado !== messageFilters.estado
       )
         return false;
-      if (messageFilters.fecha) {
-        const dateObj = new Date(e.createdAt);
-        const itemDate = dateObj.toLocaleDateString("en-CA");
-        if (itemDate !== messageFilters.fecha) return false;
+      if (queryFilters.fechaInicio || queryFilters.fechaFin) {
+        const itemTime = new Date(e.createdAt).getTime();
+        const inicioTime = queryFilters.fechaInicio
+          ? new Date(queryFilters.fechaInicio).getTime()
+          : null;
+        const finTime = queryFilters.fechaFin
+          ? new Date(queryFilters.fechaFin).getTime()
+          : null;
+
+        if (inicioTime && itemTime < inicioTime) return false;
+        if (finTime && itemTime > finTime) return false;
       }
       return true;
     });
@@ -174,7 +192,8 @@ export function useLogActivity() {
       detalle: "",
       filtros: "",
       estado: "",
-      fecha: "",
+      fechaInicio: "",
+      fechaFin: "",
     });
   };
 
@@ -183,7 +202,8 @@ export function useLogActivity() {
       nombre: "",
       detalle: "",
       estado: "",
-      fecha: "",
+      fechaInicio: "",
+      fechaFin: "",
     });
   };
 

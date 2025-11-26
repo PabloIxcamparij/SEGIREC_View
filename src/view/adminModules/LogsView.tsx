@@ -34,6 +34,36 @@ export default function LogsView() {
     fetchMessages(1);
   }, []);
 
+  function downloadCSV(filename: string, rows: any[]) {
+    if (!rows.length) {
+      alert("No hay registros para descargar");
+      return;
+    }
+
+    const header = Object.keys(rows[0]);
+    const csvContent = [
+      header.join(","),
+      ...rows.map((row) =>
+        header.map((key) => JSON.stringify(row[key] ?? "")).join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+  }
+
+  const handleDownloadConsultas = () => {
+    downloadCSV("consultas_filtradas.csv", filteredConsultas);
+  };
+
+  const handleDownloadEnvios = () => {
+    downloadCSV("envios_filtrados.csv", filteredEnvios);
+  };
+
   return (
     <div className="flex flex-col items-center gap-8 p-6">
       {/* === TABLA DE CONSULTAS === */}
@@ -42,6 +72,7 @@ export default function LogsView() {
         isLoading={isQueryLoading}
         loadMoreText="Cargar Más Consultas"
         onLoadMore={handleLoadMoreQueries}
+        onDownload={handleDownloadConsultas}
         onClearFilters={handleClearQueryFilters}
         tableContent={
           <div className="max-h-150 overflow-y-auto overflow-x-auto">
@@ -82,13 +113,23 @@ export default function LogsView() {
                       onChange={(v) => handleQueryFilterChange("filtros", v)}
                     />
                   </td>
-                  <td className="py-2 px-3">
+                  <div className="flex flex-col gap-1">
                     <FilterInput
                       type="date"
-                      value={queryFilters.fecha}
-                      onChange={(v) => handleQueryFilterChange("fecha", v)}
+                      placeholder="Desde"
+                      value={queryFilters.fechaInicio}
+                      onChange={(v) =>
+                        handleQueryFilterChange("fechaInicio", v)
+                      }
                     />
-                  </td>
+                    <FilterInput
+                      type="date"
+                      placeholder="Hasta"
+                      value={queryFilters.fechaFin}
+                      onChange={(v) => handleQueryFilterChange("fechaFin", v)}
+                    />
+                  </div>
+
                   <td className="py-2 px-3">
                     <FilterInput
                       type="select"
@@ -140,6 +181,7 @@ export default function LogsView() {
         hasMore={hasMoreMessages}
         loadMoreText="Cargar Más Envíos"
         onLoadMore={handleLoadMoreMessages}
+        onDownload={handleDownloadEnvios}
         onClearFilters={handleClearMessageFilters}
         tableContent={
           <div className="max-h-150 overflow-y-auto overflow-x-auto">
@@ -181,13 +223,23 @@ export default function LogsView() {
                   <td className="py-2 px-3">{/* Correos - No se filtra */}</td>
                   <td className="py-2 px-3">{/* WhatsApp - No se filtra */}</td>
                   <td className="py-2 px-3">{/* WhatsApp - No se filtra */}</td>
-                  <td className="py-2 px-3">
+                  <div className="flex flex-col gap-1">
                     <FilterInput
                       type="date"
-                      value={messageFilters.fecha}
-                      onChange={(v) => handleMessageFilterChange("fecha", v)}
+                      placeholder="Desde"
+                      value={queryFilters.fechaInicio}
+                      onChange={(v) =>
+                        handleQueryFilterChange("fechaInicio", v)
+                      }
                     />
-                  </td>
+                    <FilterInput
+                      type="date"
+                      placeholder="Hasta"
+                      value={queryFilters.fechaFin}
+                      onChange={(v) => handleQueryFilterChange("fechaFin", v)}
+                    />
+                  </div>
+
                   <td className="py-2 px-3">
                     <FilterInput
                       type="select"

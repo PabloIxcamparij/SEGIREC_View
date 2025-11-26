@@ -8,6 +8,7 @@ interface TableActivityProps {
   loadMoreText: string;
   onLoadMore: () => void;
   onClearFilters: () => void;
+  onDownload: () => void
   tableContent: ReactNode;
 }
 
@@ -17,6 +18,7 @@ export default function TableActivity({
   hasMore = true,
   loadMoreText,
   onLoadMore,
+  onDownload,
   onClearFilters,
   tableContent,
 }: TableActivityProps) {
@@ -27,7 +29,7 @@ export default function TableActivity({
       {/* Botones de Acción */}
       <div className="flex justify-end mb-4 gap-2">
         <button
-          onClick={onClearFilters}
+          onClick={onDownload}
           className="px-4 py-2 border-2 border-gray-200 text-black text-sm rounded-lg hover:bg-gray-200 transition-colors"
         >
           Descargar Registros
