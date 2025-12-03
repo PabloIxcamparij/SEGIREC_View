@@ -266,7 +266,7 @@ export default function LogsView() {
                       <td className="py-3 px-3">
                         {e.Envios.NumeroDeWhatsAppEnviadosCorrectamente}
                       </td>
-                      <td className="py-3 px-3 max-w-[380px]">
+                      <td className="py-3 px-3 max-w-[250px] md:max-w-[300px] lg:max-w-[400px] overflow-x-auto text-left">
                         <div className="max-h-60 overflow-y-auto pr-2">
                           {formatearDetalleIndividual(
                             e.Envios.DetalleIndividual

@@ -1,6 +1,8 @@
 import { useSendMessageContext } from "../context/SendMessageContext";
 import type { Persona } from "../types";
 
+// ... (Definiciones de ColumnDefinition y funciones getDynamicColumns permanecen sin cambios)
+
 // 1. Definición de la estructura de la columna
 interface ColumnDefinition {
   key: keyof Persona;
@@ -68,6 +70,7 @@ export default function TablePeople() {
   // Usamos la primera persona para decidir qué columnas mostrar
   const columns = getDynamicColumns(personas[0]);
 
+  // Se añaden max-h-96 y overflow-y-auto al div contenedor de la tabla
   return (
     <div className="w-full md:w-4/5 lg:w-[80%] bg-white/80 border-2 border-principal backdrop-blur-md rounded-2xl shadow-xl p-8">
       <h2 className="text-xl font-bold mb-4 text-principal flex justify-between items-center">
@@ -77,10 +80,11 @@ export default function TablePeople() {
         </span>
       </h2>
 
-      <div className="overflow-x-auto">
+      {/* APLICACIÓN DEL SCROLL VERTICAL AQUÍ */}
+      <div className="overflow-x-auto max-h-96 overflow-y-auto"> 
         <table className="w-full text-center border-collapse">
           <thead>
-            <tr className="bg-gray-100 text-center">
+            <tr className="bg-gray-100 text-center sticky top-0 z-10">
               {columns.map((col) => (
                 <th key={col.key as string} className="p-2 border">
                   {col.header}
@@ -92,16 +96,19 @@ export default function TablePeople() {
             {personas.map((p, idx) => (
               <tr
                 key={idx}
-                className="text-center odd:bg-white even:bg-gray-50"
+                className=" odd:bg-white even:bg-gray-50 py-3 px-3 max-w-[250px] md:max-w-[200px] lg:max-w-[200px] overflow-x-auto text-left"
               >
                 {columns.map((col) => (
                   <td
                     key={`${idx}-${col.key as string}`}
-                    className="p-2 border"
+                    className="py-3 px-3 max-w-[250px] md:max-w-[200px] lg:max-w-[200px] overflow-x-auto text-left"
                   >
+                      <div className="max-h-20 overflow-y-auto pr-2">
+
                     {p[col.key] !== undefined && p[col.key] !== null
                       ? String(p[col.key])
                       : "N/A"}
+                      </div>
                   </td>
                 ))}
               </tr>
