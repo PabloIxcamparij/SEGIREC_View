@@ -113,22 +113,24 @@ export default function LogsView() {
                       onChange={(v) => handleQueryFilterChange("filtros", v)}
                     />
                   </td>
-                  <div className="flex flex-col gap-1">
-                    <FilterInput
-                      type="date"
-                      placeholder="Desde"
-                      value={queryFilters.fechaInicio}
-                      onChange={(v) =>
-                        handleQueryFilterChange("fechaInicio", v)
-                      }
-                    />
-                    <FilterInput
-                      type="date"
-                      placeholder="Hasta"
-                      value={queryFilters.fechaFin}
-                      onChange={(v) => handleQueryFilterChange("fechaFin", v)}
-                    />
-                  </div>
+                  <td className="py-2 px-3">
+                    <div className="flex flex-col gap-1">
+                      <FilterInput
+                        type="date"
+                        placeholder="Desde"
+                        value={queryFilters.fechaInicio}
+                        onChange={(v) =>
+                          handleQueryFilterChange("fechaInicio", v)
+                        }
+                      />
+                      <FilterInput
+                        type="date"
+                        placeholder="Hasta"
+                        value={queryFilters.fechaFin}
+                        onChange={(v) => handleQueryFilterChange("fechaFin", v)}
+                      />
+                    </div>
+                  </td>
 
                   <td className="py-2 px-3">
                     <FilterInput
@@ -223,23 +225,24 @@ export default function LogsView() {
                   <td className="py-2 px-3">{/* Correos - No se filtra */}</td>
                   <td className="py-2 px-3">{/* WhatsApp - No se filtra */}</td>
                   <td className="py-2 px-3">{/* WhatsApp - No se filtra */}</td>
-                  <div className="flex flex-col gap-1">
-                    <FilterInput
-                      type="date"
-                      placeholder="Desde"
-                      value={queryFilters.fechaInicio}
-                      onChange={(v) =>
-                        handleQueryFilterChange("fechaInicio", v)
-                      }
-                    />
-                    <FilterInput
-                      type="date"
-                      placeholder="Hasta"
-                      value={queryFilters.fechaFin}
-                      onChange={(v) => handleQueryFilterChange("fechaFin", v)}
-                    />
-                  </div>
-
+                  <td className="py-2 px-3">
+                    <div className="flex flex-col gap-1">
+                      <FilterInput
+                        type="date"
+                        placeholder="Desde"
+                        value={queryFilters.fechaInicio}
+                        onChange={(v) =>
+                          handleQueryFilterChange("fechaInicio", v)
+                        }
+                      />
+                      <FilterInput
+                        type="date"
+                        placeholder="Hasta"
+                        value={queryFilters.fechaFin}
+                        onChange={(v) => handleQueryFilterChange("fechaFin", v)}
+                      />
+                    </div>
+                  </td>
                   <td className="py-2 px-3">
                     <FilterInput
                       type="select"
