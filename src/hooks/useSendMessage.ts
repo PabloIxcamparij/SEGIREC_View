@@ -39,7 +39,7 @@ export function useQueryPropiedades() {
   const [numeroFinca, setNumeroFinca] = useState("");
 
   // Estados para el envio masivo
-  const [asunto, setAsunto] = useState("");
+  const [asunto, setAsunto] = useState<string>("");
   const [mensaje, setMensaje] = useState("");
 
   // Estado para consultas por atributos

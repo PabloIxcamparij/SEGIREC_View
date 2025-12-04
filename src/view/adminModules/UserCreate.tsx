@@ -13,7 +13,7 @@ const roles = [
   { value: "Reportes", label : "Realizar reportes del sistema"},
   { value: "Morosidad", label: "Enviar mensajes sobre morosidad" },
   { value: "Propiedades", label: "Enviar mensajes sobre propiedades" },
-  { value: "EnviosDeMensajes", label: "Enviar mensajes de manera masiva" },
+  { value: "EnvioMasivo", label: "Enviar mensajes de manera masiva" },
 ];
 
 const activoOptions = [

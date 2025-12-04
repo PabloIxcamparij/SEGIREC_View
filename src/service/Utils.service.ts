@@ -19,9 +19,20 @@ export async function queryBaseImponibleCatalogo() {
   }
 }
 
+export async function queryAsuntosCorreo() {
+  try {
+    const { data } = await axiosClient.get("/utils/asuntosCorreo");
+    return data;
+  } catch (error: any) {
+    errorHandler(error, "Cargado Asuntos de Correo");
+  }
+}
+
 export async function activitiesOfQuery(page = 1) {
   try {
-    const { data } = await axiosClient.get(`/utils/activitiesOfQuery?page=${page}`);
+    const { data } = await axiosClient.get(
+      `/utils/activitiesOfQuery?page=${page}`
+    );
     return data;
   } catch (error: any) {
     errorHandler(error, "Cargando las actividades del sistema");
@@ -30,7 +41,9 @@ export async function activitiesOfQuery(page = 1) {
 
 export async function queryActivitiesMessage(page = 1) {
   try {
-    const { data } = await axiosClient.get(`/utils/activitiesOfMessage?page=${page}`);
+    const { data } = await axiosClient.get(
+      `/utils/activitiesOfMessage?page=${page}`
+    );
     return data;
   } catch (error: any) {
     errorHandler(error, "Cargando las actividades del sistema");

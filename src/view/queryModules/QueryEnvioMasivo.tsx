@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { useArchiveRead } from "../../hooks/useReadArchive";
-import { useSendMessageContext } from "../../context/SendMessageContext";
 import { showToast } from "../../utils/toastUtils";
 import TablePeople from "../../components/TablePeople";
+import { useArchiveRead } from "../../hooks/useReadArchive";
+import { queryAsuntosCorreo } from "../../service/Utils.service";
 import ButtonsSendsMessage from "../../components/ButtonsSendsMessage";
+import { useSendMessageContext } from "../../context/SendMessageContext";
+import { InputSelect } from "../../components/ContainerInputs";
 
 export default function QueryEnvioMasivo() {
   const {
@@ -26,6 +28,10 @@ export default function QueryEnvioMasivo() {
 
   const [sending, setSending] = useState(false);
 
+  const [asuntoCatalogo, setAsuntoCatalogo] = useState<
+    { value: string; label: string }[]
+  >([]);
+
   const handleSendMessage = async () => {
     if (asunto === "" || mensaje === "") {
       showToast("error", "Los campos de asunto y mensaje no pueden ir vacíos");
@@ -47,6 +53,21 @@ export default function QueryEnvioMasivo() {
   // Reset al desmontar
   useEffect(() => {
     return () => handleLimpiar();
+  }, []);
+
+  // Cargar servicios
+  useEffect(() => {
+    if (asuntoCatalogo.length === 0) {
+      queryAsuntosCorreo()
+        .then((data) => {
+          setAsuntoCatalogo(Array.isArray(data) ? data : []);
+        })
+        .catch((error) => {
+          console.error("Error al cargar catálogo de servicios:", error);
+          showToast("error", "No se pudo cargar el catálogo de servicios");
+          setAsuntoCatalogo([]); // valor seguro
+        });
+    }
   }, []);
 
   return (
@@ -100,22 +121,15 @@ export default function QueryEnvioMasivo() {
         {personas.length > 0 && (
           <>
             {/* Campo de Asunto */}
-            <div className="flex flex-col">
-              <label
-                htmlFor="asunto"
-                className="text-sm font-medium text-gray-700 mb-1"
-              >
-                Asunto del Mensaje
-              </label>
-              <input
-                id="asunto"
-                type="text"
-                value={asunto}
-                onChange={(e) => setAsunto(e.target.value)}
-                placeholder="Ej: Notificación Importante sobre su cuenta — ${nombre}"
-                className="p-2 border border-gray-300 rounded-lg focus:ring-principal focus:border-principal"
-              />
-            </div>
+
+            <InputSelect
+              label="Asunto del correo"
+              options={asuntoCatalogo}
+              selectedValues={asunto ? [asunto] : []}
+              onChangeValues={(values) => setAsunto(values[0] || "")}
+              isMulti={false}
+              placeholder="Seleccione un asunto..."
+            />
 
             {/* Campo de Mensaje */}
             <div className="flex flex-col">
