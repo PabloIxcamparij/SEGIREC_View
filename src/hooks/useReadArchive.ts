@@ -1,51 +1,76 @@
+// ============================================================================
 // useArchiveRead.ts
+// Hook para leer archivos XLSX y CSV, mapear sus columnas y convertirlos en
+// un arreglo de objetos Persona. Compatible con ExcelJS y PapaParse.
+// ============================================================================
+
 import * as ExcelJS from "exceljs";
+import Papa from "papaparse";
 import { useState, useCallback } from "react";
 import { useSendMessageContext } from "../context/SendMessageContext";
 
-import type { Persona } from "../types"; // Importar el tipo Persona
+import type { Persona } from "../types";
 import { showToast } from "../utils/toastUtils";
 
 /**
- * Objeto de mapeo para traducir los nombres de las columnas del archivo Excel
- * a los nombres de las propiedades del objeto Persona.
- * * Clave: Nombre de la columna en el archivo Excel (Header).
- * Valor: Nombre de la propiedad en el objeto Persona.
+ * Mapeo entre las cabeceras del archivo y las propiedades del tipo Persona.
+ * La clave es el nombre EXACTO de la columna en el archivo.
+ * El valor es el nombre de la propiedad en Persona.
  */
 const COLUMN_TO_PERSONA_MAP: Record<string, keyof Persona> = {
   "cp.CEDULA": "cedula",
-  "cp.NUM_PERSON": "numeroDeFinca", // Mapeo de NUM_PERSON a numeroDeFinca (Asunción)
+  "cp.NUM_PERSON": "numeroDeFinca",
   "cp.NOM_PERSON": "nombre",
-  NOM_COMPLE: "nombre", // Usamos NOM_COMPLE como 'nombre' (si existe)
-  "cp.CELULAR": "telefono", // Mapeo de CELULAR a telefono
+  NOM_COMPLE: "nombre",
+  "cp.CELULAR": "telefono",
   "cp.CORREO_ELE": "correo",
   "cp.DIRECCION1": "direccion",
-  "cp.DOM_LEGAL": "direccion", // Usamos DOM_LEGAL como 'direccion' (si existe)
+  "cp.DOM_LEGAL": "direccion",
   DETALLE: "detalle",
 };
 
-// Array de las cabeceras que se buscarán en el archivo (las claves del mapa)
+// Cabeceras que buscamos en ambos archivos
 const COLUMNAS_BUSQUEDA = Object.keys(COLUMN_TO_PERSONA_MAP);
+
+// Columnas mínimas para aceptar un registro
+const COLUMNAS_OBLIGATORIAS = ["cp.CEDULA", "cp.NOM_PERSON"];
+
+// ============================================================================
+// Detectores de tipo de archivo
+// ============================================================================
+
+const esExcel = (file: File) => file.name.toLowerCase().endsWith(".xlsx");
+
+const esCSV = (file: File) => file.name.toLowerCase().endsWith(".csv");
+
+// ============================================================================
+// Hook principal
+// ============================================================================
 
 export function useArchiveRead() {
   const { setPersonas } = useSendMessageContext();
+
   const [archivo, setArchivo] = useState<File | null>(null);
   const [nombreArchivo, setNombreArchivo] = useState("Seleccionar archivo...");
   const [cargando, setCargando] = useState(false);
 
-  // ... handleFileChange (sin cambios) ...
+  // Maneja el input type="file"
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setArchivo(file);
       setNombreArchivo(file.name);
-      setPersonas([]); // Limpiar personas al cargar un nuevo archivo
+      setPersonas([]); // Limpia datos previos al cargar un archivo nuevo
     } else {
       setNombreArchivo("Seleccionar archivo...");
       setArchivo(null);
       setPersonas([]);
     }
   };
+
+  // ==========================================================================
+  //  Procesamiento de archivo XLSX
+  // ==========================================================================
 
   const procesarExcel = useCallback(async () => {
     if (!archivo) {
@@ -55,19 +80,25 @@ export function useArchiveRead() {
 
     setCargando(true);
     setPersonas([]);
+
     try {
+      // Leer como ArrayBuffer
       const data = await archivo.arrayBuffer();
+
+      // Cargar workbook Excel
       const workbook = new ExcelJS.Workbook();
       await workbook.xlsx.load(data);
       const sheet = workbook.worksheets[0];
 
       const personasCargadas: Persona[] = [];
-      // Mapea Columna Header (string) a Índice de Columna (number)
+
+      // Mapeo de nombre de columna → índice en Excel
       const columnaIndices: Record<string, number> = {};
+
       const firstRow = sheet.getRow(1); // Cabeceras
 
+      // Detectar columnas presentes
       if (firstRow) {
-        // 1. Mapear el índice de columna por el nombre esperado
         firstRow.eachCell((cell, colNumber) => {
           const cellValue = String(cell.value).trim();
           if (COLUMNAS_BUSQUEDA.includes(cellValue)) {
@@ -76,82 +107,149 @@ export function useArchiveRead() {
         });
       }
 
-      // 2. Validar que se encuentren las columnas obligatorias
-      const columnasObligatorias = ["cp.CEDULA", "cp.NOM_PERSON"]; // Columnas de Excel obligatorias
-      const faltantes = columnasObligatorias.filter(
+      // Validar columnas obligatorias
+      const faltantes = COLUMNAS_OBLIGATORIAS.filter(
         (col) => !columnaIndices[col]
       );
 
       if (faltantes.length > 0) {
         throw new Error(
-          `Faltan columnas obligatorias en el archivo: ${faltantes.join(", ")}`
+          `Faltan columnas obligatorias: ${faltantes.join(", ")}`
         );
       }
 
-      // 3. Recorrer filas y construir el objeto Persona
+      // Recorrer filas del Excel
       sheet.eachRow((row, rowNumber) => {
-        if (rowNumber > 1) {
-          // Saltar la fila de cabeceras
-          const persona: Partial<Persona> = {};
+        if (rowNumber === 1) return; // Saltar cabecera
 
-          COLUMNAS_BUSQUEDA.forEach((excelKey) => {
-            const colIndex = columnaIndices[excelKey];
-            const personaKey = COLUMN_TO_PERSONA_MAP[excelKey];
+        const persona: Partial<Persona> = {};
 
-            if (colIndex && personaKey) {
-              let cellValue = row.getCell(colIndex).value;
+        COLUMNAS_BUSQUEDA.forEach((excelKey) => {
+          const colIndex = columnaIndices[excelKey];
+          const personaKey = COLUMN_TO_PERSONA_MAP[excelKey];
 
-              // Normalizar el valor a string, a menos que sea un número que se necesite como tal
-              let finalValue: string | number | undefined;
+          if (colIndex && personaKey) {
+            let cellValue = row.getCell(colIndex).value;
+            let finalValue: string | number | undefined;
 
-              if (cellValue === null || cellValue === undefined) {
-                finalValue = undefined;
-              } else if (
-                excelKey === "cp.NUM_PERSON" &&
-                typeof cellValue === "number"
-              ) {
-                // Si el valor es numérico y se mapea a 'numeroDeFinca', lo guardamos como string para el type Persona.
-                finalValue = String(cellValue);
-              } else {
-                finalValue = String(cellValue).trim();
-              }
-
-              // Asignar el valor
-              if (finalValue) {
-                // Si la clave de Persona ya tiene un valor (ej: cp.CELULAR vs cp.TELEFONO1), no la sobrescribimos.
-                // Esto podría necesitar lógica adicional si quieres que el último gane o si prefieres una jerarquía.
-                if (!persona[personaKey]) {
-                  (persona as any)[personaKey] = finalValue;
-                }
-              }
+            // Normalización del valor
+            if (cellValue === null || cellValue === undefined) {
+              finalValue = undefined;
+            } else if (
+              excelKey === "cp.NUM_PERSON" &&
+              typeof cellValue === "number"
+            ) {
+              finalValue = String(cellValue);
+            } else {
+              finalValue = String(cellValue).trim();
             }
-          });
 
-          // 4. Asegurar que solo se agreguen registros con datos esenciales del Type Persona
-          if (persona.cedula && persona.nombre) {
-            // Se debe asignar un valor por defecto para 'distrito' si no se pudo mapear
-            if (!persona.distrito) {
-              persona.distrito = persona.direccion || "";
+            if (finalValue && !persona[personaKey]) {
+              (persona as any)[personaKey] = finalValue;
             }
-            personasCargadas.push(persona as Persona);
           }
+        });
+
+        if (persona.cedula && persona.nombre) {
+          persona.distrito ||= persona.direccion || "";
+          personasCargadas.push(persona as Persona);
         }
       });
 
       setPersonas(personasCargadas);
     } catch (error) {
-      showToast("error", "Error al procesar el archivo Excel:");
+      console.error(error);
+      showToast("error", "Error al procesar el archivo Excel.");
       setPersonas([]);
     } finally {
       setCargando(false);
     }
   }, [archivo]);
 
+  // ==========================================================================
+  //  Procesamiento de archivo CSV
+  // ==========================================================================
+
+  const procesarCSV = useCallback(async () => {
+    if (!archivo) {
+      showToast("error", "No hay archivo para procesar.");
+      return;
+    }
+
+    setCargando(true);
+    setPersonas([]);
+
+    try {
+      // Leer archivo como texto
+      const text = await archivo.text();
+
+      // Parseo CSV con cabeceras
+      const resultado = Papa.parse(text, {
+        header: true,
+        skipEmptyLines: true,
+      });
+
+      const personasCargadas: Persona[] = [];
+
+      resultado.data.forEach((row: any) => {
+        const persona: Partial<Persona> = {};
+
+        // Mapear columnas
+        COLUMNAS_BUSQUEDA.forEach((excelKey) => {
+          if (row[excelKey] !== undefined && row[excelKey] !== null) {
+            const personaKey = COLUMN_TO_PERSONA_MAP[excelKey];
+            const valor = String(row[excelKey]).trim();
+
+            if (!persona[personaKey]) {
+              (persona as any)[personaKey] = valor;
+            }
+          }
+        });
+
+        if (persona.cedula && persona.nombre) {
+          persona.distrito ||= persona.direccion || "";
+          personasCargadas.push(persona as Persona);
+        }
+      });
+
+      setPersonas(personasCargadas);
+    } catch (error) {
+      console.error(error);
+      showToast("error", "Error al procesar el archivo CSV.");
+      setPersonas([]);
+    } finally {
+      setCargando(false);
+    }
+  }, [archivo]);
+
+  // ==========================================================================
+  // Router: decide cómo procesar según extensión
+  // ==========================================================================
+
+  const procesarArchivo = useCallback(async () => {
+    if (!archivo) {
+      showToast("error", "No hay archivo para procesar.");
+      return;
+    }
+
+    if (esExcel(archivo)) {
+      await procesarExcel();
+    } else if (esCSV(archivo)) {
+      await procesarCSV();
+    } else {
+      showToast("error", "Formato no soportado. Solo .xlsx o .csv");
+    }
+  }, [archivo, procesarExcel, procesarCSV]);
+
+  // ==========================================================================
+  // Retorno del hook
+  // ==========================================================================
+
   return {
     archivo,
     nombreArchivo,
     handleFileChange,
-    procesarExcel,
+    procesarArchivo, // <<-- la función que procesará XLSX o CSV
     cargando,
   };
 }

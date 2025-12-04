@@ -6,8 +6,13 @@ import TablePeople from "../../components/TablePeople";
 import ButtonsSendsMessage from "../../components/ButtonsSendsMessage";
 
 export default function QueryEnvioMasivo() {
-  const { handleFileChange, nombreArchivo, archivo, procesarExcel, cargando } =
-    useArchiveRead();
+  const {
+    handleFileChange,
+    nombreArchivo,
+    archivo,
+    procesarArchivo,
+    cargando,
+  } = useArchiveRead();
 
   const {
     handleSendMessageMassive,
@@ -28,15 +33,15 @@ export default function QueryEnvioMasivo() {
     }
 
     // Confirmación previa
-      try {
-        setSending(true);
-        await handleSendMessageMassive();
-      } catch (error) {
-        console.error(error);
-        showToast("error", "Error durante el envío de mensajes");
-      } finally {
-        setSending(false);
-      }
+    try {
+      setSending(true);
+      await handleSendMessageMassive();
+    } catch (error) {
+      console.error(error);
+      showToast("error", "Error durante el envío de mensajes");
+    } finally {
+      setSending(false);
+    }
   };
 
   // Reset al desmontar
@@ -107,7 +112,7 @@ export default function QueryEnvioMasivo() {
                 type="text"
                 value={asunto}
                 onChange={(e) => setAsunto(e.target.value)}
-                placeholder="Ej: Notificación Importante de..."
+                placeholder="Ej: Notificación Importante sobre su cuenta — ${nombre}"
                 className="p-2 border border-gray-300 rounded-lg focus:ring-principal focus:border-principal"
               />
             </div>
@@ -125,7 +130,36 @@ export default function QueryEnvioMasivo() {
                 rows={5}
                 value={mensaje}
                 onChange={(e) => setMensaje(e.target.value)}
-                placeholder="Escriba aquí el cuerpo del mensaje..."
+                placeholder={`Estimado(a) {nombre},
+
+Reciba un cordial saludo de parte de la Administración.
+
+Le notificamos que se ha registrado información relevante asociada a su cuenta:
+
+• Cédula: {cedula}
+• Número de finca / cuenta: {numeroDeFinca || numeroDeCuenta}
+• Distrito / Dirección: {distrito || direccion}
+
+Detalle:
+{detalle || "Sin detalle adicional registrado."}
+
+Si este mensaje corresponde a un aviso de morosidad:
+• Monto pendiente: ₡{valorDeLaDeuda}
+• Fecha de vencimiento: {fechaVencimiento}
+• Periodo: {periodo}
+
+Si corresponde a información de propiedad:
+• Área de la propiedad: {areaDeLaPropiedad} m²
+• Estado: {estadoPropiedad}
+• Fecha de vigencia: {fechaVigencia}
+• Monto imponible: ₡{montoImponible}
+
+Esta comunicación es de carácter informativo. Ante cualquier consulta o actualización, puede responder a este correo o comunicarse con nuestra oficina de atención.
+
+Gracias por su atención.
+
+Atentamente,
+Administración`}
                 className="p-2 border border-gray-300 rounded-lg focus:ring-principal focus:border-principal resize-y"
               />
             </div>
@@ -137,7 +171,7 @@ export default function QueryEnvioMasivo() {
       <ButtonsSendsMessage
         sending={sending}
         isConsultando={cargando}
-        handleSubmit={procesarExcel}
+        handleSubmit={procesarArchivo}
         handleSendMessage={handleSendMessage}
       />
 
