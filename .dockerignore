@@ -1,0 +1,23 @@
+# Ignorar node_modules
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Ignorar git
+.git
+.gitignore
+
+# Ignorar IDEs
+.vscode
+.idea
+
+# Ignorar dist viejo
+dist
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Env files (los copiarás manualmente si se ocupan)
+.env
+.env.local
