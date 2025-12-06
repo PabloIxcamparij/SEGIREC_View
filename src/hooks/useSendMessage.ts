@@ -50,7 +50,7 @@ export function useQueryPropiedades() {
   let priorityToken = "";
 
   /**
-   * Metodo para consultar personas por Propiedades
+   * Método para consultar personas por Propiedades
    * @param filtros Filtros para la consulta.
    */
   const handleQueryPeopleWithProperties = async (filtros: QueryBody) => {
@@ -63,7 +63,7 @@ export function useQueryPropiedades() {
   };
 
   /**
-   * Metodo para consultar personas por Morosidad
+   * Método para consultar personas por Morosidad
    * @param filtros Filtros para la consulta.
    */
   const handleQueryMorosidadByFilters = async (filtros: QueryBody) => {
@@ -77,7 +77,7 @@ export function useQueryPropiedades() {
   };
 
   /**
-   * Metodo para enviar mensajes de Propiedades
+   * Método para enviar mensajes de Propiedades
    */
   const handleSendMessagePropiedades = async () => {
     const tokenToSend = priorityToken;
@@ -91,7 +91,7 @@ export function useQueryPropiedades() {
   };
 
   /**
-   * Metodo para enviar mensajes de Morosidad
+   * Método para enviar mensajes de Morosidad
    */
   const handleSendMessageMorosidad = async () => {
     const tokenToSend = priorityToken;
@@ -105,7 +105,7 @@ export function useQueryPropiedades() {
   };
 
   /**
-   * Metodo para enviar mensajes masivos
+   * Método para enviar mensajes masivos
    */
   const handleSendMessageMassive = async () => {
     const tokenToSend = priorityToken;
@@ -124,7 +124,7 @@ export function useQueryPropiedades() {
   };
 
   //-----------------------------------------------------------
-  // Metodos para el manejo de mensajes prioritarios
+  // Métodos para el manejo de mensajes prioritarios
   //-----------------------------------------------------------
 
   /**
@@ -149,7 +149,6 @@ export function useQueryPropiedades() {
     return false;
   };
 
-  // export const confirmCodePrioritaryMessage = async (code: string): Promise<{ success: boolean; token?: string }> => { ... }
   /**
    * Confirma el código para el envío prioritario
    * @param code Código de verificación recibido por correo.
@@ -170,7 +169,7 @@ const handleConfirmCodePrioritaryMessage = async (code: string) => {
 };
 
   /**
-   * Metodo para limpiar todos los estados
+   * Método para limpiar todos los estados
    */
   const handleLimpiar = () => {
     setCedula("");
@@ -234,19 +233,19 @@ const handleConfirmCodePrioritaryMessage = async (code: string) => {
     personas,
     setPersonas,
 
-    // Metodo limpiar
+    // Método  limpiar
     handleLimpiar,
 
-    // Metodos de consulta
+    // Método s de consulta
     handleQueryMorosidadByFilters,
     handleQueryPeopleWithProperties,
 
-    // Metodo de envio
+    // Métodos  de envio
     handleSendMessageMassive,
     handleSendMessageMorosidad,
     handleSendMessagePropiedades,
 
-    // Metodos para envio prioritario
+    // Métodos para envio prioritario
     handleRequestCodePrioritaryMessage,
     handleConfirmCodePrioritaryMessage,
   };
