@@ -1,14 +1,39 @@
-const PUBLIC_DASHBOARD_URL = "http://192.168.0.7:3000/public/dashboard/7c4c9d66-bcb8-49f7-ad3e-a96cfc72ac93";
+import { useEffect, useState } from 'react';
+import { getReports } from '../../service/Admin.service';
 
 export default function ReportsView() {
+  const [url, setUrl] = useState<string>("");
+
+  useEffect(() => {
+    // Definimos la función asíncrona dentro del efecto
+    const fetchReportUrl = async () => {
+      try {
+        const response = await getReports();
+        // IMPORTANTE: Asegúrate de acceder a la propiedad exacta donde viene la URL 
+        // Si tu backend devuelve { url: "..." }, usa response.data.url
+        if (response && response.data) {
+          setUrl(response.data.url); 
+        }
+      } catch (error) {
+        console.error("Error al obtener la URL del reporte:", error);
+      }
+    };
+
+    fetchReportUrl();
+  }, []); // El array vacío asegura que solo se ejecute al montar el componente
+
   return (
-    <div style={{ width: '100%', height: '800px' }}> {/* Contenedor para el iframe */}
-      <iframe
-        src={PUBLIC_DASHBOARD_URL}
-        width="100%" // Es mejor usar 100% para que sea responsivo
-        height="100%"
-        title="Reporte Público"
-      />
+    <div style={{ width: '100%', height: '800px' }}>
+      {url ? (
+        <iframe 
+          src={url} 
+          width="100%" 
+          height="100%" 
+          title="Metabase Report"
+        />
+      ) : (
+        <p>Cargando reporte seguro...</p>
+      )}
     </div>
   );
 }
