@@ -132,15 +132,32 @@ export function useArchiveRead() {
             let cellValue = row.getCell(colIndex).value;
             let finalValue: string | number | undefined;
 
-            // Normalización del valor
+            // --- Normalizar valores especiales de ExcelJS ---
             if (cellValue === null || cellValue === undefined) {
               finalValue = undefined;
-            } else if (
-              excelKey === "cp.NUM_PERSON" &&
-              typeof cellValue === "number"
-            ) {
+            }
+            // Si Excel devuelve un correo como Hyperlink
+            else if (typeof cellValue === "object") {
+              if ("text" in cellValue) {
+                finalValue = String(cellValue.text).trim();
+              } else if (
+                "richText" in cellValue &&
+                Array.isArray(cellValue.richText)
+              ) {
+                finalValue = cellValue.richText
+                  .map((t: any) => t.text)
+                  .join("")
+                  .trim();
+              } else {
+                finalValue = String(cellValue.toString()).trim();
+              }
+            }
+            // Si es un número (solo para NUM_PERSON)
+            else if (typeof cellValue === "number") {
               finalValue = String(cellValue);
-            } else {
+            }
+            // Valor normal
+            else {
               finalValue = String(cellValue).trim();
             }
 
@@ -157,6 +174,8 @@ export function useArchiveRead() {
       });
 
       setPersonas(personasCargadas);
+
+      console.log("Personas cargadas desde Excel:", personasCargadas);
     } catch (error) {
       console.error(error);
       showToast("error", "Error al procesar el archivo Excel.");

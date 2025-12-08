@@ -6,7 +6,7 @@ export default function LayoutMessages() {
   return (
     <div className="min-h-full">
       <NavBar />
-      <SendMessageProvider> // Provide context for sending messages
+      <SendMessageProvider>
         <main className="p-4 w-full">
           <Outlet />
         </main>

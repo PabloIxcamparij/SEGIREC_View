@@ -2,7 +2,13 @@ import { useEffect } from "react";
 import { useLogActivity } from "../../hooks/useLogsActiviti";
 import TableActivity from "../../components/TableActiviti";
 import { FilterInput } from "../../components/ContainerInputs";
+import {formatearFiltros, formatearDetalleIndividual} from "../../utils/formatearFiltros";
+import { downloadCSV } from "../../utils/descargaDeArchivo";
 
+
+// ===============================
+//           COMPONENTE VIEW
+// ===============================
 export default function LogsView() {
   const {
     // Filtros de consultas
@@ -29,44 +35,30 @@ export default function LogsView() {
     hasMoreMessages,
   } = useLogActivity();
 
+  // =============================================================
+  //   CARGA INICIAL DE INFORMACIÓN (consultas y envíos)
+  // =============================================================
   useEffect(() => {
     fetchQueries(1);
     fetchMessages(1);
   }, []);
 
-  function downloadCSV(filename: string, rows: any[]) {
-    if (!rows.length) {
-      alert("No hay registros para descargar");
-      return;
-    }
-
-    const header = Object.keys(rows[0]);
-    const csvContent = [
-      header.join(","),
-      ...rows.map((row) =>
-        header.map((key) => JSON.stringify(row[key] ?? "")).join(",")
-      ),
-    ].join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
-  }
-
   const handleDownloadConsultas = () => {
-    downloadCSV("consultas_filtradas.csv", filteredConsultas);
+    downloadCSV("consultas_filtradas.csv", filteredConsultas, true);
   };
 
   const handleDownloadEnvios = () => {
-    downloadCSV("envios_filtrados.csv", filteredEnvios);
+    downloadCSV("envios_filtrados.csv", filteredEnvios, false);
   };
 
+  // =============================================================
+  //                        RENDER
+  // =============================================================
   return (
     <div className="flex flex-col items-center gap-8 p-6">
-      {/* === TABLA DE CONSULTAS === */}
+      {/* =========================================================
+          TABLA DE CONSULTAS
+      ============================================================*/}
       <TableActivity
         title="Registro de consultas a las tablas"
         isLoading={isQueryLoading}
@@ -78,7 +70,7 @@ export default function LogsView() {
           <div className="max-h-150 overflow-y-auto overflow-x-auto">
             <table className="w-full text-center border-collapse">
               <thead>
-                {/* === FILAS DE CABECERA === */}
+                {/* CABECERA */}
                 <tr className="bg-principal/10 text-gray-800  top-0 z-10">
                   <th className="py-4 px-3 min-w-[120px]">Nombre</th>
                   <th className="py-4 px-3 min-w-[150px]">Detalle</th>
@@ -87,7 +79,7 @@ export default function LogsView() {
                   <th className="py-4 px-3 min-w-[100px]">Estado</th>
                 </tr>
 
-                {/* Fila de Filtros */}
+                {/* FILA DE FILTROS */}
                 <tr>
                   <td className="py-2 px-3">
                     <FilterInput
@@ -97,6 +89,7 @@ export default function LogsView() {
                       onChange={(v) => handleQueryFilterChange("nombre", v)}
                     />
                   </td>
+
                   <td className="py-2 px-3">
                     <FilterInput
                       type="text"
@@ -105,6 +98,7 @@ export default function LogsView() {
                       onChange={(v) => handleQueryFilterChange("detalle", v)}
                     />
                   </td>
+
                   <td className="py-2 px-3">
                     <FilterInput
                       type="text"
@@ -113,6 +107,7 @@ export default function LogsView() {
                       onChange={(v) => handleQueryFilterChange("filtros", v)}
                     />
                   </td>
+
                   <td className="py-2 px-3">
                     <div className="flex flex-col gap-1">
                       <FilterInput
@@ -142,6 +137,7 @@ export default function LogsView() {
                   </td>
                 </tr>
               </thead>
+
               <tbody>
                 {filteredConsultas.length > 0 ? (
                   filteredConsultas.map((c) => (
@@ -150,15 +146,19 @@ export default function LogsView() {
                       className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
                     >
                       <td className="py-3 px-3">{c.Usuario.Nombre}</td>
+
                       <td className="py-3 px-3">{c.Detalle}</td>
+
                       <td className="py-3 px-3 max-w-[250px] md:max-w-[300px] lg:max-w-[400px] overflow-x-auto text-left">
                         <div className="max-h-60 overflow-y-auto pr-2">
                           {formatearFiltros(c.Filtros?.FiltrosAplicados)}
                         </div>
                       </td>
+
                       <td className="py-3 px-3">
                         {new Date(c.createdAt).toLocaleString()}
                       </td>
+
                       <td className="py-3 px-3">{c.Estado}</td>
                     </tr>
                   ))
@@ -176,7 +176,10 @@ export default function LogsView() {
           </div>
         }
       />
-      {/* --- TABLA DE ENVÍOS --- */}
+
+      {/* =========================================================
+          TABLA DE ENVÍOS
+      ============================================================*/}
       <TableActivity
         title="Registro de los Envíos de Mensajes"
         isLoading={isMessageLoading}
@@ -189,21 +192,21 @@ export default function LogsView() {
           <div className="max-h-150 overflow-y-auto overflow-x-auto">
             <table className="w-full text-center border-collapse">
               <thead>
-                {/* === FILAS DE CABECERA === */}
+                {/* CABECERA */}
                 <tr className="bg-principal/10 text-gray-800 top-0 z-10">
-                  <th className="py-4 px-3 min-w-[120px]">Nombre</th>
-                  <th className="py-4 px-3 min-w-[150px]">Detalle</th>
-                  <th className="py-4 px-3 min-w-[120px]">Mensajes</th>
-                  <th className="py-4 px-3 min-w-[120px]">Correos</th>
-                  <th className="py-4 px-3 min-w-[120px]">WhatsApp</th>
+                  <th className="py-4 px-3 min-w-[120px]">
+                    Nombre del responsable
+                  </th>
+                  <th className="py-4 px-3 min-w-[100px]">Detalle del envío</th>
+                  <th className="py-4 px-3 min-w-[150px]">Resumen del envío</th>
                   <th className="py-4 px-3 min-w-[350px]">
-                    Regitros individuales
+                    Registros individuales
                   </th>
                   <th className="py-4 px-3 min-w-[150px]">Fecha</th>
                   <th className="py-4 px-3 min-w-[100px]">Estado</th>
                 </tr>
 
-                {/* Fila de Filtros */}
+                {/* FILA DE FILTROS */}
                 <tr>
                   <td className="py-2 px-3">
                     <FilterInput
@@ -213,6 +216,7 @@ export default function LogsView() {
                       onChange={(v) => handleMessageFilterChange("nombre", v)}
                     />
                   </td>
+
                   <td className="py-2 px-3">
                     <FilterInput
                       type="text"
@@ -221,10 +225,10 @@ export default function LogsView() {
                       onChange={(v) => handleMessageFilterChange("detalle", v)}
                     />
                   </td>
-                  <td className="py-2 px-3">{/* Mensajes - No se filtra */}</td>
-                  <td className="py-2 px-3">{/* Correos - No se filtra */}</td>
-                  <td className="py-2 px-3">{/* WhatsApp - No se filtra */}</td>
-                  <td className="py-2 px-3">{/* WhatsApp - No se filtra */}</td>
+
+                  <td className="py-2 px-3">{/* No filtrable */}</td>
+                  <td className="py-2 px-3">{/* No filtrable */}</td>
+
                   <td className="py-2 px-3">
                     <div className="flex flex-col gap-1">
                       <FilterInput
@@ -243,6 +247,7 @@ export default function LogsView() {
                       />
                     </div>
                   </td>
+
                   <td className="py-2 px-3">
                     <FilterInput
                       type="select"
@@ -253,6 +258,7 @@ export default function LogsView() {
                   </td>
                 </tr>
               </thead>
+
               <tbody>
                 {filteredEnvios.length > 0 ? (
                   filteredEnvios.map((e) => (
@@ -261,24 +267,35 @@ export default function LogsView() {
                       className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
                     >
                       <td className="py-3 px-3">{e.Usuario.Nombre}</td>
+
                       <td className="py-3 px-3">{e.Detalle}</td>
-                      <td className="py-3 px-3">{e.Envios.NumeroDeMensajes}</td>
-                      <td className="py-3 px-3">
-                        {e.Envios.NumeroDeCorreosEnviadosCorrectamente}
+
+                      <td className="py-3 px-3 text-left text-sm leading-tight">
+                        <ul>
+                          <li>• Total: {e.Envios.NumeroDeMensajes}</li>
+                          <li>
+                            • Correos:{" "}
+                            {e.Envios.NumeroDeCorreosEnviadosCorrectamente}
+                          </li>
+                          <li>
+                            • WhatsApp:{" "}
+                            {e.Envios.NumeroDeWhatsAppEnviadosCorrectamente}
+                          </li>
+                        </ul>
                       </td>
-                      <td className="py-3 px-3">
-                        {e.Envios.NumeroDeWhatsAppEnviadosCorrectamente}
-                      </td>
-                      <td className="py-3 px-3 max-w-[250px] md:max-w-[300px] lg:max-w-[400px] overflow-x-auto text-left">
+
+                      <td className="py-3 px-3 max-w-[250px] md:max-w-[300px] lg:max-w-[400px] text-left overflow-x-auto">
                         <div className="max-h-60 overflow-y-auto pr-2">
                           {formatearDetalleIndividual(
                             e.Envios.DetalleIndividual
                           )}
                         </div>
                       </td>
+
                       <td className="py-3 px-3">
                         {new Date(e.createdAt).toLocaleString()}
                       </td>
+
                       <td className="py-3 px-3">{e.Estado}</td>
                     </tr>
                   ))
@@ -299,64 +316,3 @@ export default function LogsView() {
     </div>
   );
 }
-
-// FUNCIÓN DE FORMATO DE FILTROS
-const formatearFiltros = (texto?: string) => {
-  if (!texto) return "Sin filtros";
-
-  const limpio = texto
-    .replace("Se hizo uso de los siguientes filtros:", "")
-    .trim();
-
-  const partes = limpio
-    .split("•")
-    .map((p) => p.trim())
-    .filter((p) => p.length > 0);
-
-  return (
-    <ul className="text-left whitespace-pre-wrap break-words">
-      {partes.map((parte, i) => (
-        <li key={i} className="leading-snug mb-1">
-          • {parte}
-        </li>
-      ))}
-    </ul>
-  );
-};
-
-/**
- * Metodo para formatear el json
- * @param detalle
- * @returns
- */
-
-const formatearDetalleIndividual = (detalle: any) => {
-  if (!detalle || !Array.isArray(detalle)) {
-    return "Sin registros individuales";
-  }
-
-  return (
-    <ul className="text-left space-y-4">
-      {detalle.map((d, i) => {
-        const correoTxt = d.correo_ok ? "CorreoEnviado" : "CorreoNoEnviado";
-        const whatsappTxt = d.whatsapp_ok
-          ? "WhatsAppEnviado"
-          : "WhatsAppNoEnviado";
-
-        return (
-          <li
-            key={i}
-            className="border border-gray-300 rounded-lg p-3 bg-white shadow-sm"
-          >
-            <div className="font-semibold">{d.nombre}</div>
-            <div className="ml-4">· Cédula: {d.cedula}</div>
-            <div className="ml-4">· Correo: {d.correo}</div>
-            <div className="ml-4">· Tel: {d.telefono}</div>
-            <div className="ml-4">· {correoTxt}</div>
-            <div className="ml-4">· {whatsappTxt}</div>
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
