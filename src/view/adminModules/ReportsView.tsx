@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getReports } from '../../service/Admin.service';
+import { getReports } from '../../service/Utils.service';
 
 export default function ReportsView() {
   const [url, setUrl] = useState<string>("");

@@ -66,12 +66,3 @@ export async function updateUser(body: {
     errorHandler(error, "Actualización de usuario");
   }
 }
-
-export async function getReports() {
-  try {
-    const data = await axiosClient.get("/admin/reporte");
-    return data;
-  } catch (error: any) {
-    errorHandler(error, "Actualización de usuario");
-  }
-}

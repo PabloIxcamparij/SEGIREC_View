@@ -49,3 +49,12 @@ export async function queryActivitiesMessage(page = 1) {
     errorHandler(error, "Cargando las actividades del sistema");
   }
 }
+
+export async function getReports() {
+  try {
+    const data = await axiosClient.get("/utils/reporte");
+    return data;
+  } catch (error: any) {
+    errorHandler(error, "Actualización de usuario");
+  }
+}
