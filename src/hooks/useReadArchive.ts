@@ -175,7 +175,6 @@ export function useArchiveRead() {
 
       setPersonas(personasCargadas);
 
-      console.log("Personas cargadas desde Excel:", personasCargadas);
     } catch (error) {
       console.error(error);
       showToast("error", "Error al procesar el archivo Excel.");
